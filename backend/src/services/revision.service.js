@@ -9,7 +9,6 @@ const { handleError } = require("../utils/errorHandler");
 async function getPostulacionesPendientes() {
 try {
     const postulaciones = await Revision.find({ estado: "pendiente" })
-    .populate("postulante")
     .exec();
     if (!postulaciones) return [null, "No hay postulaciones"];
 

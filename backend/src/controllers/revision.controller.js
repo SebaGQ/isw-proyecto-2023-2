@@ -1,7 +1,8 @@
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const RevisionService = require("../services/revision.service");
 const { handleError } = require("../utils/errorHandler");
-
+// eslint-disable-next-line max-len
+const { postulacionIdSchema, postulacionBodySchema } = require("../utils/schemas/postulacion.schema");
 /**
  * Obtiene las postulaciones en estado pendiente
  * @param {Object} req - Objeto de peticion
@@ -17,7 +18,7 @@ async function getPostulacionesPendientes(req, res) {
             ? respondSuccess(req, res, 204)
             : respondSuccess(req, res, 200, postulaciones);
     } catch (error) {
-        handleError(error, "reivision.controller -> getPostulacionesPendientes");
+        handleError(error, "revision.controller -> getPostulacionesPendientes");
         respondError(req, res, 400, error.message);
     }
 }

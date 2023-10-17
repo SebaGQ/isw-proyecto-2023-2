@@ -7,10 +7,12 @@ const revisionBodySchema = Joi.object({
         "any.required": "El id de la postulacion es obligatorio.",
         "string.base": "El id de la postulacion debe ser de tipo string.",
     }),
-    estado: Joi.string().required().messages({
+    Estado: Joi.string().valid("Aprobado", "Rechazado", "En revisión", "Pendiente")
+        .required().messages({
         "string.empty": "El estado no puede estar vacío.",
         "any.required": "El estado es obligatorio.",
         "string.base": "El estado debe ser de tipo string.",
+        
     }),
     comentario: Joi.string().required().messages({
         "string.empty": "El comentario no puede estar vacío.",
