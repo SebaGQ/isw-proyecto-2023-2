@@ -38,49 +38,36 @@ try {
 }
 
 /**
- * Actualiza una postulación existente en la base de datos
- * @param {string} id Id de la postulación a actualizar
- * @param {object} postulacion Objeto con los datos actualizados de la postulación
- * @returns {Promise} Promesa con el objeto de la postulación actualizada o un mensaje de error
+ * Actualiza el estado de la postulacion por su id en la base de datos
+ * @param {string} id Id de la postulacion
+ * @param {Object} postulacion Objeto de postulacion con solo el campo estadoPostulacion
+ * @returns {Promise} Promesa con el objeto de postulacion actualizado
  */
-async function updatePostulacion(id, postulacion) {
+async function updateEstadoPostulacion(id, postulacion) {
     try {
+        // Verificar que solo el campo estadoPostulacion esté presente
+        const keys = Object.keys(postulacion);
+        if (keys.length !== 1 || !keys.includes("estadoPostulacion")) {
+            return [null, "Solo se puede actualizar el campo estadoPostulacion"];
+        }
+
         const postulacionFound = await Postulacion.findById(id);
         if (!postulacionFound) return [null, "La postulacion no existe"];
 
-        const {
-            rut,
-            nombre,
-            apellido,
-            monto,
-            fechaPostulacion,
-            tipoSubsidio,
-            porcentajeFichaHogar,
-            estadoPostulacion,
-        } = postulacion;
-
         const postulacionUpdated = await Postulacion.findByIdAndUpdate(
             id,
-            {
-                rut,
-                nombre,
-                apellido,
-                monto,
-                fechaPostulacion,
-                tipoSubsidio,
-                porcentajeFichaHogar,
-                estadoPostulacion,
-            },
+            { estadoPostulacion: postulacion.estadoPostulacion },
             { new: true },
         );
         return [postulacionUpdated, null];
     } catch (error) {
-        handleError(error, "revision.service -> updatePostulacion");
+        handleError(error, "postulacion.service -> updateEstadoPostulacion");
     }
 }
+
 
 module.exports = {
     getPostulacionesPendientes,
     getPostulacionById,
-    updatePostulacion,
+    updateEstadoPostulacion,
 };
