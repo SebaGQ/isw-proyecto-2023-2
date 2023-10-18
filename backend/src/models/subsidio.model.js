@@ -21,11 +21,11 @@ const SubsidioSchema = new mongoose.Schema(
         },
         PorcentajeFichaHogar: {
             type: String,
-            required: true,
+            required: false,
         },
         CantidadIntegrantes: {
             type: Number,
-            required: true,
+            required: false,
         },
         Direccion: {
             type: String,

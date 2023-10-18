@@ -15,9 +15,8 @@ const authorization = require('../middlewares/authorization.middleware.js');
 // Rutas para los subsidios o beneficios
 router.post('/', authorization.isAdmin, subsidioControllers.createSubsidio);
 router.get('/', subsidioControllers.getSubsidios);
-router.get('/:id', subsidioControllers.getById);
-/*
-router.put('/subsidies/:id', isAdmin, subsidyController.update);
-router.delete('/subsidies/:id', isAdmin, subsidyController.delete);*/
+router.get('/:id', subsidioControllers.getSubsidioById);
+router.put('/:id', authorization.isAdmin, subsidioControllers.updateSubsidio);
+router.delete('/:id',authorization.isAdmin, subsidioControllers.deleteSubsidio);
 
 module.exports = router;
