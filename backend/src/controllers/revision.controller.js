@@ -68,8 +68,28 @@ async function getPostulacionById(req, res) {
     }
 }
 
+/**
+ * Crear una nueva revision
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function createRevision(req, res) {
+    try {
+        const { body } = req;
+        const { error: bodyError } = postulacionBodySchema.validate(body);
+        if (bodyError) return respondError(req, res, 400, bodyError.message);
+        const [revision, revisionError] = await RevisionService.createRevision(body);
+        if (revisionError) return respondError(req, res, 400, revisionError);
+        respondSuccess(req, res, 201, revision);
+    } catch (error) {
+        handleError(error, "revision.controller -> createRevision");
+        respondError(req, res, 500, "No se pudo crear la revision");
+    }
+}
+
 module.exports = {
     getPostulacionesPendientes,
     updateEstadoPostulacion,
     getPostulacionById,
+    createRevision,
 };

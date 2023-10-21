@@ -1,6 +1,34 @@
+/* eslint-disable max-len */
 // Importar el modelo de datos 'Revision'
 const Revision = require("../models/revision.model.js");
 const { handleError } = require("../utils/errorHandler");
+
+/**  Crear revision de postulacion
+ * @param {Object} revision Objeto de revision
+ * @returns {Promise} Promesa con el objeto de revision creado
+ */
+async function createRevision(revision) {
+    try {
+        const { idPostulacion, estado, comentario } = revision;
+
+        const revisionFound = await Revision.findOne({ idPostulacion: revision.idPostulacion });
+        if (revisionFound) return [null, "La revision ya existe"];
+
+        const revisionEstado = await Postulacion.find({ estadoPostulacion: { $in: ["En revision", "Pendiente"] } } );
+        if (revisionEstado.length === 0) return [null, "La postulacion no esta en estado de revision"];
+        const newRevision = new Revision({
+            idPostulacion,
+            estado,
+            comentario,
+        });
+        await newRevision.save();
+
+        return [newRevision, null];
+    } catch (error) {
+        handleError(error, "revision.service -> createRevision");
+    }
+}
+
 
 /**
  * Obtiene todos las postulaciones pendientes de la base de datos
@@ -70,4 +98,5 @@ module.exports = {
     getPostulacionesPendientes,
     getPostulacionById,
     updateEstadoPostulacion,
+    createRevision,
 };

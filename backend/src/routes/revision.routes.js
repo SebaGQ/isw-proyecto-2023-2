@@ -20,6 +20,7 @@ router.use(authenticationMiddleware);
 router.get("/", authorizationMiddleware.isAdmin, revisionController.getPostulacionesPendientes);
 router.get("/:id", authorizationMiddleware.isAdmin, revisionController.getPostulacionById);
 router.put("/:id", authorizationMiddleware.isAdmin, revisionController.updateEstadoPostulacion);
+router.post("/", authorizationMiddleware.isAdmin, revisionController.createRevision);
 
 
 // Exporta el enrutador
