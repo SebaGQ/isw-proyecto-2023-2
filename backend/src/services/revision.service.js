@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
 // Importar el modelo de datos 'Revision'
 const Revision = require("../models/revision.model.js");
+// Importar el modelo de datos 'Postulacion'
+const Postulacion = require("../models/postulacion.model.js");
+
 const { handleError } = require("../utils/errorHandler");
 
 /**  Crear revision de postulacion
