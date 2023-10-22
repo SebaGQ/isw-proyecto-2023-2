@@ -26,13 +26,14 @@ async function getSubsidios() {
  */
 async function createSubsidio(subsidio) {
   try {
-    const { Name, Descripcion, Direccion, Monto } = subsidio;
+    const { Name,tipoPostulacion,pauta,Descripcion, Direccion, Monto } = subsidio;
 
     const subsidioFound = await Subsidio.findOne({ Name: subsidio.Name });
     if (subsidioFound) return [null, "El subsidio ya existe"];
 
     const newSubsidio = new Subsidio({
       Name,
+      tipoPostulacion,
       Descripcion,
       Direccion,
       Monto,

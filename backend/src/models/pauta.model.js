@@ -17,6 +17,6 @@ const pautaSchema = new mongoose.Schema(
     }
 );
 // Crea el modelo de datos 'Role' a partir del esquema 'roleSchema'
-const pauta = mongoose.model("Pauta", pautaSchema);
+const pauta = mongoose.model("pauta", pautaSchema);
 
 module.exports = pauta;

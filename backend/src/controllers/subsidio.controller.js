@@ -37,11 +37,9 @@ async function createSubsidio(req, res) {
     const { body } = req;
     const { error: bodyError } = subsidioBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
-    // Extrae los datos de tipo de postulación y pauta del cuerpo de la solicitud
-    const tipoPostulacionObject = body.tipoPostulacion; // Asegúrate de que la estructura de tu solicitud esté bien
-    const pautaObject = body.pauta; // Asegúrate de que la estructura de tu solicitud esté bien
+    
 
-    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(body, tipoPostulacionObject, pautaObject);
+    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(body);
 
     if (subsidioError) 
       return respondError(req, res, 400, subsidioError);

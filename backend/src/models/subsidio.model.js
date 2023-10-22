@@ -26,10 +26,11 @@ const SubsidioSchema = new mongoose.Schema(
             ref: "tipo", 
          },
         ],
-        pauta:{
+        pauta:[{
             type: mongoose.Schema.Types.ObjectId,
             ref: "pauta", 
-         },       
+         },
+      ],       
     }
     
 );

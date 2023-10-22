@@ -19,6 +19,6 @@ const tipoPostSchema = new mongoose.Schema(
 );
 
 // Crea el modelo de datos 'Role' a partir del esquema 'roleSchema'
-const tipo = mongoose.model("Tipo", tipoPostSchema);
+const tipo = mongoose.model("tipo", tipoPostSchema);
 
 module.exports = tipo;
