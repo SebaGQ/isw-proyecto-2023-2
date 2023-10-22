@@ -2,8 +2,6 @@
 // Importa el modulo 'mongoose' para crear la conexion a la base de datos
 
 const mongoose = require("mongoose");
-const { schema } = require("./user.model");
-const { number } = require("joi");
 
 const SubsidioSchema = new mongoose.Schema(
     {
@@ -15,18 +13,6 @@ const SubsidioSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        Type: {
-            type: String,
-            required: true,
-        },
-        PorcentajeFichaHogar: {
-            type: String,
-            required: false,
-        },
-        CantidadIntegrantes: {
-            type: Number,
-            required: false,
-        },
         Direccion: {
             type: String,
             required: true,
@@ -34,7 +20,16 @@ const SubsidioSchema = new mongoose.Schema(
         Monto: {
             type: Number,
             required: true,
-        },       
+        },     
+        tipoPostulacion: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "tipo", 
+         },
+        ],
+        pauta:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "pauta", 
+         },       
     }
     
 );

@@ -2,8 +2,11 @@
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const SubsidioService = require("../services/subsidio.service");
+const tipoPostulacionServices = require("../services/tipoPostulacion.service");
+const pautaServices = require("../services/pauta.service");
 const { subsidioBodySchema, subsidioIdSchema } = require("../schema/subsidio.schema");
 const { handleError } = require("../utils/errorHandler");
+
 
 /**
  * Obtiene todos los subsidios
@@ -34,20 +37,25 @@ async function createSubsidio(req, res) {
     const { body } = req;
     const { error: bodyError } = subsidioBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
+    // Extrae los datos de tipo de postulación y pauta del cuerpo de la solicitud
+    const tipoPostulacionObject = body.tipoPostulacion; // Asegúrate de que la estructura de tu solicitud esté bien
+    const pautaObject = body.pauta; // Asegúrate de que la estructura de tu solicitud esté bien
 
-    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(body);
+    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(body, tipoPostulacionObject, pautaObject);
 
-    if (subsidioError) return respondError(req, res, 400, subsidioError);
+    if (subsidioError) 
+      return respondError(req, res, 400, subsidioError);
     if (!newSubsidio) {
       return respondError(req, res, 400, "No se creó el subsidio");
     }
-
     respondSuccess(req, res, 201, newSubsidio);
   } catch (error) {
     handleError(error, "subsidio.controller -> createSubsidio");
     respondError(req, res, 500, "No se creó el subsidio");
   }
 }
+
+
 
 /**
  * Obtiene un subsidio por su id
@@ -64,7 +72,19 @@ async function getSubsidioById(req, res) {
 
     if (errorSubsidio) return respondError(req, res, 404, errorSubsidio);
 
-    respondSuccess(req, res, 200, subsidio);
+    // Ahora obtén datos de tipoPostulacion y pauta
+    const [tipoPostulacion, tipoPostulacionError] = await tipoPostulacionServices.getTipoPostulacionById(subsidio.tipoPostulacionId);
+    const [pauta, pautaError] = await pautaServices.getPautaById(subsidio.pautaId);
+     if (tipoPostulacionError || pautaError) {
+      // Maneja los errores si es necesario
+      handleError(tipoPostulacionError, "subsidio.controller -> getSubsidioById");
+      respondError(req, res, 500, "No se pudo obtener el subsidio");
+    }
+     respondSuccess(req, res, 200, {
+      subsidio,
+      tipoPostulacion,
+      pauta,
+    });
   } catch (error) {
     handleError(error, "subsidio.controller -> getSubsidioById");
     respondError(req, res, 500, "No se pudo obtener el subsidio");

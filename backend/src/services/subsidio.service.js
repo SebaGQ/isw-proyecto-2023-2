@@ -1,5 +1,7 @@
 "use strict";
 const Subsidio = require("../models/subsidio.model.js");
+const tipoPostulacion = require("../models/tipoPostulacion.model.js"); // Importa el modelo de tipo de postulación
+const pauta = require("../models/pauta.model.js"); // Importa el modelo de pauta
 const { handleError } = require("../utils/errorHandler");
 
 /**
@@ -24,7 +26,7 @@ async function getSubsidios() {
  */
 async function createSubsidio(subsidio) {
   try {
-    const { Name, Descripcion, Type, Direccion, Monto } = subsidio;
+    const { Name, Descripcion, Direccion, Monto } = subsidio;
 
     const subsidioFound = await Subsidio.findOne({ Name: subsidio.Name });
     if (subsidioFound) return [null, "El subsidio ya existe"];
@@ -32,13 +34,19 @@ async function createSubsidio(subsidio) {
     const newSubsidio = new Subsidio({
       Name,
       Descripcion,
-      Type,
       Direccion,
       Monto,
     });
 
     await newSubsidio.save();
 
+     // Asocia el tipo de postulación y la pauta al subsidio
+     if (tipoPostulacion) {
+      newSubsidio.tipoPostulacion = tipoPostulacion;
+    }
+    if (pauta) {
+      newSubsidio.pauta = pauta;
+    }
     return [newSubsidio, null];
   } catch (error) {
     handleError(error, "subsidio.service -> createSubsidio");

@@ -11,6 +11,12 @@ const authRoutes = require("./auth.routes.js");
 /**Enrutador de subsidios */
 const subsidioRoutes = require("./subsidio.routes.js");
 
+/**Enrutador de tipos de postulacion */
+const tipoRoutes = require("./tipoPostulacion.routes.js");
+
+/**Enrutador de pautas */
+const pautaRoutes = require("./pauta.routes.js");
+
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
@@ -23,6 +29,10 @@ router.use("/users", authenticationMiddleware, userRoutes);
 router.use("/auth", authRoutes);
 //define las rutas para los subsidios
 router.use("/subsidio", authenticationMiddleware, subsidioRoutes);
+//define las rutas para los tipos de subsidios
+router.use("/tipoPostulacion", authenticationMiddleware, tipoRoutes);
+//define las rutas para las pautas
+router.use("/pauta", authenticationMiddleware, pautaRoutes);
 
 // Exporta el enrutador
 module.exports = router;
