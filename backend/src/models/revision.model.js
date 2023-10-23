@@ -1,12 +1,9 @@
 const mongoose= require("mongoose");
 const RevisionSchema = new mongoose.Schema({
-    idPostulacion: { type: mongoose.Schema.Types.ObjectId, ref: "Postulacion" },
-    estado: {
+    Postulacion: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Postulacion",
         required: true,
-        enum: ["Aprobado", "Rechazado", "En revision", "Pendiente"],
-        default: "Pendiente",
     },
     fechaModificacion: {
         type: Date,

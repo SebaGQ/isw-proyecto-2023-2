@@ -1,33 +1,21 @@
 const Joi = require("joi");
-const rutPattern = /^[0-9]+-[0-9kK]{1}$/;  
+
 
 const revisionBodySchema = Joi.object({
-    idPostulacion: Joi.string().required().messages({
-        "string.empty": "El id de la postulacion no puede estar vacío.",
-        "any.required": "El id de la postulacion es obligatorio.",
-        "string.base": "El id de la postulacion debe ser de tipo string.",
+    Postulacion: Joi.string().required().messages({
+        "string.empty": "La postulación no puede estar vacía.",
+        "any.required": "La postulación es obligatoria.",
+        "string.base": "La postulación debe ser de tipo string.",
     }),
-    Estado: Joi.string().valid("Aprobado", "Rechazado", "En revisión", "Pendiente")
-        .required().messages({
-        "string.empty": "El estado no puede estar vacío.",
-        "any.required": "El estado es obligatorio.",
-        "string.base": "El estado debe ser de tipo string.",
-        
+    fechaModificacion: Joi.date().required().messages({
+        "date.base": "La fecha de modificación debe ser de tipo date.",
+        "any.required": "La fecha de modificación es obligatoria.",
     }),
     comentario: Joi.string().required().messages({
         "string.empty": "El comentario no puede estar vacío.",
         "any.required": "El comentario es obligatorio.",
         "string.base": "El comentario debe ser de tipo string.",
     }),
-    rut: Joi.string()
-        .required()
-        .pattern(rutPattern)
-        .messages({
-            "string.empty": "El rut no puede estar vacío.",
-            "any.required": "El rut es obligatorio.",
-            "string.base": "El rut debe ser de tipo string.",
-            "string.pattern.base": "El rut no tiene un formato válido.",
-        }),
 }).messages({
     "object.unknown": "No se permiten propiedades adicionales.",
 });

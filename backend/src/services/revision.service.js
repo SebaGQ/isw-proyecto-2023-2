@@ -12,16 +12,15 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function createRevision(revision) {
     try {
-        const { idPostulacion, estado, comentario } = revision;
+        const { postulacion, comentario } = revision;
+        const fechaModificacion = Date.now();
 
-        const revisionFound = await Revision.findOne({ idPostulacion: revision.idPostulacion });
-        if (revisionFound) return [null, "La revision ya existe"];
+        const postulacionFound = await Postulacion.findById(postulacion);
+        if (!postulacionFound) return [null, "La postulacion no existe"];
 
-        const revisionEstado = await Postulacion.find({ estadoPostulacion: { $in: ["En revision", "Pendiente"] } } );
-        if (revisionEstado.length === 0) return [null, "La postulacion no esta en estado de revision"];
         const newRevision = new Revision({
-            idPostulacion,
-            estado,
+            postulacion,
+            fechaModificacion,
             comentario,
         });
         await newRevision.save();
@@ -34,19 +33,22 @@ async function createRevision(revision) {
 
 
 /**
- * Obtiene todos las postulaciones pendientes de la base de datos
+ * Obtiene todos las postulaciones con estado pendientes de la base de datos
  * @returns {Promise} Promessa con el objeto de las postulaciones
  */
 async function getPostulacionesPendientes() {
-try {
-    const postulaciones = await Revision.find({ estado: "pendiente" })
-    .exec();
-    if (!postulaciones) return [null, "No hay postulaciones"];
+    try {
+        const postulaciones = await Postulacion.find({ estadoPostulacion: "Pendiente" })
+            .populate("rut")
+            .populate("tipoSubsidio")
+            .populate("estadoPostulacion")
+            .exec();
+        if (!postulaciones) return [null, "No hay postulaciones"];
 
-    return [postulaciones, null];
-} catch (error) {
-    handleError(error, "revision.service -> getPostulacionesPendientes");
-}
+        return [postulaciones, null];
+    } catch (error) {
+        handleError(error, "postulacion.service -> getPostulacionesPendientes");
+    }
 }
 
 /**
@@ -55,17 +57,18 @@ try {
  * @returns {Promise} Promesa con el objeto de la postulacion
  */
 async function getPostulacionById(id) {
-try {
-    const postulacion = await Revision.findById(id)
-    .populate("rut")
-    .populate("tipoSubsidio")
-    .exec();
-    if (!postulacion) return [null, "No existe la postulacion"];
+    try {
+        const postulacion = await Postulacion.findById(id)
+            .populate("rut")
+            .populate("tipoSubsidio")
+            .populate("estadoPostulacion")
+            .exec();
+        if (!postulacion) return [null, "La postulacion no existe"];
 
-    return [postulacion, null];
-} catch (error) {
-    handleError(error, "revision.service -> getPostulacionById");
-}
+        return [postulacion, null];
+    } catch (error) {
+        handleError(error, "postulacion.service -> getPostulacionById");
+    }
 }
 
 /**
