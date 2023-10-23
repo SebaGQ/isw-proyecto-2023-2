@@ -60,7 +60,33 @@ async function createUsers() {
   }
 }
 
+/**
+ * Crea los estado por defecto en la base de datos.
+ * @async
+ * @function createRoles
+ * @returns {Promise<void>}
+ */
+async function createEstado() {
+  try {
+    // Busca todos los roles en la base de datos
+    const count = await Estado.estimatedDocumentCount();
+    // Si no hay roles en la base de datos los crea
+    if (count > 0) return;
+
+    await Promise.all([
+      new Estado({ name: "pendiente" }).save(),
+      new Estado({ name: "en revision" }).save(),
+      new Estado({ name: "aprobado" }).save(),
+      new Estado({ name: "rechazado" }).save(),
+    ]);
+    console.log("* => Estados creados exitosamente");
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 module.exports = {
   createRoles,
   createUsers,
+  createEstado,
 };
