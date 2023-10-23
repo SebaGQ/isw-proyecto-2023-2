@@ -1,6 +1,5 @@
 "use strict";
 const Subsidio = require("../models/subsidio.model.js");
-const tipoPostulacion = require("../models/tipoPostulacion.model.js"); // Importa el modelo de tipo de postulación
 const pauta = require("../models/pauta.model.js"); // Importa el modelo de pauta
 const { handleError } = require("../utils/errorHandler");
 
@@ -22,33 +21,38 @@ async function getSubsidios() {
 /**
  * Crea un nuevo subsidio en la base de datos
  * @param {Object} subsidio Objeto de subsidio
+ * @param {Object} pauta - Objeto de pauta opcional
  * @returns {Promise} Promesa con el objeto de subsidio creado
  */
 async function createSubsidio(subsidio) {
   try {
-    const { Name,tipoPostulacion,pauta,Descripcion, Direccion, Monto } = subsidio;
-
-    const subsidioFound = await Subsidio.findOne({ Name: subsidio.Name });
-    if (subsidioFound) return [null, "El subsidio ya existe"];
-
-    const newSubsidio = new Subsidio({
+    const {
       Name,
-      tipoPostulacion,
       Descripcion,
+      Tipo,
       Direccion,
       Monto,
+      PorcentajeFichaHogar,
+      CantidadIntegrantes,
+    } = subsidio;
+    const newSubsidio = new Subsidio({
+      Name,
+      Descripcion,
+      Tipo,
+      Direccion,
+      Monto,
+      PorcentajeFichaHogar,
+      CantidadIntegrantes,
     });
 
-    await newSubsidio.save();
-
-     // Asocia el tipo de postulación y la pauta al subsidio
-     if (tipoPostulacion) {
-      newSubsidio.tipoPostulacion = tipoPostulacion;
-    }
     if (pauta) {
-      newSubsidio.pauta = pauta;
+      // Valida si se proporcionó una pauta y la asocia al subsidio
+      newSubsidio.pauta = pauta._id;
     }
-    return [newSubsidio, null];
+
+    const subsidioCreated = await newSubsidio.save();
+
+    return [subsidioCreated, null];
   } catch (error) {
     handleError(error, "subsidio.service -> createSubsidio");
   }
@@ -77,26 +81,25 @@ async function getSubsidioById(id) {
  * @returns {Promise} Promesa con el objeto de subsidio actualizado
  */
 async function updateSubsidio(id, subsidio) {
-    try {
-      const subsidioFound = await Subsidio.findById(id);
-      if (!subsidioFound) return [null, "El subsidio no existe"];
-  
-      const { Name, Descripcion, Type, Direccion, Monto } = subsidio;
-  
-      subsidioFound.Name = Name;
-      subsidioFound.Descripcion = Descripcion;
-      subsidioFound.Type = Type;
-      subsidioFound.Direccion = Direccion;
-      subsidioFound.Monto = Monto;
-  
-      const subsidioUpdated = await subsidioFound.save();
-  
-      return [subsidioUpdated, null];
-    } catch (error) {
-      handleError(error, "subsidio.service -> updateSubsidio");
-    }
+  try {
+    const subsidioFound = await Subsidio.findById(id);
+    if (!subsidioFound) return [null, "El subsidio no existe"];
+
+    const { Name, Descripcion, Type, Direccion, Monto } = subsidio;
+
+    subsidioFound.Name = Name;
+    subsidioFound.Descripcion = Descripcion;
+    subsidioFound.Type = Type;
+    subsidioFound.Direccion = Direccion;
+    subsidioFound.Monto = Monto;
+
+    const subsidioUpdated = await subsidioFound.save();
+
+    return [subsidioUpdated, null];
+  } catch (error) {
+    handleError(error, "subsidio.service -> updateSubsidio");
+  }
 }
-  
 
 /**
  * Elimina un subsidio por su id de la base de datos
@@ -118,4 +121,3 @@ module.exports = {
   getSubsidioById,
   deleteSubsidio,
 };
-

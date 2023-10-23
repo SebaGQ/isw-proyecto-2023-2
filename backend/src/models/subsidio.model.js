@@ -21,11 +21,11 @@ const SubsidioSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },     
-        tipoPostulacion: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "tipo", 
+        Tipo: {
+            type: String,
+            required: true,
          },
-        ],
+        
         pauta:[{
             type: mongoose.Schema.Types.ObjectId,
             ref: "pauta", 

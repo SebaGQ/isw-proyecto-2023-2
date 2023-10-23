@@ -113,7 +113,7 @@ async function deletePauta(req, res) {
           res,
           404,
           "No se encontró la pauta solicitada",
-          "Verifique el ID ingresado"
+          "Verifique el ID ingresado",
         )
       : respondSuccess(req, res, 200, pauta);
   } catch (error) {
