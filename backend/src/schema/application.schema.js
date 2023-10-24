@@ -24,10 +24,10 @@ const applicationBodySchema = Joi.object({
       "string.pattern.base": "El id del subsidio proporcionado no es un ObjectId válido.",
     }),
   status: Joi.string()
-    .valid('Pending', 'Approved', 'Denied')
+    .valid('En Revisión', 'Aceptado', 'Rechazado')
     .messages({
       "string.base": "El estado debe ser de tipo string.",
-      "any.only": "El estado debe ser 'Pending', 'Approved' o 'Denied'.",
+      "any.only": "El estado debe ser 'En Revisión', 'Aceptado' o 'Rechazado'.",
     }),
   socialPercentage: Joi.number()
     .min(0)

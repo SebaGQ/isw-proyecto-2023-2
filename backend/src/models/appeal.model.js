@@ -19,8 +19,8 @@ const appealSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ['Pending', 'Approved', 'Denied'],
-    default: 'Pending'
+    enum: ['En Revisión', 'Aceptado', 'Rechazado'],
+    default: 'En Revisión'
   }
 }, {
   timestamps: true

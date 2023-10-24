@@ -34,11 +34,11 @@ const appealBodySchema = Joi.object({
       "string.base": "La razón debe ser de tipo string.",
     }),
   status: Joi.string()
-    .valid('Pending', 'Approved', 'Denied')
-    .default('Pending')
+    .valid('En Revisión', 'Aceptado', 'Rechazado')
+    .default('En Revisión')
     .messages({
       "string.base": "El estado debe ser de tipo string.",
-      "any.only": "El estado debe ser 'Pending', 'Approved' o 'Denied'.",
+      "any.only": "El estado debe ser 'En Revisión', 'Aceptado' o 'Rechazado'.",
     }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",

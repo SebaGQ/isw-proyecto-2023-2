@@ -19,13 +19,13 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
-    let status = 'Pending';
+    let status = 'En Revisión';
 
     if (socialPercentage > guideline.maxSocialPercentage) {
-      status = 'Denied';
+      status = 'Rechazado';
     } else {
       // Agregar más lógica para validar postulacion
-      status = 'Approved';
+      status = 'Aceptado';
     }
 
     const newApplication = new Application({
