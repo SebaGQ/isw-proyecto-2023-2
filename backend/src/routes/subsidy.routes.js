@@ -17,8 +17,9 @@ const validationMiddleware = require("../middlewares/valid.subsidy.middleware.js
 router.use(authenticationMiddleware);
 
 router.get('/', authorizationMiddleware.isAdmin, getSubsidies);
-router.get('/:id', getSubsidyById);
-router.post('/', validationMiddleware.validateSubsidyBody, createSubsidy);
+router.get('/:id', authorizationMiddleware.isAdmin, getSubsidyById);
+//Falta una para obtener Subsidios por su estado, si están disponibles o vencidos
+router.post('/', validationMiddleware.validateSubsidyBody, authorizationMiddleware.isAdmin, createSubsidy);
 router.put('/:id', validationMiddleware.validateSubsidyBody, authorizationMiddleware.isAdmin, updateSubsidy);
 router.delete('/:id', authorizationMiddleware.isAdmin, deleteSubsidy);
 

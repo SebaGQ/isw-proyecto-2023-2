@@ -16,12 +16,13 @@ const validationMiddleware = require("../middlewares/valid.guideline.middleware.
 
 const router = express.Router();
 
-router.use(authenticationMiddleware);
+// Solo admins pueden acceder a las pautas
+router.use(authenticationMiddleware, authorizationMiddleware.isAdmin);
 
-router.get("/", authorizationMiddleware.isAdmin, guidelineController.getGuidelines);
+router.get("/", guidelineController.getGuidelines);
 router.get("/:id", guidelineController.getGuidelineById);
 router.post("/", validationMiddleware.validateGuidelineBody, guidelineController.createGuideline);
-router.put("/:id", validationMiddleware.validateGuidelineBody, authorizationMiddleware.isAdmin, guidelineController.updateGuideline);
-router.delete("/:id", authorizationMiddleware.isAdmin, guidelineController.deleteGuideline);
+router.put("/:id", validationMiddleware.validateGuidelineBody, guidelineController.updateGuideline);
+router.delete("/:id", guidelineController.deleteGuideline);
 
 module.exports = router;

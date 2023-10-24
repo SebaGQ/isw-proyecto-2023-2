@@ -8,15 +8,20 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 /** Middlewares de autorización */
 const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
 
+/** Middleware de validación */
+// Se usa solo en las solicitudes q reciben un body
+const validationMiddleware = require("../middlewares/valid.appeal.middleware.js");
+
+
 const router = express.Router();
 
 router.use(authenticationMiddleware);
 
-router.post('/', createAppeal);
 router.get('/', authorizationMiddleware.isAdmin, getAppeals);
-router.get('/:id', getAppealById);
+router.get('/:id', authorizationMiddleware.isAdmin, getAppealById);
 router.get('/user/:userId', getAppealsByUserId);
-router.put('/:id', authorizationMiddleware.isAdmin, updateAppeal);
+router.post('/', validationMiddleware.validateAppealBody, createAppeal);
+router.put('/:id', validationMiddleware.validateAppealBody, authorizationMiddleware.isAdmin, updateAppeal);
 router.delete('/:id', authorizationMiddleware.isAdmin, deleteAppeal);
 
 module.exports = router;
