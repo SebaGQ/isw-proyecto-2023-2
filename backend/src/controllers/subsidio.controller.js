@@ -2,7 +2,7 @@
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const SubsidioService = require("../services/subsidio.service");
-const pautaServices = require("../services/pauta.service");
+const PautaService = require("../services/pauta.service");
 const { subsidioBodySchema, subsidioIdSchema } = require("../schema/subsidio.schema");
 const { handleError } = require("../utils/errorHandler");
 
@@ -36,13 +36,37 @@ async function createSubsidio(req, res) {
     const { body } = req;
     const { error: bodyError } = subsidioBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
-    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(body);
 
-    if (subsidioError) 
-      return respondError(req, res, 400, subsidioError);
+    // Extraer los datos del subsidio y de la pauta del cuerpo de la solicitud
+    const subsidioData = {
+      Name: body.Name,
+      Descripcion: body.Descripcion,
+      Tipo: body.Tipo,
+      Direccion: body.Direccion,
+      Monto: body.Monto,
+    };
+
+    const pautaData = {
+      NombrePauta: body.NombrePauta,
+      PorcentajeFichaHogar: body.PorcentajeFichaHogar,
+      CantidadIntegrantes: body.CantidadIntegrantes,
+    };
+
+    // Crear la pauta
+    const [newPauta, pautaError] = await PautaService.createPauta(pautaData);
+    if (pautaError) return respondError(req, res, 400, pautaError);
+
+    // Asociar la pauta al subsidio
+    subsidioData.pauta = newPauta._id;
+
+    // Crear el subsidio
+    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(subsidioData);
+    if (subsidioError) return respondError(req, res, 400, subsidioError);
+
     if (!newSubsidio) {
       return respondError(req, res, 400, "No se creó el subsidio");
     }
+
     respondSuccess(req, res, 201, newSubsidio);
   } catch (error) {
     handleError(error, "subsidio.controller -> createSubsidio");
@@ -67,16 +91,28 @@ async function getSubsidioById(req, res) {
 
     if (errorSubsidio) return respondError(req, res, 404, errorSubsidio);
 
-
-    respondSuccess(req, res, 200, {
-      subsidio,
-      pauta,
-    });
+    if (subsidio) {
+      // Verifica si el campo "pauta" existe en el subsidio
+      if (subsidio.pauta) {
+        const pauta = subsidio.pauta;
+        respondSuccess(req, res, 200, {
+          subsidio,
+          pauta,
+        });
+      } else {
+        respondSuccess(req, res, 200, subsidio);
+      }
+    } else {
+      // Si el subsidio no existe, devuelve un error
+      respondError(req, res, 404, "El subsidio no existe");
+    }
   } catch (error) {
     handleError(error, "subsidio.controller -> getSubsidioById");
     respondError(req, res, 500, "No se pudo obtener el subsidio");
   }
 }
+
+
 
 /**
  * Actualiza un subsidio por su id

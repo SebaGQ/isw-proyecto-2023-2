@@ -81,10 +81,22 @@ async function deletePauta(id) {
   }
 }
 
+async function findPautaByNombre(nombre) {
+  try {
+    const pauta = await Pauta.findOne({ PorcentajeFichaHogar: nombre });
+
+    return pauta;
+  } catch (error) {
+    handleError(error, "pauta.service -> findPautaByNombre");
+    return null;
+  }
+}
+
 module.exports = {
   getPautas,
   createPauta,
   getPautaById,
   updatePauta,
   deletePauta,
+  findPautaByNombre,
 };

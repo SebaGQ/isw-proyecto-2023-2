@@ -7,6 +7,9 @@ const router = express.Router();
 //importar crud
 const subsidioControllers = require ('../controllers/subsidio.controller.js');
 
+//importar crud de pauta
+const pautaController = require ('../controllers/pauta.controller.js');
+
 // Middleware para verificar que el usuario es un administrador
 const authorization = require('../middlewares/authorization.middleware.js');
 

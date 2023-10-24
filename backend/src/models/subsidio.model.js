@@ -13,10 +13,6 @@ const SubsidioSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        Direccion: {
-            type: String,
-            required: true,
-        },
         Monto: {
             type: Number,
             required: true,

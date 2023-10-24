@@ -5,7 +5,7 @@ const subsidioBodySchema = Joi.object({
   Descripcion: Joi.string().required(),
   Monto: Joi.number().required(),
   Tipo: Joi.string().valid("subsidio", "beneficio").required(),
-  Direccion: Joi.string().required(),
+  NombrePauta: Joi.string().required(),
   PorcentajeFichaHogar: Joi.string().required(),
   CantidadIntegrantes: Joi.number().required(),
 });

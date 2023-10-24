@@ -6,6 +6,10 @@ const mongoose = require("mongoose");
 
 const pautaSchema = new mongoose.Schema(
     {
+        NombrePauta: {
+            type: String,
+            required: true,
+        },
         PorcentajeFichaHogar: {
             type: String,
             required: true,

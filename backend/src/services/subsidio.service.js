@@ -1,7 +1,8 @@
 "use strict";
 const Subsidio = require("../models/subsidio.model.js");
-const pauta = require("../models/pauta.model.js"); // Importa el modelo de pauta
+const Pauta = require("../models/pauta.model.js"); // Importa el modelo de pauta
 const { handleError } = require("../utils/errorHandler");
+const { respondSuccess, respondError } = require("../utils/resHandler");
 
 /**
  * Obtiene todos los subsidios de la base de datos
@@ -18,39 +19,39 @@ async function getSubsidios() {
   }
 }
 
-/**
- * Crea un nuevo subsidio en la base de datos
- * @param {Object} subsidio Objeto de subsidio
- * @param {Object} pauta - Objeto de pauta opcional
- * @returns {Promise} Promesa con el objeto de subsidio creado
- */
-async function createSubsidio(subsidio) {
+async function createSubsidio(subsidio, nuevaPauta) {
   try {
     const {
       Name,
       Descripcion,
       Tipo,
-      Direccion,
       Monto,
+      NombrePauta,
       PorcentajeFichaHogar,
       CantidadIntegrantes,
     } = subsidio;
+    
     const newSubsidio = new Subsidio({
       Name,
       Descripcion,
       Tipo,
-      Direccion,
       Monto,
+      NombrePauta,
       PorcentajeFichaHogar,
       CantidadIntegrantes,
     });
 
-    if (pauta) {
-      // Valida si se proporcionó una pauta y la asocia al subsidio
-      newSubsidio.pauta = pauta._id;
+    let subsidioCreated = await newSubsidio.save();
+    
+    if (nuevaPauta) {
+      const [newPauta, pautaError] = await pautaService.createPauta(nuevaPauta);
+      if (pautaError) {
+        // Manejo de errores
+        return [null, pautaError];
+      }
+      subsidioCreated.pauta = newPauta._id;
+      subsidioCreated = await subsidioCreated.save();
     }
-
-    const subsidioCreated = await newSubsidio.save();
 
     return [subsidioCreated, null];
   } catch (error) {
@@ -65,7 +66,8 @@ async function createSubsidio(subsidio) {
  */
 async function getSubsidioById(id) {
   try {
-    const subsidio = await Subsidio.findById(id);
+    const subsidio = await Subsidio.findById({_id: id}).populate("pauta");
+    
     if (!subsidio) return [null, "El subsidio no existe"];
 
     return [subsidio, null];
