@@ -57,59 +57,59 @@ async function getApplications() {
 }
 
 async function getApplicationById(applicationId) {
-    try {
-      if (!mongoose.Types.ObjectId.isValid(applicationId)) {
-        return [null, "ID de postulación no válido"];
-      }
-      const application = await Application.findById(applicationId);
-      if (!application) return [null, "Postulación no encontrada"];
-      return [application, null];
-    } catch (error) {
-      handleError(error, "application.service -> getApplicationById");
-      return [null, "Error al obtener la postulación"];
+  try {
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return [null, "ID de postulación no válido"];
     }
+    const application = await Application.findById(applicationId);
+    if (!application) return [null, "Postulación no encontrada"];
+    return [application, null];
+  } catch (error) {
+    handleError(error, "application.service -> getApplicationById");
+    return [null, "Error al obtener la postulación"];
   }
-  
-  async function getApplicationsByUserId(userId) {
-    try {
-      if (!mongoose.Types.ObjectId.isValid(userId)) {
-        return [null, "ID de usuario no válido"];
-      }
-      const applications = await Application.find({ userId });
-      return [applications, null];
-    } catch (error) {
-      handleError(error, "application.service -> getApplicationsByUserId");
-      return [null, "Error al obtener las postulaciones por ID de usuario"];
-    }
-  }
+}
 
-  async function updateApplication(applicationId, updateData) {
-    try {
-      if (!mongoose.Types.ObjectId.isValid(applicationId)) {
-        return [null, "ID de postulación no válido"];
-      }
-      const application = await Application.findByIdAndUpdate(applicationId, updateData, { new: true });
-      if (!application) return [null, "Postulación no encontrada"];
-      return [application, null];
-    } catch (error) {
-      handleError(error, "application.service -> updateApplication");
-      return [null, "Error al actualizar la postulación"];
+async function getApplicationsByUserId(userId) {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return [null, "ID de usuario no válido"];
     }
+    const applications = await Application.find({ userId });
+    return [applications, null];
+  } catch (error) {
+    handleError(error, "application.service -> getApplicationsByUserId");
+    return [null, "Error al obtener las postulaciones por ID de usuario"];
   }
-  
-  async function deleteApplication(applicationId) {
-    try {
-      if (!mongoose.Types.ObjectId.isValid(applicationId)) {
-        return [null, "ID de postulación no válido"];
-      }
-      const application = await Application.findByIdAndDelete(applicationId);
-      if (!application) return [null, "Postulación no encontrada"];
-      return [application, null];
-    } catch (error) {
-      handleError(error, "application.service -> deleteApplication");
-      return [null, "Error al eliminar la postulación"];
+}
+
+async function updateApplication(applicationId, updateData) {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return [null, "ID de postulación no válido"];
     }
+    const application = await Application.findByIdAndUpdate(applicationId, updateData, { new: true });
+    if (!application) return [null, "Postulación no encontrada"];
+    return [application, null];
+  } catch (error) {
+    handleError(error, "application.service -> updateApplication");
+    return [null, "Error al actualizar la postulación"];
   }
+}
+
+async function deleteApplication(applicationId) {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return [null, "ID de postulación no válido"];
+    }
+    const application = await Application.findByIdAndDelete(applicationId);
+    if (!application) return [null, "Postulación no encontrada"];
+    return [application, null];
+  } catch (error) {
+    handleError(error, "application.service -> deleteApplication");
+    return [null, "Error al eliminar la postulación"];
+  }
+}
 
 module.exports = {
   createApplication,

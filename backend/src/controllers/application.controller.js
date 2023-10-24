@@ -6,7 +6,7 @@ const { handleError } = require("../utils/errorHandler");
 
 /**
  * Crea una nueva solicitud de subsidio.
- * @param {Object} req - Objeto de petición.
+ * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta.
  */
 async function createApplication(req, res) {

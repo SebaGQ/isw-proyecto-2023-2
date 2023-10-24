@@ -1,6 +1,7 @@
 "use strict";
 
 const Joi = require("joi");
+const AVAILIBILITY = require("../constants/availability.constants");
 
 /**
  * Esquema de validación para el cuerpo de la solicitud de usuario.
@@ -34,8 +35,7 @@ const appealBodySchema = Joi.object({
       "string.base": "La razón debe ser de tipo string.",
     }),
   status: Joi.string()
-    .valid('En Revisión', 'Aceptado', 'Rechazado')
-    .default('En Revisión')
+    .valid(...AVAILIBILITY)
     .messages({
       "string.base": "El estado debe ser de tipo string.",
       "any.only": "El estado debe ser 'En Revisión', 'Aceptado' o 'Rechazado'.",

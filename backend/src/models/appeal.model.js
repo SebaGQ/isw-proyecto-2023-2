@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AVAILIBILITY = require("../constants/availability.constants");
 
 /**Declara la estructura del documento */
 const appealSchema = new mongoose.Schema({
@@ -12,15 +13,15 @@ const appealSchema = new mongoose.Schema({
     required: true,
     ref: 'User'
   },
-  reason: { 
+  reason: {
     type: String,
     required: true
   },
   status: {
     type: String,
     required: true,
-    enum: ['En Revisión', 'Aceptado', 'Rechazado'],
-    default: 'En Revisión'
+    enum: AVAILIBILITY,
+    required: true
   }
 }, {
   timestamps: true

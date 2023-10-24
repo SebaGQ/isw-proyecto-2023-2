@@ -12,7 +12,7 @@ async function createAppeal(req, res) {
     const userEmail = req.email;
     const [newAppeal, error] = await AppealService.createAppeal(userEmail, req.body);
 
-    if (error) return respondError(req, res, 404, error);
+    if (error) return respondError(req, res, 400, error);
     respondSuccess(req, res, 201, newAppeal);
   } catch (error) {
     handleError(error, "appeal.controller -> createAppeal");
