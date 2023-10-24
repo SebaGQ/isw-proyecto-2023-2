@@ -2,6 +2,10 @@
 
 const Joi = require("joi");
 
+/**
+ * Esquema de validación para el cuerpo de la solicitud de usuario.
+ * @constant {Object}
+ */
 const subsidyBodySchema = Joi.object({
   name: Joi.string()
     .trim()
@@ -43,6 +47,7 @@ const subsidyBodySchema = Joi.object({
     }),
   guidelineId: Joi.string()
     .required()
+    //Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id de la pauta no puede estar vacío.",

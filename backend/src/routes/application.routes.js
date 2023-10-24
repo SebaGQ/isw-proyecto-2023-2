@@ -10,7 +10,8 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 /** Middleware de autorización */
 const authorizationMiddleware = require("../middlewares/authorization.middleware.js");
 
-/** Middleware de validación, se usa solo en las solicitudes q reciben un body */
+/** Middleware de validación */
+// Se usa solo en las solicitudes q reciben un body
 const validationMiddleware = require("../middlewares/valid.application.middleware.js");
 
 const router = express.Router();

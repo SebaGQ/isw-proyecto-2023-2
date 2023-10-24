@@ -4,6 +4,11 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const ApplicationService = require("../services/application.service");
 const { handleError } = require("../utils/errorHandler");
 
+/**
+ * Crea una nueva solicitud de subsidio.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function createApplication(req, res) {
   try {
     const { subsidyId, socialPercentage, applicationDate } = req.body;
@@ -23,6 +28,11 @@ async function createApplication(req, res) {
   }
 }
 
+/**
+ * Obtiene todas las solicitudes de subsidio.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function getApplications(req, res) {
   try {
     const [applications, applicationsError] = await ApplicationService.getApplications();

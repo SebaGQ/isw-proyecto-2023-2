@@ -2,6 +2,11 @@ const { respondSuccess, respondError } = require("../utils/resHandler");
 const { handleError } = require("../utils/errorHandler");
 const AppealService = require("../services/appeal.service");
 
+/**
+ * Crea una nueva apelación.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function createAppeal(req, res) {
   try {
     const userEmail = req.email;
@@ -15,6 +20,11 @@ async function createAppeal(req, res) {
   }
 }
 
+/**
+ * Obtiene todas las apelaciones.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function getAppeals(req, res) {
   try {
     const [appeals, error] = await AppealService.getAppeals();
@@ -27,6 +37,11 @@ async function getAppeals(req, res) {
   }
 }
 
+/**
+ * Obtiene una apelación por su ID.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function getAppealById(req, res) {
   try {
     const [appeal, error] = await AppealService.getAppealById(req.params.id);
@@ -38,6 +53,11 @@ async function getAppealById(req, res) {
   }
 }
 
+/**
+ * Obtiene todas las apelaciones realizadas por un usuario específico.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function getAppealsByUserId(req, res) {
   try {
     const userId = req.params.userId;
@@ -50,6 +70,11 @@ async function getAppealsByUserId(req, res) {
   }
 }
 
+/**
+ * Actualiza una apelación existente.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function updateAppeal(req, res) {
   try {
     const [updatedAppeal, error] = await AppealService.updateAppeal(req.params.id, req.body);
@@ -61,6 +86,11 @@ async function updateAppeal(req, res) {
   }
 }
 
+/**
+ * Elimina una apelación existente.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function deleteAppeal(req, res) {
   try {
     const [deletedAppeal, error] = await AppealService.deleteAppeal(req.params.id);

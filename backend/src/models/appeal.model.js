@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+/**Declara la estructura del documento */
 const appealSchema = new mongoose.Schema({
   postId: {
     type: mongoose.Schema.Types.ObjectId,

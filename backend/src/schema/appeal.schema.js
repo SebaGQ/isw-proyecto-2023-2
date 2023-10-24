@@ -1,12 +1,15 @@
-// appeal.schema.js
-
 "use strict";
 
 const Joi = require("joi");
 
+/**
+ * Esquema de validación para el cuerpo de la solicitud de usuario.
+ * @constant {Object}
+ */
 const appealBodySchema = Joi.object({
   postId: Joi.string()
     .required()
+    //Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24})$/)
     .messages({
       "string.empty": "El id de la postulación no puede estar vacío.",
@@ -15,6 +18,7 @@ const appealBodySchema = Joi.object({
     }),
   userId: Joi.string()
     .required()
+    //Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24})$/)
     .messages({
       "string.empty": "El id del usuario no puede estar vacío.",

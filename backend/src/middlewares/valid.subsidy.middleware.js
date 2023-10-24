@@ -2,6 +2,7 @@ const { subsidyBodySchema } = require('../schema/subsidy.schema.js');
 const { respondError } = require("../utils/resHandler.js");
 const { handleError } = require("../utils/errorHandler.js");
 
+/** Valida el body de las peticiones según las reglas establecidas en el schema */
 function validateSubsidyBody(req, res, next) {
   try {
     const { error } = subsidyBodySchema.validate(req.body);

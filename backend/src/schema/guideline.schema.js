@@ -2,6 +2,10 @@
 
 const Joi = require("joi");
 
+/**
+ * Esquema de validación para el cuerpo de la solicitud de usuario.
+ * @constant {Object}
+ */
 const guidelineBodySchema = Joi.object({
   name: Joi.string()
     .required()
