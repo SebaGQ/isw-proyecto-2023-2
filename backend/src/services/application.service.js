@@ -11,6 +11,8 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 
+    //El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo con esa ID
+    //En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
     const subsidy = await Subsidy.findById(subsidyId).populate('guidelineId');
     if (!subsidy) return [null, 'El subsidio asociado no existe'];
 
@@ -22,7 +24,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = 'Denied';
     } else {
-      // Agregar más lógica para validar la postulacion
+      // Agregar más lógica para validar postulacion
       status = 'Approved';
     }
 

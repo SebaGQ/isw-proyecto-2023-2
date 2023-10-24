@@ -19,16 +19,11 @@ const appealRoutes = require('./appeal.routes.js');
 
 /** Enrutador de pautas */
 const guidelineRoutes = require('./guideline.routes.js');
-
-
-/** Middleware de autenticación */
-const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
-
 /** Instancia del enrutador */
 const router = express.Router();
 
 // Define las rutas para los usuarios /api/user
-router.use("/users", authenticationMiddleware, userRoutes);
+router.use("/users", userRoutes);
 // Define las rutas para la autenticación /api/auth
 router.use("/auth", authRoutes);
 // Define las rutas para las postulaciones /api/applications
