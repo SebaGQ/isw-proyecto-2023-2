@@ -15,9 +15,6 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     if (!subsidy) return [null, 'El subsidio asociado no existe'];
 
     const guideline = subsidy.guidelineId;
-    console.log(subsidy);
-    console.log('AAAAAAAAAAAAAA');
-    console.log(guideline);
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
     let status = 'Pending';
