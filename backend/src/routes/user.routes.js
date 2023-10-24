@@ -11,6 +11,10 @@ const authorizationMiddleware = require("../middlewares/authorization.middleware
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
+/** Middleware de validación de usuarios */
+const validUserMiddleware = require("../middlewares/valid.user.middleware");
+
+
 /** Instancia del enrutador */
 const router = express.Router();
 
@@ -21,15 +25,8 @@ router.use(authenticationMiddleware);
 router.get("/", usuarioController.getUsers);
 router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
 router.get("/:id", usuarioController.getUserById);
-router.put(
-  "/:id",
-  authorizationMiddleware.isAdmin,
-  usuarioController.updateUser,
-);
-router.delete(
-  "/:id",
-  authorizationMiddleware.isAdmin,
-  usuarioController.deleteUser,
+router.put("/:id", authorizationMiddleware.isAdmin, usuarioController.updateUser,);
+router.delete( "/:id", authorizationMiddleware.isAdmin, usuarioController.deleteUser,
 );
 
 // Exporta el enrutador
