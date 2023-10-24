@@ -2,8 +2,8 @@ const Joi = require("joi");
 
 const pautaBodySchema = Joi.object({
     NombrePauta: Joi.string().required(),
-    PorcentajeFichaHogar: Joi.string().required(),
-    CantidadIntegrantes: Joi.number().required(),
+    MaxPorcentajeFichaHogar: Joi.string().required(),
+    MinCantidadIntegrantes: Joi.number().required(),
 });
 
 const pautaIdSchema = Joi.object({

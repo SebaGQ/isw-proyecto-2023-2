@@ -19,43 +19,19 @@ async function getSubsidios() {
   }
 }
 
-async function createSubsidio(subsidio, nuevaPauta) {
+/**
+ * Crea un nuevo subsidio
+ * @param {Object} subsidio - Datos del subsidio a crear
+ * @returns {Promise} Promesa con el objeto de subsidio creado o un error
+ */
+async function createSubsidio(subsidio) {
   try {
-    const {
-      Name,
-      Descripcion,
-      Tipo,
-      Monto,
-      NombrePauta,
-      PorcentajeFichaHogar,
-      CantidadIntegrantes,
-    } = subsidio;
-    
-    const newSubsidio = new Subsidio({
-      Name,
-      Descripcion,
-      Tipo,
-      Monto,
-      NombrePauta,
-      PorcentajeFichaHogar,
-      CantidadIntegrantes,
-    });
-
-    let subsidioCreated = await newSubsidio.save();
-    
-    if (nuevaPauta) {
-      const [newPauta, pautaError] = await pautaService.createPauta(nuevaPauta);
-      if (pautaError) {
-        // Manejo de errores
-        return [null, pautaError];
-      }
-      subsidioCreated.pauta = newPauta._id;
-      subsidioCreated = await subsidioCreated.save();
-    }
-
+    const newSubsidio = new Subsidio(subsidio);
+    const subsidioCreated = await newSubsidio.save();
     return [subsidioCreated, null];
   } catch (error) {
     handleError(error, "subsidio.service -> createSubsidio");
+    return [null, "No se pudo crear el subsidio"];
   }
 }
 
@@ -87,12 +63,11 @@ async function updateSubsidio(id, subsidio) {
     const subsidioFound = await Subsidio.findById(id);
     if (!subsidioFound) return [null, "El subsidio no existe"];
 
-    const { Name, Descripcion, Type, Direccion, Monto } = subsidio;
+    const { Name, Descripcion, Tipo, Monto } = subsidio;
 
     subsidioFound.Name = Name;
     subsidioFound.Descripcion = Descripcion;
-    subsidioFound.Type = Type;
-    subsidioFound.Direccion = Direccion;
+    subsidioFound.Tipo = Tipo;
     subsidioFound.Monto = Monto;
 
     const subsidioUpdated = await subsidioFound.save();

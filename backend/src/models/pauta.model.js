@@ -10,15 +10,18 @@ const pautaSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        PorcentajeFichaHogar: {
+        MaxPorcentajeFichaHogar: {
             type: String,
             required: true,
         },
-        CantidadIntegrantes: {
+        MinCantidadIntegrantes: {
             type: Number,
             required: true,
         },
-    }
+    },
+    {
+        versionKey: false,
+    },
 );
 // Crea el modelo de datos 'Role' a partir del esquema 'roleSchema'
 const pauta = mongoose.model("pauta", pautaSchema);

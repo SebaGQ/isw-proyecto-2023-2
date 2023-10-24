@@ -31,6 +31,11 @@ async function getSubsidios(req, res) {
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
+/**
+ * Crea un nuevo subsidio
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
 async function createSubsidio(req, res) {
   try {
     const { body } = req;
@@ -48,8 +53,8 @@ async function createSubsidio(req, res) {
 
     const pautaData = {
       NombrePauta: body.NombrePauta,
-      PorcentajeFichaHogar: body.PorcentajeFichaHogar,
-      CantidadIntegrantes: body.CantidadIntegrantes,
+      MaxPorcentajeFichaHogar: body.PorcentajeFichaHogar,
+      MinCantidadIntegrantes: body.CantidadIntegrantes,
     };
 
     // Crear la pauta
@@ -92,16 +97,8 @@ async function getSubsidioById(req, res) {
     if (errorSubsidio) return respondError(req, res, 404, errorSubsidio);
 
     if (subsidio) {
-      // Verifica si el campo "pauta" existe en el subsidio
-      if (subsidio.pauta) {
-        const pauta = subsidio.pauta;
-        respondSuccess(req, res, 200, {
-          subsidio,
-          pauta,
-        });
-      } else {
-        respondSuccess(req, res, 200, subsidio);
-      }
+      // Responde solo con el subsidio, sin incluir pauta
+      respondSuccess(req, res, 200, subsidio);
     } else {
       // Si el subsidio no existe, devuelve un error
       respondError(req, res, 404, "El subsidio no existe");

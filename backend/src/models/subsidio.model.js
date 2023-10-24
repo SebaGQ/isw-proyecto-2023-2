@@ -26,8 +26,12 @@ const SubsidioSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "pauta", 
          },
-      ],       
-    }
+      ],
+             
+    },
+    {
+        versionKey: false,
+    },
     
 );
 // Crea el modelo de datos 'Role' a partir del esquema 'roleSchema'
