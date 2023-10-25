@@ -63,12 +63,14 @@ async function updateSubsidio(id, subsidio) {
     const subsidioFound = await Subsidio.findById(id);
     if (!subsidioFound) return [null, "El subsidio no existe"];
 
-    const { Name, Descripcion, Tipo, Monto } = subsidio;
+    const { Name, Descripcion, Tipo, Monto, FechaInicio, FechaTermino} = subsidio;
 
     subsidioFound.Name = Name;
     subsidioFound.Descripcion = Descripcion;
     subsidioFound.Tipo = Tipo;
     subsidioFound.Monto = Monto;
+    subsidioFound.FechaInicio = FechaInicio;
+    subsidioFound.FechaTermino = FechaTermino;
 
     const subsidioUpdated = await subsidioFound.save();
 

@@ -49,12 +49,14 @@ async function createSubsidio(req, res) {
       Tipo: body.Tipo,
       Direccion: body.Direccion,
       Monto: body.Monto,
+      FechaInicio: body.FechaInicio,
+      FechaTermino: body.FechaTermino,
     };
 
     const pautaData = {
       NombrePauta: body.NombrePauta,
-      MaxPorcentajeFichaHogar: body.PorcentajeFichaHogar,
-      MinCantidadIntegrantes: body.CantidadIntegrantes,
+      MaxPorcentajeFichaHogar: body.MaxPorcentajeFichaHogar,
+      MinCantidadIntegrantes: body.MinCantidadIntegrantes,
     };
 
     // Crear la pauta
