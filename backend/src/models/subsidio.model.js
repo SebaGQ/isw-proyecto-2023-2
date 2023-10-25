@@ -23,11 +23,11 @@ const SubsidioSchema = new mongoose.Schema(
             required: true,
         },
         FechaInicio: {
-            type: Date,
+            type: String,
             required: true,
         },
         FechaTermino: {
-            type: Date,
+            type: String,
             required: true,
         },
         pauta:[{

@@ -17,8 +17,24 @@ const subsidioBodySchema = Joi.object({
     "any.required": "El monto es obligatorio.",
   }),
   Tipo: Joi.string().valid("subsidio", "beneficio").required(),
-  FechaInicio: Joi.date().required(),
-  FechaTermino: Joi.date().required(),
+  FechaInicio: Joi.string()
+  .required()
+  .pattern(/^((0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/\d{4})$/)
+  .messages({
+    "string.empty": "FechaInicio no puede estar vacío.",
+    "any.required": "FechaInicio es obligatorio.",
+    "string.base": "FechaInicio debe ser de tipo string.",
+    "string.pattern.base": "FechaInicio debe tener el formato 'DD/MM/YYYY'.",
+  }),
+  FechaTermino: Joi.string()
+  .required()
+  .pattern(/^((0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])\/\d{4})$/)
+  .messages({
+    "string.empty": "FechaTermino no puede estar vacío.",
+    "any.required": "FechaTermino es obligatorio.",
+    "string.base": "FechaTermino debe ser de tipo string.",
+    "string.pattern.base": "FechaTermino debe tener el formato 'DD/MM/YYYY'.",
+  }),
   NombrePauta: Joi.string().required(),
   MaxPorcentajeFichaHogar: Joi.string().required(),
   MinCantidadIntegrantes: Joi.number().required(),

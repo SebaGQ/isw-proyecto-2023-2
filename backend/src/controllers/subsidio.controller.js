@@ -5,6 +5,8 @@ const SubsidioService = require("../services/subsidio.service");
 const PautaService = require("../services/pauta.service");
 const { subsidioBodySchema, subsidioIdSchema } = require("../schema/subsidio.schema");
 const { handleError } = require("../utils/errorHandler");
+const moment = require('moment');
+const pauta = require("../models/pauta.model");
 
 
 /**
@@ -31,11 +33,6 @@ async function getSubsidios(req, res) {
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  */
-/**
- * Crea un nuevo subsidio
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
 async function createSubsidio(req, res) {
   try {
     const { body } = req;
@@ -49,10 +46,17 @@ async function createSubsidio(req, res) {
       Tipo: body.Tipo,
       Direccion: body.Direccion,
       Monto: body.Monto,
-      FechaInicio: body.FechaInicio,
-      FechaTermino: body.FechaTermino,
+      FechaInicio: body.FechaInicio, 
+      FechaTermino: body.FechaTermino, 
     };
+    // Convierte las cadenas de fecha en objetos Date
+    const dateInicio = new Date(subsidioData.FechaInicio);
+    const dateTermino = new Date(subsidioData.FechaTermino);
 
+    // Verifica que FechaTermino no sea menor que FechaInicio
+    if (dateTermino < dateInicio) {
+      return respondError(req, res, 400, "La fecha de término no puede ser anterior a la fecha de inicio");
+    }
     const pautaData = {
       NombrePauta: body.NombrePauta,
       MaxPorcentajeFichaHogar: body.MaxPorcentajeFichaHogar,
@@ -149,21 +153,47 @@ async function deleteSubsidio(req, res) {
     const { error: paramsError } = subsidioIdSchema.validate(params);
     if (paramsError) return respondError(req, res, 400, paramsError.message);
 
-    const subsidio = await SubsidioService.deleteSubsidio(params.id);
-    !subsidio
-      ? respondError(
-          req,
-          res,
-          404,
-          "No se encontró el subsidio solicitado",
-          "Verifique el ID ingresado"
-        )
-      : respondSuccess(req, res, 200, subsidio);
+    // Obtén el subsidio por ID, incluyendo la pauta asociada
+    const [subsidio, error] = await SubsidioService.getSubsidioById(params.id);
+
+    if (error) {
+      return respondError(
+        req,
+        res,
+        404,
+        "No se encontró el subsidio solicitado",
+        "Verifique el ID ingresado"
+      );
+    }
+
+    // Elimina el subsidio por ID
+    const subsidioDeleted = await SubsidioService.deleteSubsidio(params.id);
+
+    if (!subsidioDeleted) {
+      return respondError(req, res, 500, "No se pudo eliminar el subsidio");
+    }
+
+    // Obtén la ID de la pauta desde la respuesta del subsidio
+    const pautaId = subsidio.pauta[0]._id;
+    console.log("idpauta " , subsidio.pauta[0]._id);
+    console.log("idpauta " , subsidio.pauta);
+    console.log("idpauta " ,pautaId);
+
+    // Elimina la pauta por su ID
+    const pautaDeleted = await PautaService.deletePauta(pautaId);
+
+    if (!pautaDeleted) {
+      return respondError(req, res, 500, "No se pudo eliminar la pauta asociada al subsidio");
+    }
+
+    return respondSuccess(req, res, 200, "Subsidio y pauta asociada eliminados correctamente");
   } catch (error) {
-    handleError(error, "subsidio.controller -> deleteSubsidio");
-    respondError(req, res, 500, "No se pudo eliminar el subsidio");
+    handleError(error, "subsidio.controller -> deleteSubsidioAndPauta");
+    respondError(req, res, 500, "No se pudo eliminar el subsidio y la pauta asociada");
   }
 }
+
+
 
 module.exports = {
   getSubsidios,
