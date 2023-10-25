@@ -26,6 +26,12 @@ async function getSubsidios() {
  */
 async function createSubsidio(subsidio) {
   try {
+    // Verifica si ya existe un subsidio con el mismo nombre
+    const existingSubsidio = await Subsidio.findOne({ Name: subsidio.Name });
+    if (existingSubsidio) {
+      return [null, "Ya existe un subsidio con el mismo nombre."];
+    }
+    //sino se crea un nuevo subsidio
     const newSubsidio = new Subsidio(subsidio);
     const subsidioCreated = await newSubsidio.save();
     return [subsidioCreated, null];
@@ -63,12 +69,14 @@ async function updateSubsidio(id, subsidio) {
     const subsidioFound = await Subsidio.findById(id);
     if (!subsidioFound) return [null, "El subsidio no existe"];
 
-    const { Name, Descripcion, Tipo, Monto } = subsidio;
+    const { Name, Descripcion, Tipo, Monto, FechaInicio, FechaTermino} = subsidio;
 
     subsidioFound.Name = Name;
     subsidioFound.Descripcion = Descripcion;
     subsidioFound.Tipo = Tipo;
     subsidioFound.Monto = Monto;
+    subsidioFound.FechaInicio = FechaInicio;
+    subsidioFound.FechaTermino = FechaTermino;
 
     const subsidioUpdated = await subsidioFound.save();
 
