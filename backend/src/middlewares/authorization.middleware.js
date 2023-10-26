@@ -32,6 +32,34 @@ async function isAdmin(req, res, next) {
   }
 }
 
+/**
+ * Comprueba si el usuario es quien realizo la postulacion
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ * @param {Function} next - Función para continuar con la siguiente función
+ */
+async function isPostulante(req, res, next) {
+  try {
+    const user = await User.findOne({ rut: req.rut });
+    const roles = await Role.find({ _id: { $in: user.roles } });
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "user") {
+        next();
+        return;
+      }
+    }
+    return respondError(
+      req,
+      res,
+      401,
+      "Se requiere un rol de postulador para realizar esta acción",
+    );
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isPostulador");
+  }
+}
+
 module.exports = {
   isAdmin,
+  isPostulante
 };

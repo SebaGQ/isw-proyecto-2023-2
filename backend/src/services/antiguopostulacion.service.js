@@ -1,7 +1,11 @@
 "use strict";
 //Importar el modelo de postulacion 'postulacion'
 const Postulacion = require("../models/Postulacion.model.js");
-const { handleError } = require("../utils/errorHandler");
+const { handleError } = require("../utils/errorHandler.js");
+const user = require("../models/user.model.js");
+
+
+
 
 /**
  * Obtiene todas las postulaciones de la base de datos
@@ -23,32 +27,30 @@ async function getPostulaciones() {
   }
 
   /**
-   * Crea una postulacion en la base de datos
+   * Crea una postulacion en la base de datos, recibiendo el id del usuario y los datos de postulacion
    * @param {Object} postulacion objeto de postulacion
    * @returns {Promise} promesa con el objeto postulacion creado
    */
-    async function createPostulacion(postulacion) {
-        try {
-        const { usuario, estado, subsidio, porcentajeFicha, integrantesHogar } = postulacion;
-    
-        const postulacionFound = await Postulacion.findOne({ usuario: postulacion.usuario });
-        if (postulacionFound) return [null, "La postulacion ya existe"];
-    
-        const newPostulacion = new Postulacion({
-            usuario,
-            estado,
-            subsidio,
-            porcentajeFicha,
-            integrantesHogar,
-        });
-        await newPostulacion.save();
-    
-        return [newPostulacion, null];
-        } catch (error) {
-        handleError(error, "postulacion.service -> createPostulacion");
-        }
-}
+  async function createPostulacion(postulacion) {
+    try {
+      const { usuario, subsidio, porcentajeFicha, integrantesHogar } = postulacion;
 
+      // el porcentajeFicha debe ser menor al MaxporcentajeFicha
+      
+      const postulacionCreated = await Postulacion.create({
+        usuario,
+        estado: "pendiente",
+        subsidio,
+        porcentajeFicha,
+        integrantesHogar,
+      });
+
+      return [postulacionCreated, null];
+    } catch (error) {
+      handleError(error, "postulacion.service -> createPostulacion");
+    }
+  }
+  
 /**
  * Obtiene una postulacion por su id de la base de datos
  * @param {string} Id de la postulacion

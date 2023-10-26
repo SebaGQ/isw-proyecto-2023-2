@@ -2,16 +2,27 @@
 
 const Joi = require("joi");
 const ROLES = require("../constants/roles.constants");
-
+// const rutPattern = /^[0-9]+-[0-9kK]{1}$/;
 /**
  * Esquema de validación para el cuerpo de la solicitud de usuario.
  * @constant {Object}
  */
 const userBodySchema = Joi.object({
-  username: Joi.string().required().messages({
+  nombre: Joi.string().required().messages({
     "string.empty": "El nombre de usuario no puede estar vacío.",
     "any.required": "El nombre de usuario es obligatorio.",
     "string.base": "El nombre de usuario debe ser de tipo string.",
+  }),
+  apellido: Joi.string().required().messages({
+    "string.empty": "El apellido de usuario no puede estar vacío.",
+    "any.required": "El apellido de usuario es obligatorio.",
+    "string.base": "El apellido de usuario debe ser de tipo string.",
+  }),
+  rut: Joi.string().required().messages({
+    "string.empty": "El rut no puede estar vacío.",
+    "any.required": "El rut es obligatorio.",
+    "string.base": "El rut debe ser de tipo string.",
+    "string.pattern.base": "El rut no tiene un formato válido.",
   }),
   password: Joi.string().required().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",
@@ -50,7 +61,6 @@ const userBodySchema = Joi.object({
 const userIdSchema = Joi.object({
   id: Joi.string()
     .required()
-    .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id no puede estar vacío.",
       "any.required": "El id es obligatorio.",
