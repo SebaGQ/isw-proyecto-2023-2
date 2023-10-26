@@ -16,7 +16,7 @@ const applicationSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: AVAILIBILITY,
-    required: true
+    default: "Pendiente"
   },
   socialPercentage: {
     type: Number,
