@@ -8,9 +8,6 @@ const userRoutes = require("./user.routes.js");
 /** Enrutador de autenticación */
 const authRoutes = require("./auth.routes.js");
 
-/** Enrutador de revision */
-const revisionRoutes = require("./revision.routes.js");
-
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
@@ -23,6 +20,10 @@ router.use("/users", authenticationMiddleware, userRoutes);
 router.use("/auth", authRoutes);
 // Definir las rutas para la revision
 router.use("/revision", authenticationMiddleware, revisionRoutes);
+//define las rutas para los subsidios
+router.use("/subsidio", authenticationMiddleware, subsidioRoutes);
+//define las rutas para las pautas
+router.use("/pauta", authenticationMiddleware, pautaRoutes);
 
 // Exporta el enrutador
 module.exports = router;
