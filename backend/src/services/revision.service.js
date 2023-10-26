@@ -16,6 +16,12 @@ async function createRevision(revision) {
         const postulacionFound = await Postulacion.findById(postulacion);
         if (!postulacionFound) return [null, "La postulacion no existe"];
 
+        // validacion solo se crea la revision si la postulacion esta en estado pendiente
+        if (postulacionFound.estadoPostulacion !== "pendiente") {
+            return [null, "La postulacion no esta en estado pendiente"];
+        }
+        
+
         const newRevision = new Revision({
             postulacion,
             comentario,
@@ -23,6 +29,9 @@ async function createRevision(revision) {
         await newRevision.save();
 
         postulacionFound.revisiones.push(newRevision._id);
+        await postulacionFound.save();
+        // Se edita el estado de postulacion a En revision
+        postulacionFound.estadoPostulacion = "en revision";
         await postulacionFound.save();
 
         return [newRevision, null];
@@ -99,10 +108,30 @@ async function updateEstadoPostulacion(id, postulacion) {
     }
 }
 
+/**
+* Filtrar las postulaciones segun el tipo de subsidio con el nombre del subsidio
+* @param {string} nombre Nombre del subsidio
+* @returns {Promise} Promesa con el objeto de las postulaciones
+*/
+async function getPostulacionesByTipoSubsidio(nombre) {
+    try {
+        const postulaciones = await Postulacion.find({ estadoPostulacion: "pendiente" })
+            .populate("rut")
+            .populate("tipoSubsidio")
+            .populate("estadoPostulacion")
+            .exec();
+        if (!postulaciones) return [null, "No hay postulaciones"];
+
+        return [postulaciones, null];
+    } catch (error) {
+        handleError(error, "postulacion.service -> getPostulacionesByTipoSubsidio");
+    }
+}
 
 module.exports = {
     getPostulacionesPendientes,
     getPostulacionById,
     updateEstadoPostulacion,
     createRevision,
+    getPostulacionesByTipoSubsidio,
 };

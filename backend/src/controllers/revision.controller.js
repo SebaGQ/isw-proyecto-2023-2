@@ -1,7 +1,7 @@
+/* eslint-disable max-len */
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const RevisionService = require("../services/revision.service");
 const { handleError } = require("../utils/errorHandler");
-// eslint-disable-next-line max-len
 const { postulacionIdSchema, postulacionBodySchema } = require("../utils/schemas/postulacion.schema");
 
 /**
@@ -11,7 +11,6 @@ const { postulacionIdSchema, postulacionBodySchema } = require("../utils/schemas
  */
 async function getPostulacionesPendientes(req, res) {
     try {
-        // eslint-disable-next-line max-len
         const [postulaciones, errorPostulaciones] = await RevisionService.getPostulacionesPendientes();
         if (errorPostulaciones) return respondError(req, res, 404, errorPostulaciones);
 
@@ -70,6 +69,25 @@ async function getPostulacionById(req, res) {
 }
 
 /**
+ * Obtiene todas las postulaciones de un tipo de subsidio
+ * @param {Object} req - Objeto de petición
+ * @param {Object} res - Objeto de respuesta
+ */
+async function getPostulacionesByTipoSubsidio(req, res) {
+    try {
+        const { params } = req;
+        const { error: paramsError } = postulacionIdSchema.validate(params);
+        if (paramsError) return respondError(req, res, 400, paramsError.message);
+        const [postulaciones, postulacionesError] = await RevisionService.getPostulacionesByTipoSubsidio(params.id);
+        if (postulacionesError) return respondError(req, res, 404, postulacionesError);
+        respondSuccess(req, res, 200, postulaciones);
+    } catch (error) {
+        handleError(error, "revision.controller -> getPostulacionesByTipoSubsidio");
+        respondError(req, res, 500, "No se pudo obtener las postulaciones");
+    }
+}
+
+/**
  * Crear una nueva revision
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
@@ -88,9 +106,11 @@ async function createRevision(req, res) {
     }
 }
 
+
 module.exports = {
     getPostulacionesPendientes,
     updateEstadoPostulacion,
     getPostulacionById,
     createRevision,
+    getPostulacionesByTipoSubsidio,
 };

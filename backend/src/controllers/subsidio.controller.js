@@ -5,8 +5,6 @@ const SubsidioService = require("../services/subsidio.service");
 const PautaService = require("../services/pauta.service");
 const { subsidioBodySchema, subsidioIdSchema } = require("../schema/subsidio.schema");
 const { handleError } = require("../utils/errorHandler");
-const moment = require('moment');
-const pauta = require("../models/pauta.model");
 
 
 /**
@@ -39,52 +37,15 @@ async function createSubsidio(req, res) {
     const { error: bodyError } = subsidioBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
 
-    // Extraer los datos del subsidio y de la pauta del cuerpo de la solicitud
-    const subsidioData = {
-      Name: body.Name,
-      Descripcion: body.Descripcion,
-      Tipo: body.Tipo,
-      Direccion: body.Direccion,
-      Monto: body.Monto,
-      FechaInicio: body.FechaInicio, 
-      FechaTermino: body.FechaTermino, 
-    };
-    // Convierte las cadenas de fecha en objetos Date
-    const dateInicio = new Date(subsidioData.FechaInicio);
-    const dateTermino = new Date(subsidioData.FechaTermino);
-
-    // Verifica que FechaTermino no sea menor que FechaInicio
-    if (dateTermino < dateInicio) {
-      return respondError(req, res, 400, "La fecha de término no puede ser anterior a la fecha de inicio");
-    }
-    const pautaData = {
-      NombrePauta: body.NombrePauta,
-      MaxPorcentajeFichaHogar: body.MaxPorcentajeFichaHogar,
-      MinCantidadIntegrantes: body.MinCantidadIntegrantes,
-    };
-
-    // Crear la pauta
-    const [newPauta, pautaError] = await PautaService.createPauta(pautaData);
-    if (pautaError) return respondError(req, res, 400, pautaError);
-
-    // Asociar la pauta al subsidio
-    subsidioData.pauta = newPauta._id;
-
-    // Crear el subsidio
-    const [newSubsidio, subsidioError] = await SubsidioService.createSubsidio(subsidioData);
+    const [subsidio, subsidioError] = await SubsidioService.createSubsidio(body);
     if (subsidioError) return respondError(req, res, 400, subsidioError);
 
-    if (!newSubsidio) {
-      return respondError(req, res, 400, "No se creó el subsidio");
-    }
-
-    respondSuccess(req, res, 201, newSubsidio);
+    respondSuccess(req, res, 201, subsidio);
   } catch (error) {
     handleError(error, "subsidio.controller -> createSubsidio");
-    respondError(req, res, 500, "No se creó el subsidio");
+    respondError(req, res, 500, "No se pudo crear el subsidio");
   }
 }
-
 
 
 /**
@@ -114,7 +75,6 @@ async function getSubsidioById(req, res) {
     respondError(req, res, 500, "No se pudo obtener el subsidio");
   }
 }
-
 
 
 /**
@@ -162,7 +122,7 @@ async function deleteSubsidio(req, res) {
         res,
         404,
         "No se encontró el subsidio solicitado",
-        "Verifique el ID ingresado"
+        "Verifique el ID ingresado",
       );
     }
 
@@ -175,9 +135,6 @@ async function deleteSubsidio(req, res) {
 
     // Obtén la ID de la pauta desde la respuesta del subsidio
     const pautaId = subsidio.pauta[0]._id;
-    console.log("idpauta " , subsidio.pauta[0]._id);
-    console.log("idpauta " , subsidio.pauta);
-    console.log("idpauta " ,pautaId);
 
     // Elimina la pauta por su ID
     const pautaDeleted = await PautaService.deletePauta(pautaId);
@@ -192,8 +149,6 @@ async function deleteSubsidio(req, res) {
     respondError(req, res, 500, "No se pudo eliminar el subsidio y la pauta asociada");
   }
 }
-
-
 
 module.exports = {
   getSubsidios,

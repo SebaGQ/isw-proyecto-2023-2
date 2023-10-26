@@ -2,8 +2,6 @@
 const Subsidio = require("../models/subsidio.model.js");
 const Pauta = require("../models/pauta.model.js"); // Importa el modelo de pauta
 const { handleError } = require("../utils/errorHandler");
-const { respondSuccess, respondError } = require("../utils/resHandler");
-
 /**
  * Obtiene todos los subsidios de la base de datos
  * @returns {Promise} Promesa con el objeto de subsidios
@@ -20,26 +18,41 @@ async function getSubsidios() {
 }
 
 /**
- * Crea un nuevo subsidio
+ * Crea un nuevo subsidio y crea una pauta nueva
  * @param {Object} subsidio - Datos del subsidio a crear
  * @returns {Promise} Promesa con el objeto de subsidio creado o un error
  */
 async function createSubsidio(subsidio) {
   try {
-    // Verifica si ya existe un subsidio con el mismo nombre
-    const existingSubsidio = await Subsidio.findOne({ Name: subsidio.Name });
-    if (existingSubsidio) {
-      return [null, "Ya existe un subsidio con el mismo nombre."];
-    }
-    //sino se crea un nuevo subsidio
-    const newSubsidio = new Subsidio(subsidio);
-    const subsidioCreated = await newSubsidio.save();
-    return [subsidioCreated, null];
+    const { Name, Descripcion, Tipo, Monto, FechaInicio, FechaTermino } = subsidio;
+
+    const newSubsidio = new Subsidio({
+      Name,
+      Descripcion,
+      Tipo,
+      Monto,
+      FechaInicio,
+      FechaTermino,
+    });
+
+    const newPauta = new Pauta({
+      NombrePauta,
+      MaxPorcentajeFichaHogar,
+      MinCantidadIntegrantes,
+    });
+
+    await newSubsidio.save();
+    await newPauta.save();
+
+    newSubsidio.pauta = newPauta._id;
+    await newSubsidio.save();
+
+    return [newSubsidio, null];
   } catch (error) {
     handleError(error, "subsidio.service -> createSubsidio");
-    return [null, "No se pudo crear el subsidio"];
   }
 }
+
 
 /**
  * Obtiene un subsidio por su id de la base de datos
@@ -48,7 +61,7 @@ async function createSubsidio(subsidio) {
  */
 async function getSubsidioById(id) {
   try {
-    const subsidio = await Subsidio.findById({_id: id}).populate("pauta");
+    const subsidio = await Subsidio.findById( { _id: id }).populate("pauta");
     
     if (!subsidio) return [null, "El subsidio no existe"];
 
@@ -69,7 +82,7 @@ async function updateSubsidio(id, subsidio) {
     const subsidioFound = await Subsidio.findById(id);
     if (!subsidioFound) return [null, "El subsidio no existe"];
 
-    const { Name, Descripcion, Tipo, Monto, FechaInicio, FechaTermino} = subsidio;
+    const { Name, Descripcion, Tipo, Monto, FechaInicio, FechaTermino } = subsidio;
 
     subsidioFound.Name = Name;
     subsidioFound.Descripcion = Descripcion;

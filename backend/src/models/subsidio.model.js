@@ -1,5 +1,4 @@
 "use strict";
-const { date } = require("joi");
 // Importa el modulo 'mongoose' para crear la conexion a la base de datos
 
 const mongoose = require("mongoose");
@@ -30,12 +29,11 @@ const SubsidioSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        pauta:[{
+        pauta: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "pauta", 
-         },
-      ],
-             
+        },
+        ],
     },
     {
         versionKey: false,
