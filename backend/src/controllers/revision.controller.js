@@ -3,6 +3,7 @@ const RevisionService = require("../services/revision.service");
 const { handleError } = require("../utils/errorHandler");
 // eslint-disable-next-line max-len
 const { postulacionIdSchema, postulacionBodySchema } = require("../utils/schemas/postulacion.schema");
+
 /**
  * Obtiene las postulaciones en estado pendiente
  * @param {Object} req - Objeto de peticion

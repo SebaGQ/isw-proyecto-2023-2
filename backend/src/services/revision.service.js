@@ -6,24 +6,24 @@ const Postulacion = require("../models/postulacion.model.js");
 
 const { handleError } = require("../utils/errorHandler");
 
-/**  Crear revision de postulacion
+/**  Crear revision de postulacion, vincular la id de revision con postulacion
  * @param {Object} revision Objeto de revision
  * @returns {Promise} Promesa con el objeto de revision creado
  */
 async function createRevision(revision) {
     try {
         const { postulacion, comentario } = revision;
-        const fechaModificacion = Date.now();
-
         const postulacionFound = await Postulacion.findById(postulacion);
         if (!postulacionFound) return [null, "La postulacion no existe"];
 
         const newRevision = new Revision({
             postulacion,
-            fechaModificacion,
             comentario,
         });
         await newRevision.save();
+
+        postulacionFound.revisiones.push(newRevision._id);
+        await postulacionFound.save();
 
         return [newRevision, null];
     } catch (error) {
@@ -38,7 +38,7 @@ async function createRevision(revision) {
  */
 async function getPostulacionesPendientes() {
     try {
-        const postulaciones = await Postulacion.find({ estadoPostulacion: "Pendiente" })
+        const postulaciones = await Postulacion.find({ estadoPostulacion: "pendiente" })
             .populate("rut")
             .populate("tipoSubsidio")
             .populate("estadoPostulacion")
