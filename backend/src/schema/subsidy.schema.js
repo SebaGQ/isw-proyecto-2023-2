@@ -40,9 +40,11 @@ const subsidyBodySchema = Joi.object({
     }),
   dateEnd: Joi.date()
     .required()
+    .greater(Joi.ref('dateStart'))
     .messages({
       "date.base": "La fecha límite debe ser de tipo fecha.",
       "any.required": "La fecha límite es obligatoria.",
+      'date.greater': 'La fecha límite no puede ser anterior a la fecha de inicio.',
     }),
   typeSubsidy: Joi.string()
     .required()
