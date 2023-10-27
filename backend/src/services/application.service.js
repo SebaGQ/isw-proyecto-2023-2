@@ -80,16 +80,13 @@ async function getApplicationById(applicationId) {
   }
 }
 
-async function getApplicationsByUserId(userId) {
+async function getApplicationsByUserEmail(userEmail) {
   try {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return [null, "ID de usuario no válido"];
-    }
-    const applications = await Application.find({ userId });
+    const applications = await Application.find({ userEmail });
     return [applications, null];
   } catch (error) {
-    handleError(error, "application.service -> getApplicationsByUserId");
-    return [null, "Error al obtener las postulaciones por ID de usuario"];
+    handleError(error, "application.service -> getApplicationsByUserEmail");
+    return [null, "Error al obtener las postulaciones por correo electrónico del usuario"];
   }
 }
 
@@ -139,7 +136,7 @@ module.exports = {
   createApplication,
   getApplications,
   getApplicationById,
-  getApplicationsByUserId,
+  getApplicationsByUserEmail,
   updateApplication,
   deleteApplication,
 };  

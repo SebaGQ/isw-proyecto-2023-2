@@ -78,10 +78,10 @@ async function getApplicationById(req, res) {
  * @param {Object} req - Objeto de petición.
  * @param {Object} res - Objeto de respuesta.
  */
-async function getApplicationsByUserId(req, res) {
+async function getApplicationsByUserEmail(req, res) {
   try {
-    const userId = req.params.userId;
-    const [applications, applicationsError] = await ApplicationService.getApplicationsByUserId(userId);
+    const userEmail = req.email;
+    const [applications, applicationsError] = await ApplicationService.getApplicationsByUserEmail(userEmail);
     if (applicationsError) {
       return respondError(req, res, 404, applicationsError);
     }
@@ -90,10 +90,11 @@ async function getApplicationsByUserId(req, res) {
     }
     return respondSuccess(req, res, 200, applications);
   } catch (error) {
-    handleError(error, "application.controller -> getApplicationsByUserId");
+    handleError(error, "application.controller -> getApplicationsByUserEmail");
     respondError(req, res, 500, "Error interno del servidor");
   }
 }
+
 
 
 /**
@@ -137,7 +138,7 @@ module.exports = {
   createApplication,
   getApplications,
   getApplicationById,
-  getApplicationsByUserId,
+  getApplicationsByUserEmail,
   updateApplication,
   deleteApplication,
 };
