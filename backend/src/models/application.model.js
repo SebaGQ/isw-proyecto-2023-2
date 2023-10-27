@@ -29,6 +29,11 @@ const applicationSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
+  members:{
+    type: Number,
+    required: true,
+    min: 1
+  },
 }, {
   timestamps: true
 });

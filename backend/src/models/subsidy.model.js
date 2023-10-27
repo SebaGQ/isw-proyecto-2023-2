@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+//require typeSubsidy
+const TYPE_SUBSIDY = require("./typeSubsidy.constants");
 
 const subsidySchema = new mongoose.Schema({
   name: {
@@ -15,15 +17,18 @@ const subsidySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  deadline: {
+  dateStart: {
     type: Date,
     required: true,
   },
-  type: {
+  dateEnd: {
+    type: Date,
+    required: true,
+  },
+  typeSubsidy: {
     type: String,
     required: true,
-    enum: ['Tipo1', 'Tipo2', 'Tipo3'], // Lista de tipos permitidos
-    default: 'Tipo1' // Valor por defecto
+    enum: TYPE_SUBSIDY, // Lista de tipos permitidos
   },
   guidelineId: {
     type: mongoose.Schema.Types.ObjectId,

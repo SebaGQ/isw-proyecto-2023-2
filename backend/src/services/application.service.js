@@ -7,8 +7,8 @@ const mongoose = require('mongoose');
 const { handleError } = require("../utils/errorHandler");
 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate) {
-  try {
-    const user = await User.findOne({ email: userEmail });
+  try { 
+    const user = await User.findOne({ email: userEmail }); //preguntar al prodowner si dejamos el correo lo cambiamos el rut
     if (!user) return [null, "Usuario no encontrado"];
 
     //El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
@@ -19,13 +19,18 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
-    let status = 'En Revisión';
+    let status = 'Pendiente';
 
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = 'Rechazado';
     } else {
       // Agregar más lógica para validar postulacion
-      status = 'Aceptado';
+    }
+    // validacion de integrantes
+    if (members < guideline.minMembers) {
+      status = 'Rechazado';
+    } else {
+      // Agregar más lógica para validar postulacion
     }
 
     const newApplication = new Application({

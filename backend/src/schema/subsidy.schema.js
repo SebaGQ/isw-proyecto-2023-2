@@ -1,6 +1,7 @@
 "use strict";
 
 const Joi = require("joi");
+const TYPE_SUBSIDY = require("./typeSubsidy.constants");
 
 /**
  * Esquema de validación para el cuerpo de la solicitud de usuario.
@@ -31,15 +32,21 @@ const subsidyBodySchema = Joi.object({
       "number.positive": "El monto debe ser un número positivo.",
       "any.required": "El monto es obligatorio."
     }),
-  deadline: Joi.date()
+  dateStart: Joi.date()
+    .required()
+    .messages({
+      "date.base": "La fecha de inicio debe ser de tipo fecha.",
+      "any.required": "La fecha de inicio es obligatoria."
+    }),
+  dateEnd: Joi.date()
     .required()
     .messages({
       "date.base": "La fecha límite debe ser de tipo fecha.",
       "any.required": "La fecha límite es obligatoria."
     }),
-  type: Joi.string()
+  typeSubsidy: Joi.string()
     .required()
-    .valid('Tipo1', 'Tipo2', 'Tipo3')
+    .valid(TYPE_SUBSIDY)
     .messages({
       "string.base": "El tipo debe ser de tipo texto.",
       "any.required": "El tipo es obligatorio.",
