@@ -5,14 +5,11 @@ const reviewSchema = new mongoose.Schema({
         ref: "Application",
         required: true,
     },
-        modificationDate: {
-        type: Date,
-        default: Date.now,
-    },
-        comment: {
+    comment: {
         type: String,
         required: true,
     },
-    
+}, {
+    timestamps: true,
 });
 module.exports = mongoose.model("Review", reviewSchema);
