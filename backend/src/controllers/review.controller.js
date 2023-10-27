@@ -90,7 +90,7 @@ async function getReviewById(req, res) {
         const [review, reviewError] = await ReviewService.getReviewById(req.params.id);
         if (reviewError) return respondError(res, reviewError);
         if (!review) return respondError(res, "No se pudo obtener la review");
-        // Retornar el objeto de review eliminado
+        // Retornar el objeto de review 
         return respondSucess(res, review, "Revisión obtenida");
 } catch (error) {
         handleError(error, "review.controller -> getReviewById")
@@ -117,6 +117,24 @@ async function filterReviews(req, res) {
     }
 }
 
+/**
+ * Obtiene review con email vinculado con inicio de sesion
+ * @param {Object} req 
+ * @param {Object} res
+ */
+async function getReviewByEmail(req, res) {
+    try{
+        const [review, reviewError] = await ReviewService.getReviewByEmail(req.email);
+        if (reviewError) return respondError(res, reviewError);
+        if (!review) return respondError(res, "No se pudo obtener la review");
+
+        return respondSucess(res, review, "Revisión obtenida");
+} catch (error) {
+        handleError(error, "review.controller -> getReviewByEmail")
+        respondError(req,res,500,"Error interno del servidor")
+    }
+}
+
 module.exports = {
     createReview,
     updateReviewById,
@@ -124,4 +142,5 @@ module.exports = {
     getReviewById,
     getReviews,
     filterReviews,
+    getReviewByEmail
 }

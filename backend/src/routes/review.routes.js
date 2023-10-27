@@ -24,7 +24,6 @@ router.post("/", validationMiddleware.validateReviewBody, reviewController.creat
 router.put("/:id", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.updateReviewById);
 router.delete("/:id", authorizationMiddleware.isAdmin, reviewController.deleteReviewById);
 router.get('/filter', reviewController.filterReviews);
-
-//faltaria por hacer en el service uno para que revise el estado de la revision quien realizo la postulacion
+router.get('/userReview', authorizationMiddleware.isUser, reviewController.getReviewByEmail);
 
 module.exports = router;

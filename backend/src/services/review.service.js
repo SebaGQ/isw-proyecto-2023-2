@@ -169,9 +169,28 @@ async function filterReviews(status) {
 }
 
 /**
- * El usuario obtiene la review vinculada a su correo
- *  /getReviewByLogin
+ * El usuario obtiene la review vinculado al email 
+ * @param {string} email email del usuario
+ * @returns {Promise} Promesa con el objeto de review
  */
+async function getReviewByLogin(email) {
+    try {
+        // Obtener usuario id con el email
+        const user = await User.findOne({ email: userEmail });
+        // Obtener el objeto de review y la informacion de application
+        const reviews = await Review.find().populate("applicationId");
+        // Verificar que existen review
+        if (!reviews) throw new Error("No hay revisiones");
+        // Filtrar las reviews segun el id
+        const filteredReviews = reviews.filter(review => review.applicationId.userId == user._id);
+
+        // Retornar el objeto de review
+        return filteredReviews;
+    } catch (error) {
+        // Retornar el error
+        return handleError(error);
+    }
+}
 
 
 
@@ -182,4 +201,5 @@ module.exports = {
     getReviewById,
     getReviews,
     filterReviews,
+    getReviewByLogin
 }
