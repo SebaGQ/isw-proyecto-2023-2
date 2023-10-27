@@ -2,12 +2,15 @@
 
 const Joi = require("joi");
 const ROLES = require("../constants/roles.constants");
+const rutPattern = /^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/;
 
-/**
- * Esquema de validación para el cuerpo de la solicitud de usuario.
- * @constant {Object}
- */
 const userBodySchema = Joi.object({
+  rut: Joi.string().pattern(rutPattern).required().messages({
+    "string.empty": "El RUT no puede estar vacío.",
+    "any.required": "El RUT es obligatorio.",
+    "string.base": "El RUT debe ser de tipo string.",
+    "string.pattern.base": "El RUT proporcionado no es válido.",
+  }),
   username: Joi.string().required().messages({
     "string.empty": "El nombre de usuario no puede estar vacío.",
     "any.required": "El nombre de usuario es obligatorio.",
@@ -26,27 +29,24 @@ const userBodySchema = Joi.object({
     "string.email": "El email debe tener un formato válido.",
   }),
   roles: Joi.array()
-    .items(Joi.string().valid(...ROLES))
+    .items(Joi.string().hex().length(24))
     .required()
     .messages({
-      "array.base": "El rol debe ser de tipo array.",
-      "any.required": "El rol es obligatorio.",
-      "string.base": "El rol debe ser de tipo string.",
-      "any.only": "El rol proporcionado no es válido.",
+      "array.base": "Los roles deben ser de tipo array.",
+      "any.required": "Los roles son obligatorios.",
+      "string.base": "El id de rol debe ser de tipo string.",
+      "string.hex": "El id de rol debe ser una cadena hexadecimal.",
+      "string.length": "El id de rol debe tener 24 caracteres.",
     }),
   newPassword: Joi.string().min(5).messages({
-    "string.empty": "La contraseña no puede estar vacía.",
-    "string.base": "La contraseña debe ser de tipo string.",
-    "string.min": "La contraseña debe tener al menos 5 caracteres.",
+    "string.empty": "La nueva contraseña no puede estar vacía.",
+    "string.base": "La nueva contraseña debe ser de tipo string.",
+    "string.min": "La nueva contraseña debe tener al menos 5 caracteres.",
   }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",
 });
 
-/**
- * Esquema de validación para el id de usuario.
- * @constant {Object}
- */
 const userIdSchema = Joi.object({
   id: Joi.string()
     .required()

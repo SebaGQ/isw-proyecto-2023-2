@@ -40,7 +40,8 @@ async function createApplication(req, res) {
  */
 async function getApplications(req, res) {
   try {
-    const [applications, applicationsError] = await ApplicationService.getApplications();
+    const filters = req.query;
+    const [applications, applicationsError] = await ApplicationService.getApplications(filters);
     if (applicationsError) return respondError(req, res, 404, applicationsError);
 
     applications.length === 0
@@ -51,6 +52,7 @@ async function getApplications(req, res) {
     respondError(req, res, 500, "Error interno del servidor");
   }
 }
+
 
 
 /**

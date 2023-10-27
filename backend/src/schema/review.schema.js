@@ -7,7 +7,7 @@ const Joi = require("joi");
  * @constant {Object}
  */
 const reviewBodySchema = Joi.object({
-    applicationIdd: Joi.string()
+    applicationId: Joi.string()
         .required()
         .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
         .messages({

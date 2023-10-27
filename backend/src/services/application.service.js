@@ -20,8 +20,12 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
-    let status = "Pendiente";
+    const hasPending = await hasPendingApplication(user._id, subsidyId);
+    if (hasPending) {
+      return [null, "Ya tiene una postulación pendiente para este subsidio"];
+    }
 
+    let status = "Pendiente";
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = "Rechazado";
     } else {
@@ -50,17 +54,17 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
   }
 }
 
-async function getApplications() {
+async function getApplications(filters = {}) {
   try {
-    const applications = await Application.find();
+    const applications = await Application.find(filters);
     if (!applications) return [null, "No hay postulaciones"];
-
     return [applications, null];
   } catch (error) {
     handleError(error, "application.service -> getApplications");
     return [null, "Error al obtener las postulaciones"];
   }
 }
+
 
 async function getApplicationById(applicationId) {
   try {
@@ -114,6 +118,20 @@ async function deleteApplication(applicationId) {
   } catch (error) {
     handleError(error, "application.service -> deleteApplication");
     return [null, "Error al eliminar la postulación"];
+  }
+}
+
+async function hasPendingApplication(userId, subsidyId) {
+  try {
+    const pendingApplication = await Application.findOne({
+      userId,
+      subsidyId,
+      status: "Pendiente"
+    });
+    return pendingApplication !== null; // Retorna true si existe una aplicación pendiente
+  } catch (error) {
+    handleError(error, "application.service -> hasPendingApplication");
+    throw new Error("Error al comprobar la existencia de postulaciones pendientes");
   }
 }
 
