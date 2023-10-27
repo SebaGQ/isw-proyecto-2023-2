@@ -174,7 +174,7 @@ async function filterReviews(status) {
  */
 async function getReviewByLogin(email) {
     try {
-        // Obtener usuario id con el email
+        // Obtener usuario con el email
         const user = await User.findOne({ email: userEmail });
         // Obtener el objeto de review y la informacion de application
         const reviews = await Review.find().populate("applicationId");
