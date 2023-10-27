@@ -21,7 +21,7 @@ router.use(authenticationMiddleware);
 
 router.get("/", authorizationMiddleware.isAdmin, reviewController.getReviews);
 router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewById);
-router.post("/", validationMiddleware.validateReviewBody, reviewController.createReview);
+router.post("/", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.createReview);
 router.put("/:id", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.updateReviewById);
 router.delete("/:id", authorizationMiddleware.isAdmin, reviewController.deleteReviewById);
 router.get("/filter", reviewController.filterReviews);
