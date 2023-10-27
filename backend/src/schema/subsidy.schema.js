@@ -1,7 +1,7 @@
 "use strict";
 
 const Joi = require("joi");
-const TYPE_SUBSIDY = require("./typeSubsidy.constants");
+const TYPE_SUBSIDY = require("../constants/typeSubsidy.constants");
 
 /**
  * Esquema de validación para el cuerpo de la solicitud de usuario.
@@ -14,7 +14,7 @@ const subsidyBodySchema = Joi.object({
     .messages({
       "string.base": "El nombre debe ser de tipo texto.",
       "string.empty": "El nombre no puede estar vacío.",
-      "any.required": "El nombre es obligatorio."
+      "any.required": "El nombre es obligatorio.",
     }),
   description: Joi.string()
     .trim()
@@ -22,7 +22,7 @@ const subsidyBodySchema = Joi.object({
     .messages({
       "string.base": "La descripción debe ser de tipo texto.",
       "string.empty": "La descripción no puede estar vacía.",
-      "any.required": "La descripción es obligatoria."
+      "any.required": "La descripción es obligatoria.",
     }),
   amount: Joi.number()
     .required()
@@ -30,31 +30,31 @@ const subsidyBodySchema = Joi.object({
     .messages({
       "number.base": "El monto debe ser de tipo número.",
       "number.positive": "El monto debe ser un número positivo.",
-      "any.required": "El monto es obligatorio."
+      "any.required": "El monto es obligatorio.",
     }),
   dateStart: Joi.date()
     .required()
     .messages({
       "date.base": "La fecha de inicio debe ser de tipo fecha.",
-      "any.required": "La fecha de inicio es obligatoria."
+      "any.required": "La fecha de inicio es obligatoria.",
     }),
   dateEnd: Joi.date()
     .required()
     .messages({
       "date.base": "La fecha límite debe ser de tipo fecha.",
-      "any.required": "La fecha límite es obligatoria."
+      "any.required": "La fecha límite es obligatoria.",
     }),
   typeSubsidy: Joi.string()
     .required()
-    .valid(TYPE_SUBSIDY)
+    .valid("Subsidio", "Beneficio")
     .messages({
       "string.base": "El tipo debe ser de tipo texto.",
       "any.required": "El tipo es obligatorio.",
-      "any.only": "El tipo debe ser uno de los siguientes: Tipo1, Tipo2, Tipo3"
+      "any.only": "El tipo de subsidio no es válido.",
     }),
   guidelineId: Joi.string()
     .required()
-    //Patrón que tienen los id de mongo, 24 caracteres hexadecimales
+    // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id de la pauta no puede estar vacío.",

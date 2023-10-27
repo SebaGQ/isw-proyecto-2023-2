@@ -1,43 +1,43 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const AVAILIBILITY = require("../constants/availability.constants");
 
 const applicationSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'User'
+    ref: "User",
   },
   subsidyId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Subsidy'
+    ref: "Subsidy",
   },
   status: {
     type: String,
     required: true,
     enum: AVAILIBILITY,
-    default: "Pendiente"
+    default: "Pendiente",
   },
   socialPercentage: {
     type: Number,
     required: true,
     min: 0,
-    max: 100
+    max: 100,
   },
   applicationDate: {
     type: Date,
     required: true,
-    default: Date.now
+    default: Date.now,
   },
-  members:{
+  members: {
     type: Number,
     required: true,
-    min: 1
+    min: 1,
   },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-const Application = mongoose.model('Application', applicationSchema);
+const Application = mongoose.model("Application", applicationSchema);
 
 module.exports = Application;

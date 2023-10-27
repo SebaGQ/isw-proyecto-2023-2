@@ -1,7 +1,7 @@
 "use strict";
 
-const express = require('express');
-const guidelineController = require('../controllers/guideline.controller');
+const express = require("express");
+const guidelineController = require("../controllers/guideline.controller");
 
 /** Middleware de autenticación */
 // Se encarga de validar que el JWT sea válido

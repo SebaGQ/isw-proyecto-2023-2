@@ -1,7 +1,7 @@
 "use strict";
 
 const Subsidy = require("../models/subsidy.model");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 
 async function createSubsidy(subsidyData) {

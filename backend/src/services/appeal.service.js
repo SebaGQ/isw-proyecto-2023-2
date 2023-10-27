@@ -1,7 +1,8 @@
-const Appeal = require('../models/appeal.model');
-const User = require('../models/user.model');
-const ApplicationService = require('./application.service');
-const mongoose = require('mongoose');
+/* eslint-disable max-len */
+const Appeal = require("../models/appeal.model");
+const User = require("../models/user.model");
+const ApplicationService = require("./application.service");
+const mongoose = require("mongoose");
 
 async function createAppeal(userEmail, postData) {
   try {
@@ -12,12 +13,12 @@ async function createAppeal(userEmail, postData) {
 
     const [application, applicationError] = await ApplicationService.getApplicationById(postData.postId);
     if (applicationError) return [null, applicationError];
-    if (!application) return [null, 'La postulación asociada no existe'];
+    if (!application) return [null, "La postulación asociada no existe"];
 
     const newAppeal = new Appeal({
       postId: postData.postId,
       userId: user._id,
-      reason: postData.reason
+      reason: postData.reason,
     });
 
     await newAppeal.save();
@@ -106,5 +107,5 @@ module.exports = {
   getAppealById,
   getAppealsByUserId,
   updateAppeal,
-  deleteAppeal
+  deleteAppeal,
 };

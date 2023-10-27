@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-//require typeSubsidy
-const TYPE_SUBSIDY = require("./typeSubsidy.constants");
+const mongoose = require("mongoose");
+// require typeSubsidy
+const TYPE_SUBSIDY = require("../constants/typeSubsidy.constants");
 
 const subsidySchema = new mongoose.Schema({
   name: {
@@ -33,12 +33,12 @@ const subsidySchema = new mongoose.Schema({
   guidelineId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    ref: 'Guideline'
+    ref: "Guideline",
   },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-const Subsidy = mongoose.model('Subsidy', subsidySchema);
+const Subsidy = mongoose.model("Subsidy", subsidySchema);
 
 module.exports = Subsidy;

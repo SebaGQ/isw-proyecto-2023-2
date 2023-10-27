@@ -9,19 +9,19 @@ const userRoutes = require("./user.routes.js");
 const authRoutes = require("./auth.routes.js");
 
 /** Enrutador de postulaciones */
-const applicationRoutes = require('./application.routes.js');
+const applicationRoutes = require("./application.routes.js");
 
 /** Enrutador de subsidios */
-const subsidyRoutes = require('./subsidy.routes.js');
+const subsidyRoutes = require("./subsidy.routes.js");
 
 /** Enrutador de revisiones */
-const reviewRoutes = require('./review.routes.js');
+const reviewRoutes = require("./review.routes.js");
 
 /** Enrutador de apelaciones */
-const appealRoutes = require('./appeal.routes.js');
+const appealRoutes = require("./appeal.routes.js");
 
 /** Enrutador de pautas */
-const guidelineRoutes = require('./guideline.routes.js');
+const guidelineRoutes = require("./guideline.routes.js");
 /** Instancia del enrutador */
 const router = express.Router();
 
@@ -34,9 +34,9 @@ router.use("/applications", applicationRoutes);
 // Define las rutas para los subsidios /api/subsidies
 router.use("/subsidies", subsidyRoutes);
 // Define las rutas para las apelaciones /api/appeals
-router.use('/appeals', appealRoutes);
+router.use("/appeals", appealRoutes);
 // Define las rutas para las pautas /api/guidelines
-router.use('/guidelines', guidelineRoutes);
+router.use("/guidelines", guidelineRoutes);
 // Define las rutas para las revisiones /api/reviews
 router.use("/reviews", reviewRoutes);
 

@@ -1,6 +1,7 @@
-const { respondSucess, respondError } = require("../utils/resHandler")
-const { handleError } = require("../utils/errorHandler")
-const ReviewService = require("../services/review.service")
+/* eslint-disable max-len */
+const { respondSucess, respondError } = require("../utils/resHandler");
+const { handleError } = require("../utils/errorHandler");
+const ReviewService = require("../services/review.service");
 
 
 /** Obtiene todas las reviews
@@ -27,21 +28,20 @@ async function createReview(req, res) {
     try {
         const { body } = req.body;
 
-        const [newReview, reviewError] = await ReviewService.createReview(body)
+        const [newReview, reviewError] = await ReviewService.createReview(body);
 
         if (reviewError) return respondError(res, reviewError);
         if (!newReview) return respondError(res, "No se pudo crear la review");
 
         // Actualizar la aplicación
         // await Application.findByIdAndUpdate(req.body.applicationId, { status: "En Revisión" });
-        //no se realiza porque la valiadcion se hace en el service
+        // no se realiza porque la valiadcion se hace en el service
 
         // Retornar el objeto de review creado
         return respondSucess(res, newReview, "Revisión creada");
     } catch (error) {
-
-        handleError(error, "review.controller -> createReview")
-        respondError(req,res,500,"Error interno del servidor")
+        handleError(error, "review.controller -> createReview");
+        respondError(req, res, 500, "Error interno del servidor");
     }
 }
 
@@ -50,7 +50,7 @@ async function createReview(req, res) {
  * @param {Object} res - Objeto de respuesta
 */
 async function updateReviewById(req, res) {
-    try{
+    try {
         const { body } = req.body;
         const [updatedReview, reviewError] = await ReviewService.updateReviewById(req.params.id, body);
         if (reviewError) return respondError(res, reviewError);
@@ -58,8 +58,8 @@ async function updateReviewById(req, res) {
         // Retornar el objeto de review modificado
         return respondSucess(res, updatedReview, "Revisión modificada");
 } catch (error) {
-        handleError(error, "review.controller -> updateReviewById")
-        respondError(req,res,500,"Error interno del servidor")
+        handleError(error, "review.controller -> updateReviewById");
+        respondError(req, res, 500, "Error interno del servidor");
     }
 }
 
@@ -68,15 +68,15 @@ async function updateReviewById(req, res) {
  * @param {Object} res - Objeto de respuesta
 */
 async function deleteReviewById(req, res) {
-    try{
+    try {
         const [deletedReview, reviewError] = await ReviewService.deleteReviewById(req.params.id);
         if (reviewError) return respondError(res, reviewError);
         if (!deletedReview) return respondError(res, "No se pudo eliminar la review");
         // Retornar el objeto de review eliminado
         return respondSucess(res, deletedReview, "Revisión eliminada");
 } catch (error) {
-        handleError(error, "review.controller -> deleteReviewById")
-        respondError(req,res,500,"Error interno del servidor")
+        handleError(error, "review.controller -> deleteReviewById");
+        respondError(req, res, 500, "Error interno del servidor");
     }
 }
 
@@ -86,15 +86,15 @@ async function deleteReviewById(req, res) {
  * @param {Object} res 
  */
 async function getReviewById(req, res) {
-    try{
+    try {
         const [review, reviewError] = await ReviewService.getReviewById(req.params.id);
         if (reviewError) return respondError(res, reviewError);
         if (!review) return respondError(res, "No se pudo obtener la review");
         // Retornar el objeto de review 
         return respondSucess(res, review, "Revisión obtenida");
 } catch (error) {
-        handleError(error, "review.controller -> getReviewById")
-        respondError(req,res,500,"Error interno del servidor")
+        handleError(error, "review.controller -> getReviewById");
+        respondError(req, res, 500, "Error interno del servidor");
     }
 }
 
@@ -105,15 +105,15 @@ async function getReviewById(req, res) {
  * @param {Object} res 
  */
 async function filterReviews(req, res) {
-    try{
+    try {
         const [reviews, reviewError] = await ReviewService.filterReviews(req.query);
         if (reviewError) return respondError(res, reviewError);
         if (!reviews) return respondError(res, "No se pudo obtener la review");
         // Retornar el objeto de review eliminado
         return respondSucess(res, reviews, "Revisión obtenida");
 } catch (error) {
-        handleError(error, "review.controller -> filterReviews")
-        respondError(req,res,500,"Error interno del servidor")
+        handleError(error, "review.controller -> filterReviews");
+        respondError(req, res, 500, "Error interno del servidor");
     }
 }
 
@@ -123,15 +123,15 @@ async function filterReviews(req, res) {
  * @param {Object} res
  */
 async function getReviewByEmail(req, res) {
-    try{
+    try {
         const [review, reviewError] = await ReviewService.getReviewByEmail(req.email);
         if (reviewError) return respondError(res, reviewError);
         if (!review) return respondError(res, "No se pudo obtener la review");
 
         return respondSucess(res, review, "Revisión obtenida");
 } catch (error) {
-        handleError(error, "review.controller -> getReviewByEmail")
-        respondError(req,res,500,"Error interno del servidor")
+        handleError(error, "review.controller -> getReviewByEmail");
+        respondError(req, res, 500, "Error interno del servidor");
     }
 }
 
@@ -142,5 +142,5 @@ module.exports = {
     getReviewById,
     getReviews,
     filterReviews,
-    getReviewByEmail
-}
+    getReviewByEmail,
+};

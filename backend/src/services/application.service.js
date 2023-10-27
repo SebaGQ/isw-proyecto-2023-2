@@ -1,34 +1,35 @@
+/* eslint-disable max-len */
 "use strict";
 
 const Application = require("../models/application.model");
 const User = require("../models/user.model");
 const Subsidy = require("../models/subsidy.model");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate) {
   try { 
-    const user = await User.findOne({ email: userEmail }); //preguntar al prodowner si dejamos el correo lo cambiamos el rut
+    const user = await User.findOne({ email: userEmail }); // preguntar al prodowner si dejamos el correo lo cambiamos el rut
     if (!user) return [null, "Usuario no encontrado"];
 
-    //El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
-    //En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
-    const subsidy = await Subsidy.findById(subsidyId).populate('guidelineId');
-    if (!subsidy) return [null, 'El subsidio asociado no existe'];
+    // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
+    // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
+    const subsidy = await Subsidy.findById(subsidyId).populate("guidelineId");
+    if (!subsidy) return [null, "El subsidio asociado no existe"];
 
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
-    let status = 'Pendiente';
+    let status = "Pendiente";
 
     if (socialPercentage > guideline.maxSocialPercentage) {
-      status = 'Rechazado';
+      status = "Rechazado";
     } else {
       // Agregar más lógica para validar postulacion
     }
     // validacion de integrantes
     if (members < guideline.minMembers) {
-      status = 'Rechazado';
+      status = "Rechazado";
     } else {
       // Agregar más lógica para validar postulacion
     }
@@ -38,7 +39,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       userId: user._id,
       socialPercentage,
       applicationDate,
-      status
+      status,
     });
 
     await newApplication.save();

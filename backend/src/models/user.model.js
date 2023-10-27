@@ -2,13 +2,13 @@
 // Importa el modulo 'mongoose' para crear la conexion a la base de datos
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-//rut Pattern de Chile
+// rut Pattern de Chile
 const rutPattern = /^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/;
 
 // Crea el esquema de la coleccion 'usuarios'
 const userSchema = new mongoose.Schema(
   {
-    rut:{
+    rut: {
       type: String,
       required: true,
       unique: true,

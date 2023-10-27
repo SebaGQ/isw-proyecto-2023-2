@@ -6,7 +6,7 @@ const AVAILIBILITY = require("../constants/availability.constants");
 const applicationBodySchema = Joi.object({
   userId: Joi.string()
     .required()
-    //Patrón que tienen los id de mongo, 24 caracteres hexadecimales
+    // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id del usuario no puede estar vacío.",
@@ -16,7 +16,7 @@ const applicationBodySchema = Joi.object({
     }),
   subsidyId: Joi.string()
     .required()
-    //Patrón que tienen los id de mongo, 24 caracteres hexadecimales
+    // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id del subsidio no puede estar vacío.",

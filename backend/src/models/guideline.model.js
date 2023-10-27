@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const guidelineSchema = new mongoose.Schema({
   name: {
@@ -11,17 +11,17 @@ const guidelineSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 0,
-    max: 100
+    max: 100,
   },
   minMembers: {
     type: Number,
     required: true,
-    min: 1
+    min: 1,
   },
 }, {
-  timestamps: true
+  timestamps: true,
 });
 
-const Guideline = mongoose.model('Guideline', guidelineSchema);
+const Guideline = mongoose.model("Guideline", guidelineSchema);
 
 module.exports = Guideline;

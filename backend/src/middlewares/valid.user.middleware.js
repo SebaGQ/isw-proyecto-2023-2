@@ -1,4 +1,4 @@
-const { userBodySchema } = require('../schema/user.schema.js');
+const { userBodySchema } = require("../schema/user.schema.js");
 const { respondError } = require("../utils/resHandler.js");
 const { handleError } = require("../utils/errorHandler.js");
 

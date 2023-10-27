@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 "use strict";
 
-const express = require('express');
-const reviewController = require('../controllers/review.controller');
+const express = require("express");
+const reviewController = require("../controllers/review.controller");
 
 /** Middleware de autenticación */
 // Se encarga de validar que el JWT sea válido
@@ -23,7 +24,7 @@ router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewBy
 router.post("/", validationMiddleware.validateReviewBody, reviewController.createReview);
 router.put("/:id", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.updateReviewById);
 router.delete("/:id", authorizationMiddleware.isAdmin, reviewController.deleteReviewById);
-router.get('/filter', reviewController.filterReviews);
-router.get('/userReview', authorizationMiddleware.isUser, reviewController.getReviewByEmail);
+router.get("/filter", reviewController.filterReviews);
+router.get("/userReview", authorizationMiddleware.isUser, reviewController.getReviewByEmail);
 
 module.exports = router;

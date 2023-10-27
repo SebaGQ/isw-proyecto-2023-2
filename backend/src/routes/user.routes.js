@@ -13,6 +13,7 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 
 /** Middleware de validación de usuarios */
 const validUserMiddleware = require("../middlewares/valid.user.middleware");
+// esto no se utiliza
 
 
 /** Instancia del enrutador */
@@ -25,7 +26,7 @@ router.use(authenticationMiddleware);
 router.get("/", usuarioController.getUsers);
 router.post("/", authorizationMiddleware.isAdmin, usuarioController.createUser);
 router.get("/:id", usuarioController.getUserById);
-router.put("/:id", authorizationMiddleware.isAdmin, usuarioController.updateUser,);
+router.put("/:id", authorizationMiddleware.isAdmin, usuarioController.updateUser);
 router.delete( "/:id", authorizationMiddleware.isAdmin, usuarioController.deleteUser,
 );
 

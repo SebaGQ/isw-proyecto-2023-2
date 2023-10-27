@@ -1,7 +1,7 @@
 "use strict";
 
 const Guideline = require("../models/guideline.model");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 
 async function createGuideline(data) {

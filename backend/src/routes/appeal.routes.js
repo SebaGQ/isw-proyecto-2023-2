@@ -1,5 +1,6 @@
-const express = require('express');
-const { createAppeal, getAppeals, getAppealById, getAppealsByUserId, updateAppeal, deleteAppeal } = require('../controllers/appeal.controller');
+/* eslint-disable max-len */
+const express = require("express");
+const { createAppeal, getAppeals, getAppealById, getAppealsByUserId, updateAppeal, deleteAppeal } = require("../controllers/appeal.controller");
 
 /** Middleware de autenticación */
 // Se encarga de validar que el JWT sea válido
@@ -17,11 +18,11 @@ const router = express.Router();
 
 router.use(authenticationMiddleware);
 
-router.get('/', authorizationMiddleware.isAdmin, getAppeals);
-router.get('/:id', authorizationMiddleware.isAdmin, getAppealById);
-router.get('/user/:userId', getAppealsByUserId);
-router.post('/', validationMiddleware.validateAppealBody, createAppeal);
-router.put('/:id', validationMiddleware.validateAppealBody, authorizationMiddleware.isAdmin, updateAppeal);
-router.delete('/:id', authorizationMiddleware.isAdmin, deleteAppeal);
+router.get("/", authorizationMiddleware.isAdmin, getAppeals);
+router.get("/:id", authorizationMiddleware.isAdmin, getAppealById);
+router.get("/user/:userId", getAppealsByUserId);
+router.post("/", validationMiddleware.validateAppealBody, createAppeal);
+router.put("/:id", validationMiddleware.validateAppealBody, authorizationMiddleware.isAdmin, updateAppeal);
+router.delete("/:id", authorizationMiddleware.isAdmin, deleteAppeal);
 
 module.exports = router;

@@ -108,5 +108,5 @@ module.exports = {
   getAppealById,
   getAppealsByUserId,
   updateAppeal,
-  deleteAppeal
+  deleteAppeal,
 };

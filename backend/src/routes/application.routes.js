@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 "use strict";
 
-const express = require('express');
-const applicationsController = require('../controllers/application.controller');
+const express = require("express");
+const applicationsController = require("../controllers/application.controller");
 
 /** Middleware de autenticación */
 // Se encarga de validar que el JWT sea válido
@@ -20,7 +21,7 @@ router.use(authenticationMiddleware);
 
 router.get("/", authorizationMiddleware.isAdmin, applicationsController.getApplications);
 router.get("/:id", authorizationMiddleware.isAdmin, applicationsController.getApplicationById);
-router.get('/user/:userId',applicationsController.getApplicationsByUserId);
+router.get("/user/:userId", applicationsController.getApplicationsByUserId);
 router.post("/", validationMiddleware.validateApplicationBody, applicationsController.createApplication);
 router.put("/:id", validationMiddleware.validateApplicationBody, authorizationMiddleware.isAdmin, applicationsController.updateApplication);
 router.delete("/:id", authorizationMiddleware.isAdmin, applicationsController.deleteApplication);

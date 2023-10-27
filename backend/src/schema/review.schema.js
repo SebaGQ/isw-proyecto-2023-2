@@ -12,7 +12,7 @@ const reviewBodySchema = Joi.object({
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
         "string.empty": "El id de la solicitud no puede estar vacío.",
-        "any.required": "El id de la solicitud es obligatorio."
+        "any.required": "El id de la solicitud es obligatorio.",
         }),
     modificationDate: Joi.date().required().messages({
         "date.base": "La fecha de modificación debe ser de tipo date.",
@@ -25,4 +25,4 @@ const reviewBodySchema = Joi.object({
     }),
 });
 
-modelue.exports = reviewBodySchema;
+module.exports = reviewBodySchema;

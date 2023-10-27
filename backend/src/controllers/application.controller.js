@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 "use strict";
 
 const { respondSuccess, respondError } = require("../utils/resHandler");
@@ -14,7 +15,11 @@ async function createApplication(req, res) {
     const { subsidyId, socialPercentage, applicationDate } = req.body;
     const userEmail = req.email;
 
-    const [newApplication, applicationError] = await ApplicationService.createApplication(subsidyId, userEmail, socialPercentage, applicationDate);
+    const [newApplication, applicationError] = await ApplicationService.createApplication(
+      subsidyId,
+      userEmail,
+      socialPercentage,
+      applicationDate);
 
     if (applicationError) return respondError(req, res, 400, applicationError);
     if (!newApplication) {
@@ -47,10 +52,18 @@ async function getApplications(req, res) {
   }
 }
 
+
+/**
+ * Obtiene una solicitud de subsidio por su ID.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function getApplicationById(req, res) {
   try {
     const [application, applicationError] = await ApplicationService.getApplicationById(req.params.id);
-    if (applicationError) return respondError(req, res, 404, applicationError);
+    if (applicationError) {
+      return respondError(req, res, 404, applicationError);
+    }
     respondSuccess(req, res, 200, application);
   } catch (error) {
     handleError(error, "application.controller -> getApplicationById");
@@ -58,22 +71,40 @@ async function getApplicationById(req, res) {
   }
 }
 
+/**
+ * Obtiene todas las solicitudes de subsidio de un usuario.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function getApplicationsByUserId(req, res) {
   try {
     const userId = req.params.userId;
     const [applications, applicationsError] = await ApplicationService.getApplicationsByUserId(userId);
-    if (applicationsError) return respondError(req, res, 404, applicationsError);
-    if (applications.length === 0) return respondSuccess(req, res, 204);
+    if (applicationsError) {
+      return respondError(req, res, 404, applicationsError);
+    }
+    if (applications.length === 0) {
+      return respondSuccess(req, res, 204);
+    }
     return respondSuccess(req, res, 200, applications);
   } catch (error) {
     handleError(error, "application.controller -> getApplicationsByUserId");
-    return respondError(req, res, 500, "Error interno del servidor");
+    respondError(req, res, 500, "Error interno del servidor");
   }
 }
 
+
+/**
+ * Actualiza una solicitud de subsidio por su ID.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function updateApplication(req, res) {
   try {
-    const [updatedApplication, updateError] = await ApplicationService.updateApplication(req.params.id, req.body);
+    const [updatedApplication, updateError] = await ApplicationService.updateApplication(
+      req.params.id,
+      req.body,
+    );
     if (updateError) return respondError(req, res, 404, updateError);
     respondSuccess(req, res, 200, updatedApplication);
   } catch (error) {
@@ -82,9 +113,16 @@ async function updateApplication(req, res) {
   }
 }
 
+/**
+ * Elimina una solicitud de subsidio por su ID.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
 async function deleteApplication(req, res) {
   try {
-    const [deletedApplication, deleteError] = await ApplicationService.deleteApplication(req.params.id);
+    const [deletedApplication, deleteError] = await ApplicationService.deleteApplication(
+      req.params.id,
+    );
     if (deleteError) return respondError(req, res, 404, deleteError);
     respondSuccess(req, res, 200, deletedApplication);
   } catch (error) {

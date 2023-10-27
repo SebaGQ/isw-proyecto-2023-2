@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Importar el modelo de datos 'Review'
 const Review = require("../models/review.model");
 // Importar el modelo de datos 'Application'
@@ -6,10 +7,8 @@ const Application = require("../models/application.model");
 // Importar el modelo de datos 'User'
 const User = require("../models/user.model");
 
-// Importar el modelo de datos 'Subsidy'
-const Subsidy = require("../models/subsidy.model");
 
-const { handleError } = require("../utils/errorHandler")
+const { handleError } = require("../utils/errorHandler");
 
 /**
  * Crear review de application, vincular la id de review con application
@@ -20,8 +19,8 @@ async function createReview(review) {
     try {
         // Validaciones
         // Solo realizar la review si la application esta en estado 'Pendiente'
-        const applicationStatus = await Application.findById(review.applicationId, { status: "Pendiente" , _id: 0 });
-        if (applicationStatus.status != 'Pendiente') throw new Error("La aplicación no está en estado 'Pendiente'");
+        const applicationStatus = await Application.findById(review.applicationId, { status: "Pendiente", _id: 0 });
+        if (applicationStatus.status != "Pendiente") throw new Error("La aplicación no está en estado 'Pendiente'");
 
         // Verificar que la postulacion existe
         const application = await Application.findById(review.applicationId);
@@ -32,7 +31,7 @@ async function createReview(review) {
         if (reviewExists) throw new Error("La aplicación ya tiene una revisión");
         
         // vincular id de review con application
-        review.applicationId = application._id; //esto no se si dejarlo asi, o colocar la misma id de postulacion a la revision
+        review.applicationId = application._id; // esto no se si dejarlo asi, o colocar la misma id de postulacion a la revision
 
         // Crear el objeto de review
         const createdReview = await Review.create(review);
@@ -158,7 +157,7 @@ async function filterReviews(status) {
         && status != "Rechazado" 
         && status != "Pendiente") throw new Error("El estado no es válido");
         // Filtrar las reviews segun el estado de application
-        const filteredReviews = reviews.filter(review => review.applicationId.status == status);
+        const filteredReviews = reviews.filter((review) => review.applicationId.status == status);
 
         // Retornar el objeto de review
         return filteredReviews;
@@ -182,7 +181,7 @@ async function getReviewByLogin(email) {
         // Verificar que existen review
         if (!reviews) throw new Error("No hay revisiones");
         // Filtrar las reviews segun el id
-        const filteredReviews = reviews.filter(review => review.applicationId.userId == user._id);
+        const filteredReviews = reviews.filter((review) => review.applicationId.userId == user._id);
 
         // Retornar el objeto de review
         return filteredReviews;
@@ -193,7 +192,6 @@ async function getReviewByLogin(email) {
 }
 
 
-
 module.exports = {
     createReview,
     updateReviewById,
@@ -201,5 +199,5 @@ module.exports = {
     getReviewById,
     getReviews,
     filterReviews,
-    getReviewByLogin
-}
+    getReviewByLogin,
+};
