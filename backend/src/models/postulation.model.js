@@ -6,34 +6,34 @@ const mongoose = require("mongoose");
 const availability = require("../constants/avalibility.constants.js");
 // constante postulationSchema
 const postulationSchema = new mongoose.Schema({
-    subsidy: [{
+    subsidyId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Subsidy",
         required: true,
     },
-    ],
     socialPercentage: {
         type: Number,
-        required: true,
-    },
-    applicationDate: {
-        type: Date,
-        required: true,
-    },
-    status: {
-        type: String,
-        enum: availability,
-        default: "Pendiente",
-    },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
         required: true,
     },
     createdAt: {
         type: Date,
         default: Date.now,
     },
+    status: {
+        type: String,
+        enum: availability,
+        default: "Pendiente",
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    integrantes: {
+        type: Number,
+        required: true,
+    }
+
 },{
     timestamps: true
 });

@@ -2,16 +2,36 @@
 
 // creamos las const de respondSucces, respondError y require en utils/resHandler
 const { respondSuccess, respondError } = require("../utils/resHandler");
-// const applicationservies
+// const applicationservices
 const applicationServices = require("../services/application.services");
 // const handleError
 const { handleError } = require("../utils/errorHandler");
 
 /**
- * Creamos una nueva postulacion con el rut del usuario
+ * Creamos una nueva postulacion con el rut del usuario, el id del subsidio y los parametros de la postulacion
  * @param {Object} req - Objeto de peticion
  * @param {Object} res - Objeto de respuesta 
  */
+async function createPostulation(req,res){
+    try {
+        const { rut, subsidyId, socialPercentage, applicationDate} = req.body;
+        const {userEmail} = req.email;
+        //sacar id de usuario con email
+        const [idUsuario, usuarioError] = await applicationServices.getUserIdByEmail(userEmail);
+        if(usuarioError) return respondError(req, res, 400, usuarioError);
+        
+        const [newPostulation, postulationError] = await applicationServices.createPostulation(idUsuario, rut, subsidy, socialPercentage, applicationDate);
+        if(postulationError) return respondError(req, res, 400, postulationError);
+        if(!newPostulation){
+            return respondError(req, res, 400, "No se pudo crear la solicitud");
+        }
+        return respondSuccess(req, res, 200, newPostulation);
+    }
+    catch (error) {
+        handleError(error, "Postulation.controller -> createPostulation");
+        respondError(req, res, 500, "Error interno");
+    }
+}
 
 
 /**
