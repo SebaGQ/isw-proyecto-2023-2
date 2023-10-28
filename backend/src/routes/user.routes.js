@@ -11,11 +11,6 @@ const authorizationMiddleware = require("../middlewares/authorization.middleware
 /** Middleware de autenticación */
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 
-/** Middleware de validación de usuarios */
-const validUserMiddleware = require("../middlewares/valid.user.middleware");
-// esto no se utiliza
-
-
 /** Instancia del enrutador */
 const router = express.Router();
 

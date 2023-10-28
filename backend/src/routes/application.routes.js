@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 "use strict";
 
 const express = require("express");
@@ -20,9 +19,9 @@ const router = express.Router();
 router.use(authenticationMiddleware);
 
 router.get("/", authorizationMiddleware.isAdmin, applicationsController.getApplications);
+router.get("/user/", applicationsController.getApplicationsByUserEmail);
 router.get("/:id", authorizationMiddleware.isAdmin, applicationsController.getApplicationById);
-router.get("/user/:userId", applicationsController.getApplicationsByUserId);
-router.post("/", validationMiddleware.validateApplicationBody, applicationsController.createApplication);
+router.post("/", validationMiddleware.validateApplicationBody, authorizationMiddleware.isUser, applicationsController.createApplication);
 router.put("/:id", validationMiddleware.validateApplicationBody, authorizationMiddleware.isAdmin, applicationsController.updateApplication);
 router.delete("/:id", authorizationMiddleware.isAdmin, applicationsController.deleteApplication);
 

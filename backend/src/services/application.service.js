@@ -6,10 +6,12 @@ const User = require("../models/user.model");
 const Subsidy = require("../models/subsidy.model");
 const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
+const AVAILABILITY = require("../constants/availability.constants");
 
-async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate) {
+async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
-    const user = await User.findOne({ email: userEmail }); // preguntar al prodowner si dejamos el correo lo cambiamos el rut
+    console.log(subsidyId);
+    const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
@@ -25,18 +27,16 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
 
-    let status = "Pendiente";
+    let status = AVAILABILITY[3];
+
+    // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
-      status = "Rechazado";
-    } else {
-      // Agregar más lógica para validar postulacion
-    }
+      status = AVAILABILITY[2];
+    } 
     // validacion de integrantes
     if (members < guideline.minMembers) {
-      status = "Rechazado";
-    } else {
-      // Agregar más lógica para validar postulacion
-    }
+      status = AVAILABILITY[2];
+    } 
 
     const newApplication = new Application({
       subsidyId,
@@ -44,6 +44,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       socialPercentage,
       applicationDate,
       status,
+      members,
     });
 
     await newApplication.save();
@@ -79,17 +80,17 @@ async function getApplicationById(applicationId) {
     return [null, "Error al obtener la postulación"];
   }
 }
-
-async function getApplicationsByUserId(userId) {
+async function getApplicationsByUserEmail(userEmail) {
   try {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return [null, "ID de usuario no válido"];
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return [null, "Usuario no encontrado"];
     }
-    const applications = await Application.find({ userId });
+    const applications = await Application.find({ userId: user._id });
     return [applications, null];
   } catch (error) {
-    handleError(error, "application.service -> getApplicationsByUserId");
-    return [null, "Error al obtener las postulaciones por ID de usuario"];
+    handleError(error, "application.service -> getApplicationsByUserEmail");
+    return [null, "Error al obtener las postulaciones por correo electrónico del usuario"];
   }
 }
 
@@ -139,7 +140,7 @@ module.exports = {
   createApplication,
   getApplications,
   getApplicationById,
-  getApplicationsByUserId,
+  getApplicationsByUserEmail,
   updateApplication,
   deleteApplication,
-};  
+};

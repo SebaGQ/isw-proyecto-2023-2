@@ -5,22 +5,18 @@ const AVAILIBILITY = require("../constants/availability.constants");
 
 const applicationBodySchema = Joi.object({
   userId: Joi.string()
-    .required()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id del usuario no puede estar vacío.",
-      "any.required": "El id del usuario es obligatorio.",
       "string.base": "El id del usuario debe ser de tipo string.",
       "string.pattern.base": "El id del usuario proporcionado no es un ObjectId válido.",
     }),
   subsidyId: Joi.string()
-    .required()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({
       "string.empty": "El id del subsidio no puede estar vacío.",
-      "any.required": "El id del subsidio es obligatorio.",
       "string.base": "El id del subsidio debe ser de tipo string.",
       "string.pattern.base": "El id del subsidio proporcionado no es un ObjectId válido.",
     }),
@@ -40,11 +36,17 @@ const applicationBodySchema = Joi.object({
       "number.max": "El porcentaje social no puede ser mayor que 100.",
       "any.required": "El porcentaje social es obligatorio.",
     }),
-  applicationDate: Joi.date()
+    members: Joi.number()
+    .min(1)
     .required()
     .messages({
+      "number.base": "La cantidad de miembros debe ser de tipo número.",
+      "number.min": "La cantidad de miembros no puede ser menor que 0.",
+      "any.required": "La cantidad de miembros es obligatoria.",
+    }),
+  applicationDate: Joi.date()
+    .messages({
       "date.base": "La fecha de postulación debe ser de tipo fecha.",
-      "any.required": "La fecha de postulación es obligatoria.",
     }),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",

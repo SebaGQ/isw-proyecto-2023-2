@@ -9,21 +9,17 @@ const AVAILIBILITY = require("../constants/availability.constants");
  */
 const appealBodySchema = Joi.object({
   postId: Joi.string()
-    .required()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24})$/)
     .messages({
       "string.empty": "El id de la postulación no puede estar vacío.",
-      "any.required": "El id de la postulación es obligatorio.",
       "string.pattern.base": "El id de la postulación proporcionado no es un ObjectId válido.",
     }),
   userId: Joi.string()
-    .required()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24})$/)
     .messages({
       "string.empty": "El id del usuario no puede estar vacío.",
-      "any.required": "El id del usuario es obligatorio.",
       "string.pattern.base": "El id del usuario proporcionado no es un ObjectId válido.",
     }),
   reason: Joi.string()
