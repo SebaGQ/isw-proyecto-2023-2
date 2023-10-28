@@ -5,7 +5,6 @@ const AVAILIBILITY = require("../constants/availability.constants");
 
 const applicationBodySchema = Joi.object({
   userId: Joi.string()
-    .required()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
     .messages({

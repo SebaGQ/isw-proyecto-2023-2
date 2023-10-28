@@ -58,14 +58,19 @@ async function getAppealById(req, res) {
  * @param {Object} req - Objeto de petición.
  * @param {Object} res - Objeto de respuesta.
  */
-async function getAppealsByUserId(req, res) {
+async function getAppealsByUserEmail(req, res) {
   try {
-    const userId = req.params.userId;
-    const [appeals, error] = await AppealService.getAppealsByUserId(userId);
-    if (error) return respondError(req, res, 400, error);
-    respondSuccess(req, res, 200, appeals);
+    const userEmail = req.email;
+    const [appeals, error] = await AppealService.getAppealsByUserEmail(userEmail);
+    if (error) {
+      return respondError(req, res, 404, error);
+    }
+    if (appeals.length === 0) {
+      return respondSuccess(req, res, 204);
+    }
+    return respondSuccess(req, res, 200, appeals);
   } catch (error) {
-    handleError(error, "appeal.controller -> getAppealsByUserId");
+    handleError(error, "appeal.controller -> getAppealsByUserEmail");
     respondError(req, res, 500, "Error interno del servidor");
   }
 }
@@ -106,7 +111,7 @@ module.exports = {
   createAppeal,
   getAppeals,
   getAppealById,
-  getAppealsByUserId,
+  getAppealsByUserEmail,
   updateAppeal,
   deleteAppeal,
 };

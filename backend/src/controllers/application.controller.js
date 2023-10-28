@@ -80,6 +80,8 @@ async function getApplicationById(req, res) {
  * @param {Object} res - Objeto de respuesta.
  */
 //Esto resuelve el requerimiento número 4
+//La gracia es que no se le pasa parámetro, solo necesita que la petición la haga un
+//user logeado, a partir del token saca el email, y a partir del email el userId para hacer la consulta
 async function getApplicationsByUserEmail(req, res) {
   try {
     const userEmail = req.email;

@@ -19,6 +19,7 @@ async function createAppeal(userEmail, postData) {
       postId: postData.postId,
       userId: user._id,
       reason: postData.reason,
+      status: "Pendiente",
     });
 
     await newAppeal.save();
@@ -55,16 +56,17 @@ async function getAppealById(appealId) {
   }
 }
 
-async function getAppealsByUserId(userId) {
+async function getAppealsByUserEmail(userEmail) {
   try {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return [null, "ID de usuario no válido"];
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return [null, "Usuario no encontrado"];
     }
-    const appeals = await Appeal.find({ userId });
+    const appeals = await Appeal.find({ userId: user._id });
     return [appeals, null];
   } catch (error) {
-    console.error("Error al obtener las apelaciones por ID de usuario:", error);
-    return [null, "Error interno del servidor"];
+    handleError(error, "appeal.service -> getAppealsByUserEmail");
+    return [null, "Error al obtener las apelaciones por correo electrónico del usuario"];
   }
 }
 
@@ -105,7 +107,7 @@ module.exports = {
   createAppeal,
   getAppeals,
   getAppealById,
-  getAppealsByUserId,
+  getAppealsByUserEmail,
   updateAppeal,
   deleteAppeal,
 };

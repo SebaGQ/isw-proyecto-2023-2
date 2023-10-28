@@ -18,7 +18,6 @@ const appealBodySchema = Joi.object({
       "string.pattern.base": "El id de la postulación proporcionado no es un ObjectId válido.",
     }),
   userId: Joi.string()
-    .required()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24})$/)
     .messages({
