@@ -20,7 +20,6 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function createReview(review) {
 try {
-    console.log(review);
     const { applicationId, comment } = review;
 
     // Validar que el objeto review tenga las propiedades necesarias
@@ -28,20 +27,19 @@ try {
     return [null, "Faltan datos obligatorios en el objeto review"];
     }
 
-    // Verificar que la aplicación existe
+    // Verificar que la postulacion existe
     const application = await Application.findById(applicationId);
-    if (!application) return [null, "La aplicación no existe"];
+    if (!application) return [null, "La postulacion no existe"];
 
-    // Verificar que la aplicación no tenga una revision
-    if (application.reviewId)
-    return [null, "La aplicación ya tiene una revisión"];
+    // Verificar que la postulacion no tenga una revision
+    if (application.reviewId) return [null, "La postulacion ya tiene una revisión"];
 
     // Verificar el estado de la postulacion
     if (application.status !== AVAILABILITY[3]) {
     return [null, "La postulacion no se encuentra en estado 'Pendiente'"];
     }
 
-    //cambiar estado de application a 'En revision'
+    // cambiar estado de application a 'En revision'
     application.status = AVAILABILITY[0];
     await application.save();
 
@@ -55,7 +53,7 @@ try {
     applicationId,
     comment: comment.trim(),
     });
-    //vincula la id de review con application
+    // vincula la id de review con application
     application.reviewId = newReview._id;
     // Guardar el review
     await newReview.save();
@@ -63,32 +61,32 @@ try {
     // Devolver el review creado
     return [newReview, null];
 } catch (error) {
-    console.error("Error en review.service -> createReview", error);
-    return [null, "Error al crear el review"];
+    handleError(error, "review.service -> createReview");
+    return [null, "Error al crear la revision"];
 }
 }
 
 /**
  * Modificar review de application, solo si se encuentra en estado "En revision"
- * @param {Object} review objeto de review
+ * @param {Object} updateData objeto de review
  * @returns {Object} Promesa con el review modificado
  */
 async function updateReviewById(reviewId, updateData) {
 try {
-    // Intentar encontrar la reseña por su ID y actualizarla
+    // Intentar encontrar la revision por su ID y actualizarla
     const review = await Review.findByIdAndUpdate(reviewId, updateData, {
     new: true,
     });
 
-    // Si la reseña no se encuentra, devolver un error
-    if (!review) return [null, "Reseña no encontrada"];
+    // Si la revision no se encuentra, devolver un error
+    if (!review) return [null, "Revision no encontrada"];
 
-    // Si la reseña se actualiza correctamente, devolver la reseña actualizada
+    // Si la revision se actualiza correctamente, devolver la revision actualizada
     return [review, null];
 } catch (error) {
     // Si ocurre un error, manejarlo y devolver un mensaje de error
     handleError(error, "review.service -> updateReviewById");
-    return [null, "Error al actualizar la reseña"];
+    return [null, "Error al actualizar la revision"];
 }
 }
 
@@ -103,7 +101,7 @@ try {
     if (!review) return [null, "Revision no encontrada"];
 
     const application = await Application.findById(review.applicationId);
-    if (!application) return [null, "La aplicación no existe"];
+    if (!application) return [null, "La postulacion no existe"];
 
     // cambiar estado de application a 'Pendiente'
     application.status = AVAILABILITY[3];
@@ -117,18 +115,18 @@ try {
 }
 
 /**
- * Obtener la review segun su id
+ * Obtener la revision segun su id
  * @param {string} id Id de la review
  * @returns {Promise} Promesa con el objeto de review
  */
 async function getReviewById(reviewId) {
 try {
     const review = await Review.findById(reviewId);
-    if (!review) return [null, "Reseña no encontrada"];
+    if (!review) return [null, "revision no encontrada"];
     return [review, null];
 } catch (error) {
     handleError(error, "review.service -> getReviewById");
-    return [null, "Error al obtener la reseña"];
+    return [null, "Error al obtener la revision"];
 }
 }
 
@@ -168,7 +166,7 @@ try {
     // Obtener los IDs de las aplicaciones
     const applicationIds = applications.map((app) => app._id);
 
-    // Obtener las reseñas asociadas a esas aplicaciones
+    // Obtener las revisions asociadas a esas aplicaciones
     const reviews = await Review.find({
     applicationId: { $in: applicationIds },
     });
@@ -176,7 +174,7 @@ try {
     return [reviews, null];
 } catch (error) {
     handleError(error, "review.service -> filterReviewsByStatus");
-    return [null, "Error al filtrar las reseñas"];
+    return [null, "Error al filtrar las revisions"];
 }
 }
 
@@ -207,7 +205,7 @@ try {
     handleError(error, "review.service -> getReviewsByEmail");
     return [
     null,
-    "Error al obtener las reseñas por correo electrónico del usuario",
+    "Error al obtener las revisions por correo electrónico del usuario",
     ];
 }
 }

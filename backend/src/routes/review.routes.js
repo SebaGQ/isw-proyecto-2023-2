@@ -13,7 +13,7 @@ const authorizationMiddleware = require("../middlewares/authorization.middleware
 
 /** Middleware de validación */
 // Se usa solo en las solicitudes q reciben un body
-const validationMiddleware = require("../middlewares/valid.review.middleware.js");
+// const validationMiddleware = require("../middlewares/valid.review.middleware.js");
 
 const router = express.Router();
 
