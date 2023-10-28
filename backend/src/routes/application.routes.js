@@ -21,7 +21,7 @@ router.use(authenticationMiddleware);
 router.get("/", authorizationMiddleware.isAdmin, applicationsController.getApplications);
 router.get("/user/", applicationsController.getApplicationsByUserEmail);
 router.get("/:id", authorizationMiddleware.isAdmin, applicationsController.getApplicationById);
-router.post("/", validationMiddleware.validateApplicationBody, applicationsController.createApplication);
+router.post("/", validationMiddleware.validateApplicationBody, authorizationMiddleware.isUser, applicationsController.createApplication);
 router.put("/:id", validationMiddleware.validateApplicationBody, authorizationMiddleware.isAdmin, applicationsController.updateApplication);
 router.delete("/:id", authorizationMiddleware.isAdmin, applicationsController.deleteApplication);
 

@@ -26,9 +26,7 @@ async function getReviews(req, res) {
  */
 async function createReview(req, res) {
     try {
-        const { body } = req.body;
-
-        const [newReview, reviewError] = await ReviewService.createReview(body);
+        const [newReview, reviewError] = await ReviewService.createReview(req.body);
 
         if (reviewError) return respondError(res, reviewError);
         if (!newReview) return respondError(res, "No se pudo crear la review");

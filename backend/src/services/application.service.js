@@ -6,9 +6,11 @@ const User = require("../models/user.model");
 const Subsidy = require("../models/subsidy.model");
 const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
+const AVAILABILITY = require("../constants/availability.constants");
 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
+    console.log(subsidyId);
     const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 
@@ -25,26 +27,24 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
 
-    let status = "Pendiente";
+    let status = AVAILABILITY[3];
+
+    // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
-      status = "Rechazado";
-    } else {
-      // Agregar más lógica para validar postulacion
-    }
+      status = AVAILABILITY[2];
+    } 
     // validacion de integrantes
     if (members < guideline.minMembers) {
-      status = "Rechazado";
-    } else {
-      // Agregar más lógica para validar postulacion
-    }
+      status = AVAILABILITY[2];
+    } 
 
     const newApplication = new Application({
-      subsidy,
+      subsidyId,
       userId: user._id,
       socialPercentage,
       applicationDate,
       status,
-      members
+      members,
     });
 
     await newApplication.save();
@@ -143,4 +143,4 @@ module.exports = {
   getApplicationsByUserEmail,
   updateApplication,
   deleteApplication,
-};  
+};

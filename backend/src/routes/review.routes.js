@@ -20,11 +20,11 @@ const router = express.Router();
 router.use(authenticationMiddleware);
 
 router.get("/", authorizationMiddleware.isAdmin, reviewController.getReviews);
-router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewById);
-router.post("/", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.createReview);
-router.put("/:id", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.updateReviewById);
-router.delete("/:id", authorizationMiddleware.isAdmin, reviewController.deleteReviewById);
 router.get("/filter", reviewController.filterReviews);
 router.get("/userReview", authorizationMiddleware.isUser, reviewController.getReviewByEmail);
+router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewById);
+router.post("/", authorizationMiddleware.isAdmin, reviewController.createReview);
+router.put("/:id", validationMiddleware.validateReviewBody, authorizationMiddleware.isAdmin, reviewController.updateReviewById);
+router.delete("/:id", authorizationMiddleware.isAdmin, reviewController.deleteReviewById);
 
 module.exports = router;

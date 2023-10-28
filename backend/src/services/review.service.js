@@ -17,10 +17,8 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function createReview(review) {
     try {
+        console.log("entrando al service");
         // Validaciones
-        // Solo realizar la review si la application esta en estado 'Pendiente'
-        const applicationStatus = await Application.findById(review.applicationId, { status: "Pendiente", _id: 0 });
-        if (applicationStatus.status != "Pendiente") throw new Error("La aplicación no está en estado 'Pendiente'");
 
         // Verificar que la postulacion existe
         const application = await Application.findById(review.applicationId);
