@@ -40,6 +40,14 @@ const applicationBodySchema = Joi.object({
       "number.max": "El porcentaje social no puede ser mayor que 100.",
       "any.required": "El porcentaje social es obligatorio.",
     }),
+    members: Joi.number()
+    .min(1)
+    .required()
+    .messages({
+      "number.base": "La cantidad de miembros debe ser de tipo número.",
+      "number.min": "La cantidad de miembros no puede ser menor que 0.",
+      "any.required": "La cantidad de miembros es obligatoria.",
+    }),
   applicationDate: Joi.date()
     .required()
     .messages({

@@ -1,7 +1,6 @@
 "use strict";
 
 const Joi = require("joi");
-const ROLES = require("../constants/roles.constants");
 const rutPattern = /^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/;
 
 const userBodySchema = Joi.object({

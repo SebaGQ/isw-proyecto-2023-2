@@ -12,14 +12,15 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function createApplication(req, res) {
   try {
-    const { subsidyId, socialPercentage, applicationDate } = req.body;
+    const { subsidyId, socialPercentage, applicationDate, members } = req.body;
     const userEmail = req.email;
 
     const [newApplication, applicationError] = await ApplicationService.createApplication(
       subsidyId,
       userEmail,
       socialPercentage,
-      applicationDate);
+      applicationDate,
+      members);
 
     if (applicationError) return respondError(req, res, 400, applicationError);
     if (!newApplication) {
@@ -78,6 +79,7 @@ async function getApplicationById(req, res) {
  * @param {Object} req - Objeto de petición.
  * @param {Object} res - Objeto de respuesta.
  */
+//Esto resuelve el requerimiento número 4
 async function getApplicationsByUserEmail(req, res) {
   try {
     const userEmail = req.email;

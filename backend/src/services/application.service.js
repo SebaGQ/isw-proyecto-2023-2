@@ -7,7 +7,7 @@ const Subsidy = require("../models/subsidy.model");
 const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 
-async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate) {
+async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
     const user = await User.findOne({ email: userEmail }); // preguntar al prodowner si dejamos el correo lo cambiamos el rut
     if (!user) return [null, "Usuario no encontrado"];
@@ -44,6 +44,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       socialPercentage,
       applicationDate,
       status,
+      members
     });
 
     await newApplication.save();
@@ -79,10 +80,13 @@ async function getApplicationById(applicationId) {
     return [null, "Error al obtener la postulación"];
   }
 }
-
 async function getApplicationsByUserEmail(userEmail) {
   try {
-    const applications = await Application.find({ userEmail });
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return [null, "Usuario no encontrado"];
+    }
+    const applications = await Application.find({ userId: user._id });
     return [applications, null];
   } catch (error) {
     handleError(error, "application.service -> getApplicationsByUserEmail");
