@@ -32,18 +32,10 @@ async function createReviewAppeal(reviewAppeal) {
     // Verificar que la apelacion no tenga una revision
     if (appeal.reviewAppealId) return [null, "La apelación ya tiene una revisión"];
 
-    // Obtener la id de application vinculada a review
-    const applicationId = appeal.applicationId;
-    const application = await Application.findById(applicationId);
-
-    // Verificar que la aplicación este en estado 'Apelacion'
-    if (application.status !== AVAILABILITY[4]) {
-        return [null, "La postulacion no se encuentra en estado 'Apelacion'"];
-    }
 
     // cambiar estado de application a 'En revision'
-    application.status = AVAILABILITY[0];
-    await application.save();
+    appeal.status = AVAILABILITY[0];
+    await appeal.save();
 
     // Validar que el comentario no esté vacío
     if (typeof comment !== "string" || comment.trim() === "") {

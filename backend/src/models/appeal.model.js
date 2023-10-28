@@ -7,6 +7,7 @@ const appealSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Application",
+    unique: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -21,7 +22,6 @@ const appealSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: AVAILIBILITY,
-    required: true,
   },
 }, {
   timestamps: true,

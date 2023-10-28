@@ -34,10 +34,6 @@ async function createReview(req, res) {
     if (reviewError) return respondError(req, res, 400, reviewError);
     if (!newReview) return respondError(req, res, 400, "No se pudo crear la review");
 
-    // Actualizar la aplicación
-    // await Application.findByIdAndUpdate(req.body.applicationId, { status: "En Revisión" });
-    // no se realiza porque la valiadcion se hace en el service
-
     // Retornar el objeto de review creado
     return respondSuccess(req, res, 201, newReview);
   } catch (error) {
