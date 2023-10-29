@@ -10,10 +10,15 @@ const userBodySchema = Joi.object({
     "string.base": "El RUT debe ser de tipo string.",
     "string.pattern.base": "El RUT proporcionado no es válido.",
   }),
-  username: Joi.string().required().messages({
-    "string.empty": "El nombre de usuario no puede estar vacío.",
-    "any.required": "El nombre de usuario es obligatorio.",
-    "string.base": "El nombre de usuario debe ser de tipo string.",
+  firstName: Joi.string().required().messages({
+    "string.empty": "El nombre del usuario no puede estar vacío.",
+    "any.required": "El nombre del usuario es obligatorio.",
+    "string.base": "El nombre del usuario debe ser de tipo string.",
+  }),
+  firstName: Joi.string().required().messages({
+    "string.empty": "El apellido del usuario no puede estar vacío.",
+    "any.required": "El apellido del usuario es obligatorio.",
+    "string.base": "El apellido del usuario debe ser de tipo string.",
   }),
   password: Joi.string().required().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",

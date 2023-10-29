@@ -11,8 +11,8 @@ const reviewBodySchema = Joi.object({
         .required()
         .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
         .messages({
-            "string.empty": "El id de la solicitud no puede estar vacío.",
-            "any.required": "El id de la solicitud es obligatorio.",
+            "string.empty": "El id de la postulacion no puede estar vacío.",
+            "any.required": "El id de la postulacion es obligatorio.",
         }),
     comment: Joi.string().required().messages({
         "string.empty": "El comentario no puede estar vacío.",
