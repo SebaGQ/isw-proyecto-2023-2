@@ -101,7 +101,7 @@ async function updateReviewAppealById(reviewAppealId, updateData) {
 async function deleteReviewAppealById(reviewAppealId) {
     try {
     // Verificar que la apelacion existe
-    const reviewAppeal = await ReviewAppeal.findById(reviewAppealId);
+    const reviewAppeal = await ReviewAppeal.findByIdAndDelete(reviewAppealId);
     if (!reviewAppeal) return [null, "La revisión de la apelación no existe"];
 
     // Obtener la id de appeal vinculada a review
@@ -112,20 +112,14 @@ async function deleteReviewAppealById(reviewAppealId) {
     const postId = appeal.postId;
     const application = await Application.findById(postId);
 
-    // Verificar que la aplicación este en estado 'En revision'
-    if (application.status !== AVAILABILITY[0]) {
-        return [null, "La postulacion no se encuentra en estado 'En revision'"];
-    }
 
     // cambiar estado de application a 'Apelacion'
     application.status = AVAILABILITY[4];
     await application.save();
 
-    // Eliminar el review
-    const reviewAppealDeleted = Review.findById(reviewAppealId);
 
     // Devolver el review eliminado
-    return [reviewAppealDeleted, null];
+    return [reviewAppeal, null];
   } catch (error) {
     handleError(error, "reviewAppeal.service -> deleteReviewAppealById");
     return [null, "Error al eliminar la revisión de la apelación"];
