@@ -21,6 +21,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
+    //se valida que el cliente no tenga una postulación pendiente para el mismo subsidio
     const hasPending = await hasPendingApplication(user._id, subsidyId);
     if (hasPending) {
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
