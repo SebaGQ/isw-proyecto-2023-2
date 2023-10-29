@@ -113,6 +113,23 @@ async function updateApplication(applicationId, updateData) {
   }
 }
 
+async function updateApplicationStatus(applicationId, newStatus) {
+  try {
+
+    if (newStatus !== "Aprobado" && newStatus !== "Rechazado") {
+      return [null, "Estado de postulación no válido"];
+    }
+
+    const application = await Application.findByIdAndUpdate(applicationId, { status: newStatus }, { new: true });
+    if (!application) return [null, "Postulación no encontrada"];
+
+    return [application, null];
+  } catch (error) {
+    handleError(error, "application.service -> updateApplicationStatus");
+    return [null, "Error al actualizar el estado de la postulación"];
+  }
+}
+
 async function deleteApplication(applicationId) {
   try {
     if (!mongoose.Types.ObjectId.isValid(applicationId)) {
@@ -147,5 +164,6 @@ module.exports = {
   getApplicationById,
   getApplicationsByUserEmail,
   updateApplication,
+  updateApplicationStatus,
   deleteApplication,
 };
