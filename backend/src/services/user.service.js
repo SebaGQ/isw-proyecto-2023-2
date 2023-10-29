@@ -29,22 +29,24 @@ async function getUsers() {
  */
 async function createUser(user) {
   try {
-    const { nombre, apellido, rut, email, password, roles } = user;
+    const { rut, nombre, apellido, edad, email, password, roles } = user;
 
     const userFound = await User.findOne({ email: user.email });
     if (userFound) return [null, "El usuario ya existe"];
-    
+
+    // rutfound
     const rutFound = await User.findOne({ rut: user.rut });
-    if (rutFound) return [null, "El rut ya esta registrado."];
+    if (rutFound) return [null, "El rut ya registrado"];
 
     const rolesFound = await Role.find({ name: { $in: roles } });
     if (rolesFound.length === 0) return [null, "El rol no existe"];
     const myRole = rolesFound.map((role) => role._id);
 
     const newUser = new User({
+      rut,
       nombre,
       apellido,
-      rut,
+      edad,
       email,
       password: await User.encryptPassword(password),
       roles: myRole,
@@ -88,7 +90,7 @@ async function updateUser(id, user) {
     const userFound = await User.findById(id);
     if (!userFound) return [null, "El usuario no existe"];
 
-    const { nombre, apellido, rut, email, password, roles } = user;
+    const { username, email, password, newPassword, roles } = user;
 
     const matchPassword = await User.comparePassword(
       password,
@@ -107,9 +109,7 @@ async function updateUser(id, user) {
     const userUpdated = await User.findByIdAndUpdate(
       id,
       {
-        nombre,
-        apellido,
-        rut,
+        username,
         email,
         password: await User.encryptPassword(newPassword || password),
         roles: myRole,

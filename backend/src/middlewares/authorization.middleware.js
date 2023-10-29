@@ -33,14 +33,14 @@ async function isAdmin(req, res, next) {
 }
 
 /**
- * Comprueba si el usuario es quien realizo la postulacion
+ * Comprueba si el usuario tiene rol user
  * @param {Object} req - Objeto de petición
  * @param {Object} res - Objeto de respuesta
  * @param {Function} next - Función para continuar con la siguiente función
  */
-async function isPostulante(req, res, next) {
+async function isUser(req, res, next) {
   try {
-    const user = await User.findOne({ rut: req.rut });
+    const user = await User.findOne({ email: req.email });
     const roles = await Role.find({ _id: { $in: user.roles } });
     for (let i = 0; i < roles.length; i++) {
       if (roles[i].name === "user") {
@@ -52,14 +52,14 @@ async function isPostulante(req, res, next) {
       req,
       res,
       401,
-      "Se requiere un rol de postulador para realizar esta acción",
+      "Se requiere un rol de postulante para realizar esta acción",
     );
   } catch (error) {
-    handleError(error, "authorization.middleware -> isPostulador");
+    handleError(error, "authorization.middleware -> isUser");
   }
 }
 
 module.exports = {
   isAdmin,
-  isPostulante
+  isUser,
 };

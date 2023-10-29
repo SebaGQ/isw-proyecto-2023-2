@@ -1,6 +1,4 @@
 "use strict";
-//Pattern de rut Chileno
-const rutPattern = /(\d{1,3}(?:\.\d{1,3}){2}-[\dkK])/;
 // Importa el modulo 'mongoose' para crear la conexion a la base de datos
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -8,6 +6,11 @@ const bcrypt = require("bcryptjs");
 // Crea el esquema de la coleccion 'usuarios'
 const userSchema = new mongoose.Schema(
   {
+    rut: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     nombre: {
       type: String,
       required: true,
@@ -16,12 +19,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    rut:
-    {
-      type: String,
+    edad: {
+      type: Number,
       required: true,
-      unique: true,
-      match: rutPattern,
+      min: 18,
     },
     password: {
       type: String,
