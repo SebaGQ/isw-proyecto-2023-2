@@ -122,10 +122,10 @@ async function deleteReviewAppealById(reviewAppealId) {
     await application.save();
 
     // Eliminar el review
-    await reviewAppeal.delete();
+    const reviewAppealDeleted = Review.findById(reviewAppealId);
 
     // Devolver el review eliminado
-    return [reviewAppeal, null];
+    return [reviewAppealDeleted, null];
   } catch (error) {
     handleError(error, "reviewAppeal.service -> deleteReviewAppealById");
     return [null, "Error al eliminar la revisión de la apelación"];
