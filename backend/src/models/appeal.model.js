@@ -22,6 +22,7 @@ const appealSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: AVAILIBILITY,
+    default : AVAILIBILITY[0],
   },
 }, {
   timestamps: true,
