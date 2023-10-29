@@ -43,6 +43,7 @@ async function createUsers() {
     await Promise.all([
       new User({
         firstName: "user",
+        lastName: "user",
         email: "user@email.com",
         password: await User.encryptPassword("user123"),
         roles: user._id,
@@ -50,6 +51,7 @@ async function createUsers() {
       }).save(),
       new User({
         firstName: "admin",
+        lastName: "admin",
         email: "admin@email.com",
         password: await User.encryptPassword("admin123"),
         roles: admin._id,

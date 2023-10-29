@@ -9,7 +9,7 @@ const AVAILABILITY = require("../constants/availability.constants");
 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
-    console.log(subsidyId);
+    
     const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 

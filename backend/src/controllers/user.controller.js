@@ -32,9 +32,6 @@ async function getUsers(req, res) {
 async function createUser(req, res) {
   try {
     const { body } = req;
-    const { error: bodyError } = userBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
     const [newUser, userError] = await UserService.createUser(body);
 
     if (userError) return respondError(req, res, 400, userError);
@@ -79,8 +76,6 @@ async function getUserById(req, res) {
 async function updateUser(req, res) {
   try {
     const { params, body } = req;
-    const { error: paramsError } = userIdSchema.validate(params);
-    if (paramsError) return respondError(req, res, 400, paramsError.message);
 
     const { error: bodyError } = userBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);

@@ -15,7 +15,7 @@ const userBodySchema = Joi.object({
     "any.required": "El nombre del usuario es obligatorio.",
     "string.base": "El nombre del usuario debe ser de tipo string.",
   }),
-  firstName: Joi.string().required().messages({
+  lastName: Joi.string().required().messages({
     "string.empty": "El apellido del usuario no puede estar vacío.",
     "any.required": "El apellido del usuario es obligatorio.",
     "string.base": "El apellido del usuario debe ser de tipo string.",
