@@ -108,9 +108,9 @@ async function deleteReviewAppealById(reviewAppealId) {
     const appealId = reviewAppeal.appealId;
     const appeal = await Appeal.findById(appealId);
     
-    // Obtener applicationId con appeal
-    const applicationId = appeal.applicationId;
-    const application = await Application.findById(applicationId);
+    // Obtener postId con appeal
+    const postId = appeal.postId;
+    const application = await Application.findById(postId);
 
     // Verificar que la aplicación este en estado 'En revision'
     if (application.status !== AVAILABILITY[0]) {
@@ -189,7 +189,7 @@ async function getReviewAppealByEmail(email) {
     // Obtener appeal de reviews
     const appeal = reviewsAppeal.appealId;
     // Obtener application de appeal
-    const application = appeal.applicationId;
+    const application = appeal.postId;
     // Obtener email de application
     const userEmail = application.email;
 
