@@ -17,9 +17,6 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function createReview(review) {
     try {
-        console.log("entrando al service");
-        // Validaciones
-
         // Verificar que la postulacion existe
         const application = await Application.findById(review.applicationId);
         if (!application) throw new Error("La aplicación no existe");
