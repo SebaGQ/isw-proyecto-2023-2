@@ -20,6 +20,15 @@ const userBodySchema = Joi.object({
     "any.required": "El apellido del usuario es obligatorio.",
     "string.base": "El apellido del usuario debe ser de tipo string.",
   }),
+  apellido: Joi.string().required().messages({
+    "string.empty": "El apellido de usuario no puede estar vacío.",
+    "any.required": "El apellido de usuario es obligatorio.",
+    "string.base": "El apellido de usuario debe ser de tipo string.",
+  }),
+  edad: Joi.number().positive().required().messages({
+    "number.base": "La edad debe ser de tipo número.",
+    "any.required": "La edad es obligatoria.",
+  }),
   password: Joi.string().required().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",
     "any.required": "La contraseña es obligatoria.",
@@ -43,6 +52,9 @@ const userBodySchema = Joi.object({
       "string.length": "El id de rol debe tener 24 caracteres.",
     }),
   newPassword: Joi.string().min(5).messages({
+    "string.empty": "La nueva contraseña no puede estar vacía.",
+    "string.base": "La nueva contraseña debe ser de tipo string.",
+    "string.min": "La nueva contraseña debe tener al menos 5 caracteres.",
     "string.empty": "La nueva contraseña no puede estar vacía.",
     "string.base": "La nueva contraseña debe ser de tipo string.",
     "string.min": "La nueva contraseña debe tener al menos 5 caracteres.",

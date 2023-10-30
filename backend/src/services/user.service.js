@@ -34,6 +34,10 @@ async function createUser(user) {
     const userFound = await User.findOne({ email: user.email });
     if (userFound) return [null, "El usuario ya existe"];
 
+    // rutfound
+    const rutFound = await User.findOne({ rut: user.rut });
+    if (rutFound) return [null, "El rut ya registrado"];
+
     const rolesFound = await Role.find({ name: { $in: roles } });
     if (rolesFound.length === 0) return [null, "El rol no existe"];
     const myRole = rolesFound.map((role) => role._id);

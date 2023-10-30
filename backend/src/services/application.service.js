@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 "use strict";
 
 const Application = require("../models/application.model");
@@ -9,7 +10,7 @@ const AVAILABILITY = require("../constants/availability.constants");
 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
-    
+    console.log(subsidyId);
     const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 
@@ -21,7 +22,6 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
-    //se valida que el cliente no tenga una postulación pendiente para el mismo subsidio
     const hasPending = await hasPendingApplication(user._id, subsidyId);
     if (hasPending) {
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
@@ -36,7 +36,12 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     // validacion de integrantes
     if (members < guideline.minMembers) {
       status = AVAILABILITY[2];
-    } 
+    }
+    const applicationDateObj = new Date(applicationDate);
+    // Validacion de la flecha de aplicacion con la del subsidio
+    if (applicationDateObj > subsidy.dateEnd || applicationDateObj < subsidy.dateStart) {
+      status = AVAILABILITY[2];
+    }
 
     const newApplication = new Application({
       subsidyId,
@@ -127,7 +132,7 @@ async function hasPendingApplication(userId, subsidyId) {
     const pendingApplication = await Application.findOne({
       userId,
       subsidyId,
-      status: AVAILABILITY[3]
+      status: "Pendiente"
     });
     return pendingApplication !== null; // Retorna true si existe una aplicación pendiente
   } catch (error) {
