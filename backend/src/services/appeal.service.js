@@ -2,6 +2,7 @@ const AVAILIBILITY = require("../constants/availability.constants");
 const Appeal = require("../models/appeal.model");
 const User = require("../models/user.model");
 const ApplicationService = require("./application.service");
+const mongoose = require("mongoose");
 
 async function createAppeal(userEmail, postData) {
   try {

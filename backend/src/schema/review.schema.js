@@ -9,7 +9,7 @@ const Joi = require("joi");
 const reviewBodySchema = Joi.object({
     applicationId: Joi.string()
         .required()
-        .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
+        .pattern(/^(?:[0-9a-fA-F]{24})$/)
         .messages({
             "string.empty": "El id de la postulacion no puede estar vacío.",
             "any.required": "El id de la postulacion es obligatorio.",
