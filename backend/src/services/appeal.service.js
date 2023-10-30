@@ -1,12 +1,11 @@
-/* eslint-disable max-len */
+const AVAILIBILITY = require("../constants/availability.constants");
 const Appeal = require("../models/appeal.model");
 const User = require("../models/user.model");
 const ApplicationService = require("./application.service");
-const mongoose = require("mongoose");
-const AVAILIBILITY = require("../constants/availability.constants");
 
 async function createAppeal(userEmail, postData) {
   try {
+    // Buscar el usuario por email
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       return [null, "Usuario no encontrado"];
@@ -15,7 +14,10 @@ async function createAppeal(userEmail, postData) {
     const [application, applicationError] = await ApplicationService.getApplicationById(postData.postId);
     if (applicationError) return [null, applicationError];
     if (!application) return [null, "La postulación asociada no existe"];
-    if (application.status !== AVAILIBILITY[2]) return [null, "La postulación debe estar Rechazada para postular."];
+    
+    // Validar condiciones
+    if (application.status !== AVAILIBILITY[2]) return [null, "La postulación debe estar Rechazada para apelar."];
+    if (application.userId.toString() !== user._id.toString()) return [null, "La postulación a la que se está apelando debe pertenecer al usuario."];
 
     const newAppeal = new Appeal({
       postId: postData.postId,
@@ -24,7 +26,13 @@ async function createAppeal(userEmail, postData) {
       status: AVAILIBILITY[4],
     });
 
+    // Guardar la apelación
     await newAppeal.save();
+
+    // Cambiar el estado de la postulación a Revision
+    application.status = AVAILIBILITY[0];
+    await application.save();
+
     return [newAppeal, null];
   } catch (error) {
     console.error("Error al crear la apelación:", error);
