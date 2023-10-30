@@ -21,7 +21,7 @@ router.use(authenticationMiddleware);
 router.get("/", authorizationMiddleware.isAdmin, appealController.getAppeals);
 router.get("/user/", appealController.getAppealsByUserEmail);
 router.get("/:id", authorizationMiddleware.isAdmin, appealController.getAppealById);
-router.post("/", validationMiddleware.validateAppealBody, appealController.createAppeal);
+router.post("/", validationMiddleware.validateAppealBody, authorizationMiddleware.isUser, appealController.createAppeal);
 router.put("/:id", validationMiddleware.validateAppealBody, authorizationMiddleware.isAdmin, appealController.updateAppeal);
 router.delete("/:id", authorizationMiddleware.isAdmin, appealController.deleteAppeal);
 
