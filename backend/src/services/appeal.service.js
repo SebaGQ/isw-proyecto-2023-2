@@ -5,7 +5,6 @@ const ApplicationService = require("./application.service");
 
 async function createAppeal(userEmail, postData) {
   try {
-    // Buscar el usuario por email
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       return [null, "Usuario no encontrado"];
@@ -26,7 +25,6 @@ async function createAppeal(userEmail, postData) {
       status: AVAILIBILITY[4],
     });
 
-    // Guardar la apelación
     await newAppeal.save();
 
     // Cambiar el estado de la postulación a Revision
