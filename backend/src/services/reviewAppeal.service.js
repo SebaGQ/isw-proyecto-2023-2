@@ -20,7 +20,7 @@ async function createReviewAppeal(reviewAppeal) {
   try {
     const { appealId, comment } = reviewAppeal;
 
-    // Validar que el objeto reviewAppeal tenga las propiedades necesarias
+    // Validar que el objeto reviewAppeal tenga las propiagees necesarias
     if (!appealId || !comment) {
         return [null, "Faltan datos obligatorios en el objeto reviewAppeal"];
     }
@@ -67,7 +67,7 @@ async function createReviewAppeal(reviewAppeal) {
  */
 async function updateReviewAppealById(reviewAppealId, updateData) {
   try {
-    // Validar que el objeto reviewAppeal tenga las propiedades necesarias
+    // Validar que el objeto reviewAppeal tenga las propiagees necesarias
     if (!reviewAppealId || !updateData) {
         return [null, "Faltan datos obligatorios en el objeto reviewAppeal"];
     }

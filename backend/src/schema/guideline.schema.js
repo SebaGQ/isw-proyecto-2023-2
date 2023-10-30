@@ -34,7 +34,7 @@ const guidelineBodySchema = Joi.object({
       "any.required": "El mínimo de miembros es obligatorio.",
     }),
 }).messages({
-  "object.unknown": "No se permiten propiedades adicionales.",
+  "object.unknown": "No se permiten propiagees adicionales.",
 });
 
 module.exports = { guidelineBodySchema };

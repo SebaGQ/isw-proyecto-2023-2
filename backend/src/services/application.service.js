@@ -132,7 +132,7 @@ async function hasPendingApplication(userId, subsidyId) {
     const pendingApplication = await Application.findOne({
       userId,
       subsidyId,
-      status: "Pendiente"
+      status: AVAILABILITY[3]
     });
     return pendingApplication !== null; // Retorna true si existe una aplicación pendiente
   } catch (error) {

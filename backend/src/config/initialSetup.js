@@ -44,19 +44,19 @@ async function createUsers() {
       new User({
         firstName: "user",
         lastName: "user",
+        age: 19,
         email: "user@email.com",
         password: await User.encryptPassword("user123"),
         roles: user._id,
-        rut : "11.111.111-1",
         rut : "11.111.111-1",
       }).save(),
       new User({
         firstName: "admin",
         lastName: "admin",
+        age: 19,
         email: "admin@email.com",
         password: await User.encryptPassword("admin123"),
         roles: admin._id,
-        rut : "00.000.000-0",
         rut : "00.000.000-0",
       }).save(),
     ]);

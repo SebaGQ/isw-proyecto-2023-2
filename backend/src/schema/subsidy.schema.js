@@ -48,7 +48,7 @@ const subsidyBodySchema = Joi.object({
     }),
   typeSubsidy: Joi.string()
     .required()
-    .valid("Subsidio", "Beneficio")
+    .valid(...TYPE_SUBSIDY)
     .messages({
       "string.base": "El tipo debe ser de tipo texto.",
       "any.required": "El tipo es obligatorio.",
@@ -65,7 +65,7 @@ const subsidyBodySchema = Joi.object({
       "string.pattern.base": "El id de la pauta proporcionado no es un ObjectId válido.",
     }),
 }).messages({
-  "object.unknown": "No se permiten propiedades adicionales.",
+  "object.unknown": "No se permiten propiagees adicionales.",
 });
 
 module.exports = { subsidyBodySchema };

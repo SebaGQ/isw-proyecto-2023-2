@@ -49,7 +49,7 @@ const applicationBodySchema = Joi.object({
       "date.base": "La fecha de postulación debe ser de tipo fecha.",
     }),
 }).messages({
-  "object.unknown": "No se permiten propiedades adicionales.",
+  "object.unknown": "No se permiten propiagees adicionales.",
 });
 
 module.exports = { applicationBodySchema };
