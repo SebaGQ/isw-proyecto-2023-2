@@ -21,7 +21,7 @@ async function createAppeal(userEmail, postData) {
       postId: postData.postId,
       userId: user._id,
       reason: postData.reason,
-      status: "Pendiente",
+      status: AVAILIBILITY[4],
     });
 
     await newAppeal.save();
