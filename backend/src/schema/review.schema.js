@@ -21,4 +21,4 @@ const reviewBodySchema = Joi.object({
     }),
 });
 
-module.exports = reviewBodySchema;
+module.exports = {reviewBodySchema};
