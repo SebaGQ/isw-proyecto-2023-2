@@ -134,34 +134,6 @@ async function getReviews() {
 }
 
 /**
- * Filtrar las reviews segun el estado de application
- * @param {string} status Estado de application
- * @returns {Promise} Promesa con los objetos de review
- */
-async function filterReviews(status) {
-  try {
-    // Obtener todas las aplicaciones con el estado deseado
-    const applications = await Application.find({ status });
-
-    // Si no hay aplicaciones, devolver un array vacío
-    if (applications.length === 0) return [[], null];
-
-    // Obtener los IDs de las aplicaciones
-    const applicationIds = applications.map((app) => app._id);
-
-    // Obtener las revisions asociadas a esas aplicaciones
-    const reviews = await Review.find({
-      applicationId: { $in: applicationIds },
-    });
-
-    return [reviews, null];
-  } catch (error) {
-    handleError(error, "review.service -> filterReviewsByStatus");
-    return [null, "Error al filtrar las revisions"];
-  }
-}
-
-/**
  * El usuario obtiene la review vinculado al email
  * @param {string} email email del usuario
  * @returns {Promise} Promesa con el objeto de review
@@ -199,6 +171,5 @@ module.exports = {
   deleteReviewById,
   getReviewById,
   getReviews,
-  filterReviews,
   getReviewByEmail,
 };

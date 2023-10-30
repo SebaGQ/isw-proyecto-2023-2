@@ -165,45 +165,10 @@ async function getReviewsAppeal() {
   }
 }
 
-// sin terminar
-
-/**
- * El usuario obtiene la reviewAppeal vinculado al email
- * @param {Object} email email del usuario
- * @returns {Promise} Promesa con el objeto de reviewAppeal
- */
-/*
-async function getReviewAppealByEmail(email) {
-    try {
-    // Obtener el objeto de reviewAppeal y la informacion de appeal
-    const reviewsAppeal = await ReviewAppeal.find().populate("appealId");
-    // Verificar que existen reviewAppeal
-    if (!reviewsAppeal) throw new Error("No hay revisiones de apelaciones");
-
-    // Obtener appeal de reviews
-    const appeal = reviewsAppeal.appealId;
-    // Obtener application de appeal
-    const application = appeal.postId;
-    // Obtener email de application
-    const userEmail = application.email;
-
-
-    // Retornar el objeto de reviewAppeal
-    return [reviewsAppeal, null];
-  } catch (error) {
-    // Retornar el error
-    handleError(error, "reviewAppeal.service -> getReviewsAppeal");
-    return [null, "Error al obtener las revisiones de apelaciones"];
-  }
-}
-
-*/
-
 module.exports = {
     createReviewAppeal,
     updateReviewAppealById,
     deleteReviewAppealById,
     getReviewAppealById,
     getReviewsAppeal,
-    // getReviewAppealByEmail,
     };
