@@ -3,6 +3,7 @@ const Appeal = require("../models/appeal.model");
 const User = require("../models/user.model");
 const ApplicationService = require("./application.service");
 const mongoose = require("mongoose");
+const AVAILIBILITY = require("../constants/availability.constants");
 
 async function createAppeal(userEmail, postData) {
   try {
@@ -14,6 +15,7 @@ async function createAppeal(userEmail, postData) {
     const [application, applicationError] = await ApplicationService.getApplicationById(postData.postId);
     if (applicationError) return [null, applicationError];
     if (!application) return [null, "La postulación asociada no existe"];
+    if (application.status !== AVAILIBILITY[2]) return [null, "La postulación debe estar Rechazada para postular."];
 
     const newAppeal = new Appeal({
       postId: postData.postId,
