@@ -13,7 +13,7 @@ const authorizationMiddleware = require("../middlewares/authorization.middleware
 
 /** Middleware de validación */
 // Se usa solo en las solicitudes q reciben un body
-// const validationMiddleware = require("../middlewares/valid.reviewAppeal.middleware.js");
+const validationMiddleware = require("../middlewares/valid.reviewAppeal.middleware.js");
 
 const router = express.Router();
 
@@ -21,8 +21,8 @@ router.use(authenticationMiddleware);
 
 router.get("/", authorizationMiddleware.isAdmin, reviewAppealController.getReviewsAppeal);
 router.get("/:id", authorizationMiddleware.isAdmin, reviewAppealController.getReviewAppealById);
-router.post("/", authorizationMiddleware.isAdmin, reviewAppealController.createReviewAppeal);
-router.put("/:id", authorizationMiddleware.isAdmin, reviewAppealController.updateReviewAppealById);
+router.post("/", authorizationMiddleware.isAdmin, validationMiddleware.validateReviewAppealBody, reviewAppealController.createReviewAppeal);
+router.put("/:id", authorizationMiddleware.isAdmin, validationMiddleware.validateReviewAppealBody, reviewAppealController.updateReviewAppealById);
 router.delete("/:id", authorizationMiddleware.isAdmin, reviewAppealController.deleteReviewAppealById);
 
 module.exports = router;
