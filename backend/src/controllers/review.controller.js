@@ -143,6 +143,58 @@ async function getReviewByEmail(req, res) {
   }
 }
 
+/**
+ * Agregar comentario a la review asignada con la id
+ * @param {Object} req 
+ * @param {Promise} res
+ */
+async function addCommentToReview(req, res) {
+  const { id } = req.params;
+  const { comment } = req.body;
+
+  if (!id || !comment) {
+    return respondError(req, res, 400, "ID de la revisión y comentario son requeridos");
+  }
+
+  try {
+    const [review, reviewError] = await ReviewService.addCommentToReview(id, comment);
+    if (reviewError) return respondError(req, res, 404, reviewError);
+    respondSuccess(req, res, 200, review);
+  } catch (error) {
+    handleError(error, "review.controller -> addComment");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+/**
+ * Controlador para eliminar un comentario de una review
+ * @param {Object} req 
+ * @param {Promise} res
+ */
+async function removeCommentToReview(req, res) {
+  const { reviewId } = req.params; // Asume que reviewId se pasa como parte de la URL
+  const { commentIndex } = req.body; // Obtiene el índice del comentario del cuerpo de la solicitud
+
+  // Validación básica
+  if (!reviewId || commentIndex == null) {
+    return respondError(req, res, 400, "ID de la revisión y el índice del comentario son requeridos");
+  }
+
+  // Asegurarse de que commentIndex es un número y no es negativo
+  if (typeof commentIndex !== "number" || commentIndex < 0) {
+    return respondError(req, res, 400, "Índice de comentario inválido");
+  }
+
+  try {
+    const [updatedReview, reviewError] = await ReviewService.removeCommentToReview(reviewId, commentIndex);
+    if (reviewError) return respondError(req, res, 404, reviewError);
+    respondSuccess(req, res, 200, updatedReview);
+  } catch (error) {
+    handleError(error, "review.controller -> removeComment");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
 module.exports = {
   createReview,
   updateReviewById,
@@ -151,4 +203,6 @@ module.exports = {
   getReviews,
   filterReviews,
   getReviewByEmail,
+  addCommentToReview,
+  removeCommentToReview,
 };

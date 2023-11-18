@@ -1,24 +1,52 @@
-"use strict";
-
 const Joi = require("joi");
+const AVAILABILITY = require("../constants/availability.constants");
 
-/**
- * Esquema de validacion para el cuerpo de la solicitu de review
- * @constant {Object}
- */
 const reviewBodySchema = Joi.object({
     applicationId: Joi.string()
         .required()
-        .pattern(/^(?:[0-9a-fA-F]{24})$/)
+        .pattern(/^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i)
         .messages({
-            "string.empty": "El id de la postulacion no puede estar vacío.",
-            "any.required": "El id de la postulacion es obligatorio.",
+            "string.empty": "El id de la postulación no puede estar vacío.",
+            "any.required": "El id de la postulación es obligatorio.",
+            "string.pattern.base": "El id de la postulación debe ser un ObjectId válido de MongoDB.",
         }),
-    comment: Joi.string().required().messages({
-        "string.empty": "El comentario no puede estar vacío.",
-        "any.required": "El comentario es obligatorio.",
-        "string.base": "El comentario debe ser de tipo string.",
+    comment: Joi.array().items(
+        Joi.string().required().messages({
+            "string.empty": "El comentario no puede estar vacío.",
+            "any.required": "El comentario es obligatorio.",
+            "string.base": "El comentario debe ser de tipo string.",
+        }),
+    ).required().min(1).messages({
+        "array.base": "Los comentarios deben estar en formato de arreglo.",
+        "any.required": "Los comentarios son obligatorios.",
+        "array.min": "Debe haber al menos un comentario.",
     }),
+    status: Joi.string()
+        .required()
+        .valid(...AVAILABILITY)
+        .messages({
+            "string.base": "El estado debe ser de tipo string.",
+            "any.required": "El estado es obligatorio.",
+            "any.only": "El estado debe ser valido.",
+        }),
+    statusPercentage: Joi.boolean()
+        .required()
+        .messages({
+            "boolean.base": "El estado de porcentaje debe ser de tipo booleano.",
+            "any.required": "El estado de porcentaje es obligatorio.",
+        }),
+    statusMembers: Joi.boolean()
+        .required()
+        .messages({
+            "boolean.base": "El estado de miembros debe ser de tipo booleano.",
+            "any.required": "El estado de miembros es obligatorio.",
+        }),
+    statusDate: Joi.boolean()
+        .required()
+        .messages({
+            "boolean.base": "El estado de fecha debe ser de tipo booleano.",
+            "any.required": "El estado de fecha es obligatorio.",
+        }),
 });
 
-module.exports = {reviewBodySchema};
+module.exports = { reviewBodySchema };

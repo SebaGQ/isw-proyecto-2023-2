@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 // Importar el modelo de datos 'Review'
 const Review = require("../models/review.model");
 // Importar el modelo de datos 'Application'
@@ -165,6 +164,62 @@ async function getReviewByEmail(userEmail) {
   }
 }
 
+/**
+ * Agregar comentario a la review asignada con la id
+ * @param {string} id id de la review
+ * @returns {Promise} Promesa con el objeto de review
+ */
+async function addCommentToReview(reviewId, comment) {
+  try {
+    // Buscar la revisión por ID y agregar el comentario
+    const review = await Review.findByIdAndUpdate(
+      reviewId,
+      { $push: { comment: comment } },
+      { new: true }, // Devolver el documento actualizado
+    );
+
+    // Verificar si se encontró la revisión
+    if (!review) {
+      return [null, "Revisión no encontrada"];
+    }
+
+    // Devolver la revisión actualizada
+    return [review, null];
+  } catch (error) {
+    handleError(error, "review.service -> addCommentToReview");
+    return [null, "Error al agregar el comentario a la revisión"];
+  }
+}
+
+
+/**
+ * Eliminar un comentario de la review basado en su índice
+ * @param {string} reviewId - ID de la review
+ * @param {number} commentIndex - Índice del comentario a eliminar
+ * @returns {Promise} - Promesa con el objeto de review actualizado
+ */
+async function removeCommentToReview(reviewId, commentIndex) {
+  try {
+    const review = await Review.findById(reviewId);
+
+    if (!review || !review.comment[commentIndex]) {
+      return [null, "Revisión no encontrada o comentario inexistente"];
+    }
+
+    // Eliminar el comentario en el índice dado
+    review.comment.splice(commentIndex, 1);
+
+    // Guardar los cambios
+    await review.save();
+
+    return [review, null];
+  } catch (error) {
+    handleError(error, "review.service -> removeCommentByIndex");
+    return [null, "Error al eliminar el comentario de la revisión"];
+  }
+}
+
+
 module.exports = {
   createReview,
   updateReviewById,
@@ -172,4 +227,6 @@ module.exports = {
   getReviewById,
   getReviews,
   getReviewByEmail,
+  addCommentToReview,
+  removeCommentToReview,
 };

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const AVAILIBILITY = require("../constants/availability.constants");
+const AVAILABILITY = require("../constants/availability.constants");
 
 const applicationSchema = new mongoose.Schema({
   userId: {
@@ -15,8 +15,8 @@ const applicationSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: AVAILIBILITY,
-    default: AVAILIBILITY[3],
+    enum: AVAILABILITY,
+    default: AVAILABILITY[3],
   },
   socialPercentage: {
     type: Number,

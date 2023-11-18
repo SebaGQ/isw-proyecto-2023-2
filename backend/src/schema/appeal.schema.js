@@ -1,43 +1,69 @@
 "use strict";
 
 const Joi = require("joi");
-const AVAILIBILITY = require("../constants/availability.constants");
+const AVAILABILITY = require("../constants/availability.constants");
 
-/**
- * Esquema de validación para el cuerpo de la solicitud de usuario.
- * @constant {Object}
- */
 const appealBodySchema = Joi.object({
   postId: Joi.string()
-    // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
-    .pattern(/^(?:[0-9a-fA-F]{24})$/)
-    .messages({
-      "string.empty": "El id de la postulación no puede estar vacío.",
-      "string.pattern.base": "El id de la postulación proporcionado no es un ObjectId válido.",
-    }),
-  userId: Joi.string()
-    // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
-    .pattern(/^(?:[0-9a-fA-F]{24})$/)
-    .messages({
-      "string.empty": "El id del usuario no puede estar vacío.",
-      "string.pattern.base": "El id del usuario proporcionado no es un ObjectId válido.",
-    }),
-  reason: Joi.string()
+    .length(24)
+    .hex()
     .required()
-    .trim()
     .messages({
-      "string.empty": "La razón no puede estar vacía.",
-      "any.required": "La razón es obligatoria.",
-      "string.base": "La razón debe ser de tipo string.",
+      "string.length": "El id de la postulación debe tener 24 caracteres.",
+      "string.hex": "El id de la postulación debe ser un string hexadecimal.",
+      "any.required": "El id de la postulación es obligatorio.",
     }),
+
+  userId: Joi.string()
+    .length(24)
+    .hex()
+    .messages({
+      "string.length": "El id del usuario debe tener 24 caracteres.",
+      "string.hex": "El id del usuario debe ser un string hexadecimal.",
+      "any.required": "El id del usuario es obligatorio.",
+    }),
+
   status: Joi.string()
-    .valid(...AVAILIBILITY)
+    .valid(...AVAILABILITY)
     .messages({
       "string.base": "El estado debe ser de tipo string.",
-      "any.only": "El estado debe ser 'En Revisión', 'Aceptado' o 'Rechazado'.",
+      "any.only": `El estado debe ser uno de los siguientes: ${AVAILABILITY.join(", ")}.`,
+      "any.required": "El estado es obligatorio.",
     }),
+
+  newSocialPercentage: Joi.number()
+    .min(0)
+    .max(100)
+    .messages({
+      "number.base": "El porcentaje social debe ser un número.",
+      "number.min": "El porcentaje social no puede ser menor a 0.",
+      "number.max": "El porcentaje social no puede ser mayor a 100.",
+    }),
+
+  newMembers: Joi.number()
+    .min(1)
+    .messages({
+      "number.base": "Los nuevos miembros deben ser un número.",
+      "number.min": "Debe haber al menos un nuevo miembro.",
+    }),
+
+  comment: Joi.array().items(
+    Joi.string().allow('').messages({
+      "string.base": "El comentario debe ser de tipo string.",
+    })
+  ).messages({
+    "array.base": "Los comentarios deben estar en formato de arreglo.",
+    "any.required": "Los comentarios son obligatorios."
+  }),
+
+  result: Joi.array().items(
+    Joi.string().allow('').messages({
+      "string.base": "El resultado debe ser de tipo string.",
+    })
+  ),
+
 }).messages({
-  "object.unknown": "No se permiten propiagees adicionales.",
+  "object.unknown": "No se permiten propiedades adicionales.",
 });
 
 module.exports = { appealBodySchema };

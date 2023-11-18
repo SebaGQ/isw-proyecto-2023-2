@@ -25,5 +25,7 @@ router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewBy
 router.post("/", authorizationMiddleware.isAdmin, validationMiddleware.validateReviewBody, reviewController.createReview);
 router.put("/:id", authorizationMiddleware.isAdmin, validationMiddleware.validateReviewBody, reviewController.updateReviewById);
 router.delete("/:id", authorizationMiddleware.isAdmin, reviewController.deleteReviewById);
+router.put("/addCommentReview/:id", authorizationMiddleware.isAdmin, reviewController.addCommentToReview);
+router.put("/removeCommentReview/:id", authorizationMiddleware.isAdmin, reviewController.removeCommentToReview);
 
 module.exports = router;
