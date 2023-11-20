@@ -17,9 +17,6 @@ const subsidyRoutes = require("./subsidy.routes.js");
 /** Enrutador de revisiones */
 const reviewRoutes = require("./review.routes.js");
 
-/** Enrutaddor de revisiones de apelacion */
-const reviewAppealRoutes = require("./reviewAppeal.routes.js");
-
 /** Enrutador de apelaciones */
 const appealRoutes = require("./appeal.routes.js");
 
@@ -42,8 +39,7 @@ router.use("/appeals", appealRoutes);
 router.use("/guidelines", guidelineRoutes);
 // Define las rutas para las revisiones /api/reviews
 router.use("/reviews", reviewRoutes);
-// Define las rutas para las revisiones de apelaciones /api/reviewsAppeal
-router.use("/reviewsAppeal", reviewAppealRoutes);
+
 
 // Exporta el enrutador
 module.exports = router;

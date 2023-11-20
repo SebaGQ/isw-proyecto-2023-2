@@ -1,7 +1,7 @@
 "use strict";
 
 const Joi = require("joi");
-const AVAILIBILITY = require("../constants/availability.constants");
+const AVAILABILITY = require("../constants/availability.constants");
 
 const applicationBodySchema = Joi.object({
   userId: Joi.string()
@@ -21,7 +21,7 @@ const applicationBodySchema = Joi.object({
       "string.pattern.base": "El id del subsidio proporcionado no es un ObjectId válido.",
     }),
   status: Joi.string()
-    .valid(...AVAILIBILITY)
+    .valid(...AVAILABILITY)
     .messages({
       "string.base": "El estado debe ser de tipo string.",
       "any.only": "El estado debe ser 'En Revisión', 'Aceptado' o 'Rechazado'.",
