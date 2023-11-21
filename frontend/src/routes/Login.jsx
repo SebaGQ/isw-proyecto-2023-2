@@ -1,22 +1,24 @@
 import LoginForm from '../components/LoginForm';
 import { useNavigate } from 'react-router-dom';
+import '../styles/LoginForm.css';
 
 function Login() {
   const navigate = useNavigate();
 
   if (localStorage.getItem('user')) {
     return (
-      <>
-        <h2>Ya estas logeado!</h2>
+      <div className="login-form-container">
+        <h2>Ya estás logueado!</h2>
         <button onClick={() => navigate('/')}>Ir a home</button>
-      </>
+      </div>
     );
   }
 
   return (
-    <div>
-      <h2>Inicia sesion!</h2>
-      <LoginForm />
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <div style={{ width: '100%', maxWidth: '400px' }}>
+        <LoginForm />
+      </div>
     </div>
   );
 }

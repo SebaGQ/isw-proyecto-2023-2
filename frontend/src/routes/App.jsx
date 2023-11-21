@@ -1,8 +1,9 @@
 function App() {
   return (
-    <>
-      <h1>Pagina principal</h1>
-    </>
+    <div className="app-container">
+      <h1>Página principal</h1>
+      {/* Otros elementos de la página principal aquí */}
+    </div>
   );
 }
 
