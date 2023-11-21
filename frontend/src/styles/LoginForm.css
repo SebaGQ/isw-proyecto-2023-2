@@ -2,10 +2,10 @@
   background: #fff;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
-  margin: 2rem auto;
+  max-width: 336px; /* Ajuste el ancho según sea necesario */
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,26 +18,26 @@
 }
 
 .login-form h2 {
-  font-size: 2.5rem; /* Tamaño del título */
-  color: #333; /* Color de texto para el título */
+  font-size: 2.5rem;
+  color: #333;
   margin-bottom: 1rem;
 }
 
 .login-form p {
-  font-size: 1.5rem; /* Tamaño del texto de bienvenida */
-  color: #666; /* Color de texto para el párrafo de bienvenida */
+  font-size: 1rem;
+  color: #666;
   margin-bottom: 2rem;
 }
 
 .login-form label {
-  font-size: 1.2rem; /* Tamaño del texto de las etiquetas */
-  color: #333; /* Color de texto para las etiquetas */
+  font-size: 1rem;
+  color: #333;
   margin-bottom: 0.5rem;
 }
 
 .login-form input {
   padding: 0.75rem;
-  margin-bottom: 1rem; /* Espacio entre los campos de entrada */
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
@@ -45,27 +45,27 @@
 
 .login-form button {
   padding: 0.75rem;
-  background-color: #ffd700; /* Color de fondo para el botón */
-  color: #333; /* Color de texto para el botón */
+  background-color: #ffd700;
+  color: #333;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
-  font-weight: bold; /* Negrita para el texto del botón */
+  font-weight: bold;
   margin-top: 1rem;
   transition: background-color 0.2s;
 }
 
 .login-form button:hover {
-  background-color: #f1c40f; /* Color al pasar el cursor */
+  background-color: #f1c40f;
 }
 
 .login-form .forgot-password {
-  font-size: 0.9rem; /* Tamaño del texto para "¿Olvidaste tu contraseña?" */
-  color: #007bff; /* Color de texto para el enlace */
+  font-size: 0.9rem;
+  color: var(--link-color);
   text-align: center;
   display: block;
   margin-top: 1rem;
-  margin-bottom: 1rem; /* Espacio antes del botón */
+  margin-bottom: 1rem;
 }
 
 .login-form .forgot-password:hover {

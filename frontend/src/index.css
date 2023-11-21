@@ -1,19 +1,28 @@
 :root {
-  font-family: 'Inter', sans-serif;
-  line-height: 1.6;
-  font-weight: 400;
-  color: #333;
-  background-color: #f0f0f0;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+  --background-color: #f0f0f0; /* Color de fondo para todo el sitio */
+  --text-color: #333; /* Color de texto general */
+  --link-color: #007bff; /* Color de los enlaces */
+  --link-hover-color: #0056b3; /* Color de los enlaces al pasar el cursor */
+  --font-family: 'Inter', sans-serif; /* La familia tipográfica para el sitio */
+}
+
+* {
+  box-sizing: border-box; /* Asegura que padding y border están incluidos en el ancho total */
 }
 
 body {
   margin: 0;
   padding: 0;
+  font-family: var(--font-family);
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,10 +31,11 @@ body {
 
 a {
   text-decoration: none;
-  color: #007bff;
+  color: var(--link-color);
 }
 
 a:hover {
+  color: var(--link-hover-color);
   text-decoration: underline;
 }
 
