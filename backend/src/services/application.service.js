@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable require-jsdoc */
 "use strict";
 
 const Application = require("../models/application.model");
@@ -10,8 +9,15 @@ const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 const AVAILABILITY = require("../constants/availability.constants");
 
+
+    /*
+      Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+      Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
+      se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
+    */ 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
+    console.log(subsidyId);
     const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 
@@ -28,34 +34,21 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
 
-    // Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
-    let comment = [];
-
-    // Se define por defectos los estados de la revision, asi si esta correcto todas seran true
-    let statusPercentage = true;
-    let statusMembers = true;
-    let statusDate = true;
 
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
-      statusPercentage = false;
-      comment = comment.concat(`El porcentaje social es mayor al permitido (${guideline.maxSocialPercentage}%)`);
     } 
     // validacion de integrantes
     if (members < guideline.minMembers) {
       status = AVAILABILITY[2];
-      statusMembers = false;
-      comment = comment.concat(`La cantidad de integrantes es menor al permitido (${guideline.minMembers})`);
     }
 
     const applicationDateObj = new Date(applicationDate);
     // Validacion de la flecha de aplicacion con la del subsidio
     if (applicationDateObj > subsidy.dateEnd || applicationDateObj < subsidy.dateStart) {
       status = AVAILABILITY[2];
-      statusDate = false;
-      comment = comment.concat(`La postulacion se realiza en una fecha no permitida (${subsidy.dateStart} - ${subsidy.dateEnd})`);
     }
 
     const newApplication = new Application({
@@ -68,30 +61,6 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     });
 
     await newApplication.save();
-
-    // Se define el estado de revisión en 'En Revisión'
-    let statusReview = AVAILABILITY[0];
-
-    if (status == AVAILABILITY[3]) {
-      // Se define el estado de revisión en 'Aceptado'
-      statusReview = AVAILABILITY[1];
-      comment = comment.concat("La postulación cumple con la pauta");
-    } else {
-      // Se define el estado de revision en 'Rechazado'
-      statusReview = AVAILABILITY[2];
-    }
-
-    const newReview = new Review({
-      applicationId: newApplication._id,
-      comment,
-      statusReview,
-      statusPercentage,
-      statusMembers,
-      statusDate,
-    });
-
-    await newReview.save();
-
     return [newApplication, null];
   } catch (error) {
     handleError(error, "application.service -> createApplication");

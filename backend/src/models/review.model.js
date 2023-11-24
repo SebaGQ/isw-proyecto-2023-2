@@ -7,7 +7,11 @@ const reviewSchema = new mongoose.Schema({
         ref: "Application",
         required: true,
     },
+<<<<<<< HEAD
+    comments: [{
+=======
     comment: [{
+>>>>>>> origin/SergioVillenaDev
         type: String,
         required: true,
     }],
@@ -16,6 +20,12 @@ const reviewSchema = new mongoose.Schema({
         required: true,
         enum: AVAILABILITY,
         default: AVAILABILITY[0],
+<<<<<<< HEAD
+      },
+}, {
+    timestamps: true,
+});
+=======
     },
     statusPercentage: {
         type: Boolean,
@@ -35,5 +45,6 @@ const reviewSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     });
+>>>>>>> origin/SergioVillenaDev
 
 module.exports = mongoose.model("Review", reviewSchema);

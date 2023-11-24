@@ -47,7 +47,11 @@ const appealBodySchema = Joi.object({
       "number.min": "Debe haber al menos un nuevo miembro.",
     }),
 
+<<<<<<< HEAD
+  comments: Joi.array().items(
+=======
   comment: Joi.array().items(
+>>>>>>> origin/SergioVillenaDev
     Joi.string().allow('').messages({
       "string.base": "El comentario debe ser de tipo string.",
     })

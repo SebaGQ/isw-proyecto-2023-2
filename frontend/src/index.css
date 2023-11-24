@@ -1,0 +1,93 @@
+:root {
+  --background-color: #ffffff; /* Actualizar el color de fondo a blanco */
+  --card-background-color: #f9f9f9; /* Color de fondo para las tarjetas */
+  --text-color: #333;
+  --primary-color: #2c3e50; /* Color principal para botones y encabezados */
+  --border-radius: 10px; /* Bordes redondeados para elementos como tarjetas */
+  --box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Sombra para las tarjetas */
+  --font-family: 'Inter', sans-serif;
+}
+
+* {
+  box-sizing: border-box; /* Asegura que padding y border están incluidos en el ancho total */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-color);
+}
+
+a:hover {
+  color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
+.card {
+  background-color: var(--card-background-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin: 10px;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+}
+
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.topbar {
+  /* Asumiendo que ya tienes estilos para TopBar, asegúrate de que ocupe el ancho completo */
+  width: 100%;
+  z-index: 1000; /* Para asegurarse de que TopBar se mantenga en la parte superior sobre otros elementos */
+}
+
+.app-content {
+  display: flex;
+  flex: 1; /* Esto hace que app-content llene el espacio restante después de TopBar */
+  overflow: hidden; /* Evita cualquier desbordamiento causado por los hijos */
+}
+
+.navbar {
+  /* Asumiendo que ya tienes estilos para NavBar, ajusta según sea necesario para el layout lateral */
+  flex-basis: 250px; /* o el ancho que prefieras para tu NavBar */
+  height: calc(100vh); /* Ajusta la altura si TopBar no es fija */
+  overflow-y: auto; /* Permite scroll en NavBar si el contenido es más largo que la pantalla */
+  z-index: 500; /* Menor que TopBar para mantener la jerarquía si se superponen */
+}
+
+.main-content {
+  flex-grow: 1; /* Esto asegura que main-content ocupe el espacio restante */
+  overflow-y: auto; /* Permite scroll en main content si el contenido es más largo que la pantalla */
+  padding: 1rem; /* Añade algo de espacio alrededor del contenido principal */
+}

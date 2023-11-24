@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 /* eslint-disable require-jsdoc */
+>>>>>>> origin/SergioVillenaDev
 const AVAILABILITY = require("../constants/availability.constants");
 const Appeal = require("../models/appeal.model");
 const User = require("../models/user.model");
@@ -44,12 +47,20 @@ async function createAppeal(userEmail, postData) {
 
     //Se reemplazan los valores nuevos solo si están presentes.
     if (typeof postData.newSocialPercentage === 'number') {
+<<<<<<< HEAD
+      newAppeal.comments.push(`Porcentaje social actualizado de ${application.socialPercentage} a ${postData.newSocialPercentage}%`);
+=======
       newAppeal.comment.push(`Porcentaje social actualizado de ${application.socialPercentage} a ${postData.newSocialPercentage}%`);
+>>>>>>> origin/SergioVillenaDev
       application.socialPercentage = postData.newSocialPercentage;
     }
 
     if (typeof postData.newMembers === 'number') {
+<<<<<<< HEAD
+      newAppeal.comments.push(`Cantidad de miembros actualizada de ${application.members} a ${postData.newMembers}`);
+=======
       newAppeal.comment.push(`Cantidad de miembros actualizada de ${application.members} a ${postData.newMembers}`);
+>>>>>>> origin/SergioVillenaDev
       application.members = postData.newMembers;
     }
 

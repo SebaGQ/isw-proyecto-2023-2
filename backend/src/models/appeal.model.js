@@ -28,7 +28,7 @@ const appealSchema = new mongoose.Schema({
     type: Number,
     min: 1,
   },
-  comment: [{
+  comments: [{
     type: String,
   }],
   result: [{
