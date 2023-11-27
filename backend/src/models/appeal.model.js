@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const AVAILIBILITY = require("../constants/availability.constants");
+const AVAILABILITY = require("../constants/availability.constants");
 
 /** Declara la estructura del documento */
 const appealSchema = new mongoose.Schema({
@@ -7,22 +7,33 @@ const appealSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "Application",
-    unique: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: "User",
   },
-  reason: {
-    type: String,
-    required: true,
-  },
   status: {
     type: String,
     required: true,
-    enum: AVAILIBILITY,
+    enum: AVAILABILITY,
+    default : AVAILABILITY[0],
   },
+  newSocialPercentage: {
+    type: Number,
+    min: 0,
+    max: 100,
+  },
+  newMembers: {
+    type: Number,
+    min: 1,
+  },
+  comments: [{
+    type: String,
+  }],
+  result: [{
+    type: String,
+  }],
 }, {
   timestamps: true,
 });

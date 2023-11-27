@@ -29,7 +29,7 @@ async function getUsers() {
  */
 async function createUser(user) {
   try {
-    const { rut, nombre, apellido, edad, email, password, roles } = user;
+    const { rut, firstName, lastName, age, email, password, roles } = user;
 
     const userFound = await User.findOne({ email: user.email });
     if (userFound) return [null, "El usuario ya existe"];
@@ -44,9 +44,9 @@ async function createUser(user) {
 
     const newUser = new User({
       rut,
-      nombre,
-      apellido,
-      edad,
+      firstName,
+      lastName,
+      age,
       email,
       password: await User.encryptPassword(password),
       roles: myRole,
@@ -90,7 +90,7 @@ async function updateUser(id, user) {
     const userFound = await User.findById(id);
     if (!userFound) return [null, "El usuario no existe"];
 
-    const { username, email, password, newPassword, roles } = user;
+    const { firstName, lastName, email, password, newPassword, roles } = user;
 
     const matchPassword = await User.comparePassword(
       password,
@@ -109,7 +109,8 @@ async function updateUser(id, user) {
     const userUpdated = await User.findByIdAndUpdate(
       id,
       {
-        username,
+        firstName,
+        lastName,
         email,
         password: await User.encryptPassword(newPassword || password),
         roles: myRole,

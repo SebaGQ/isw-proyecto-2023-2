@@ -11,15 +11,15 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    nombre: {
+    firstName: {
       type: String,
       required: true,
     },
-    apellido: {
+    lastName: {
       type: String,
       required: true,
     },
-    edad: {
+    age: {
       type: Number,
       required: true,
       min: 18,

@@ -2,7 +2,8 @@
 
 const Joi = require("joi");
 const rutPattern = /^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/;
-const ROLES =  require("../constants/roles.constants");
+const ROLES = require("../constants/roles.constants");
+
 const userBodySchema = Joi.object({
   rut: Joi.string().pattern(rutPattern).required().messages({
     "string.empty": "El RUT no puede estar vacío.",
@@ -10,19 +11,24 @@ const userBodySchema = Joi.object({
     "string.base": "El RUT debe ser de tipo string.",
     "string.pattern.base": "El RUT proporcionado no es válido.",
   }),
-  nombre: Joi.string().required().messages({
-    "string.empty": "El nombre de usuario no puede estar vacío.",
-    "any.required": "El nombre de usuario es obligatorio.",
-    "string.base": "El nombre de usuario debe ser de tipo string.",
+  firstName: Joi.string().required().messages({
+    "string.empty": "El nombre del usuario no puede estar vacío.",
+    "any.required": "El nombre del usuario es obligatorio.",
+    "string.base": "El nombre del usuario debe ser de tipo string.",
+  }),
+  lastName: Joi.string().required().messages({
+    "string.empty": "El apellido del usuario no puede estar vacío.",
+    "any.required": "El apellido del usuario es obligatorio.",
+    "string.base": "El apellido del usuario debe ser de tipo string.",
   }),
   apellido: Joi.string().required().messages({
     "string.empty": "El apellido de usuario no puede estar vacío.",
     "any.required": "El apellido de usuario es obligatorio.",
     "string.base": "El apellido de usuario debe ser de tipo string.",
   }),
-  edad: Joi.number().positive().required().messages({
-    "number.base": "La edad debe ser de tipo número.",
-    "any.required": "La edad es obligatoria.",
+  age: Joi.number().positive().required().messages({
+    "number.base": "La age debe ser de tipo número.",
+    "any.required": "La age es obligatoria.",
   }),
   password: Joi.string().required().min(5).messages({
     "string.empty": "La contraseña no puede estar vacía.",
@@ -37,21 +43,25 @@ const userBodySchema = Joi.object({
     "string.email": "El email debe tener un formato válido.",
   }),
   roles: Joi.array()
-    .items(Joi.string().valid(...ROLES))
+    .valid(...ROLES)
     .required()
     .messages({
-      "array.base": "El rol debe ser de tipo array.",
-      "any.required": "El rol es obligatorio.",
-      "string.base": "El rol debe ser de tipo string.",
-      "any.only": "El rol proporcionado no es válido.",
+      "array.base": "Los roles deben ser de tipo array.",
+      "any.required": "Los roles son obligatorios.",
+      "string.base": "El id de rol debe ser de tipo string.",
+      "string.hex": "El id de rol debe ser una cadena hexadecimal.",
+      "string.length": "El id de rol debe tener 24 caracteres.",
     }),
   newPassword: Joi.string().min(5).messages({
     "string.empty": "La nueva contraseña no puede estar vacía.",
     "string.base": "La nueva contraseña debe ser de tipo string.",
     "string.min": "La nueva contraseña debe tener al menos 5 caracteres.",
+    "string.empty": "La nueva contraseña no puede estar vacía.",
+    "string.base": "La nueva contraseña debe ser de tipo string.",
+    "string.min": "La nueva contraseña debe tener al menos 5 caracteres.",
   }),
 }).messages({
-  "object.unknown": "No se permiten propiedades adicionales.",
+  "object.unknown": "No se permiten propiagees adicionales.",
 });
 
 const userIdSchema = Joi.object({

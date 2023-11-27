@@ -7,6 +7,7 @@ const subsidySchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
+    unique:true,
   },
   description: {
     type: String,

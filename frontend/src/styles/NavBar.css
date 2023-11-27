@@ -1,0 +1,48 @@
+.navbar {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    width: 250px; /* Ajusta la anchura del sidebar */
+    height: 100vh;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Para el scroll si los ítems exceden la altura de la vista */
+}
+
+.navbar-header {
+    flex: 0 0 auto;
+    padding: 1rem;
+    text-align: center;
+    /* Añade aquí estilos para el logo si es necesario */
+}
+
+.nav-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem; /* Reduce el padding para que los ítems no sean tan grandes */
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    background-color: #e0e0e0; /* Color más suave para el hover */
+}
+
+
+.nav-icon {
+    height: 24px; /* o 1.5rem, dependiendo de tus preferencias */
+    width: 24px; /* o 1.5rem, asegúrate de que ancho y alto sean iguales para mantener la proporción */
+    margin-right: 10px; /* ajusta el espaciado a la derecha del ícono si es necesario */
+}
+
+/* Añade estilos para la tipografía y otros detalles de diseño si es necesario */
+.nav-item span {
+    font-size: 0.9rem; /* Tamaño de fuente más estándar para el texto del menú */
+}

@@ -110,16 +110,11 @@ async function getReviewById(req, res) {
 async function filterReviews(req, res) {
     try {
       // Obtener el estado de la ruta
-      const { status } = req.params;
-  
-      // Validar que el estado es uno de los permitidos
-      const allowedStatuses = ["Aceptado", "Rechazado", "En revisión"];
-      if (!allowedStatuses.includes(status)) {
-        return res.status(400).json({ error: "Estado no válido" });
-      }
+      const { status } = req.query;
+      console.log(status);
   
       // Llamar al servicio para obtener las reseñas
-      const [reviews, error] = await filterReviews(status);
+      const [reviews, error] = await ReviewService.filterReviews(status);
       if (error) return res.status(500).json({ error });
   
       // Devolver las reseñas

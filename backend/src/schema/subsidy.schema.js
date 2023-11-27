@@ -40,13 +40,15 @@ const subsidyBodySchema = Joi.object({
     }),
   dateEnd: Joi.date()
     .required()
+    .greater(Joi.ref('dateStart'))
     .messages({
       "date.base": "La fecha límite debe ser de tipo fecha.",
       "any.required": "La fecha límite es obligatoria.",
+      'date.greater': 'La fecha límite no puede ser anterior a la fecha de inicio.',
     }),
   typeSubsidy: Joi.string()
     .required()
-    .valid("Subsidio", "Beneficio")
+    .valid(...TYPE_SUBSIDY)
     .messages({
       "string.base": "El tipo debe ser de tipo texto.",
       "any.required": "El tipo es obligatorio.",
@@ -63,7 +65,7 @@ const subsidyBodySchema = Joi.object({
       "string.pattern.base": "El id de la pauta proporcionado no es un ObjectId válido.",
     }),
 }).messages({
-  "object.unknown": "No se permiten propiedades adicionales.",
+  "object.unknown": "No se permiten propiagees adicionales.",
 });
 
 module.exports = { subsidyBodySchema };
