@@ -12,6 +12,19 @@ const applicationBodySchema = Joi.object({
       "string.base": "El id del usuario debe ser de tipo string.",
       "string.pattern.base": "El id del usuario proporcionado no es un ObjectId válido.",
     }),
+    // Cambios solicitados, validacion de rut, por cada valor en el array se verifica que cumpla con el pattern.
+    rut: Joi.array().items(
+      Joi.string().pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).required().messages({
+          "string.empty": "El rut no puede estar vacío.",
+          "any.required": "El rut es obligatorio.",
+          "string.base": "El rut debe ser de tipo string.",
+    })
+    ).required().min(1).messages(
+      {
+        "array.base": "Los rut deben estar en formato de arreglo.",
+        "any.required": "Los rut son obligatorios.",
+        "array.min": "Debe haber al menos un rut."
+    }),
   subsidyId: Joi.string()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)

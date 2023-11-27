@@ -8,10 +8,31 @@ const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 const AVAILABILITY = require("../constants/availability.constants");
 
-async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
+function validarRUT(rut) {
+  // Separar el R.U.T. y el dígito verificador
+  const cleanRUT = rut.replace(/\./g, '').replace(/-/i, '').toUpperCase();
+  const rutNumeros = cleanRUT.slice(0, -1);
+  const digitoVerificador = cleanRUT.slice(-1);
+
+  // Calcular el dígito verificador esperado
+  let suma = 0;
+  let multiplicador = 2;
+
+  for (let i = rutNumeros.length - 1; i >= 0; i--) {
+    suma += parseInt(rutNumeros[i]) * multiplicador;
+    multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
+  }
+
+  const digitoEsperado = 11 - (suma % 11);
+  const digitoCalculado = digitoEsperado === 11 ? '0' : digitoEsperado.toString();
+
+  // Comparar el dígito verificador calculado con el proporcionado
+  return digitoCalculado === digitoVerificador;
+}
+
+async function createApplication(rut, subsidyId, socialPercentage, applicationDate, members) {
   try { 
-    console.log(subsidyId);
-    const user = await User.findOne({ email: userEmail });
+    const user = await User.findOne({ rut: rut[0] });
     if (!user) return [null, "Usuario no encontrado"];
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
@@ -26,6 +47,19 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     if (hasPending) {
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
+    
+    // Se verifica por cada item en el arreglo, que el rut sea valido, a traves de un calculo matematico.      
+    for(const ruts of rut){
+      if(!validarRUT(ruts)){
+        return [null, "Uno o más rut es invalido"];
+      }
+    }
+    // Se agrega validacion de cantidad de rut igual a la cantidad de miembros.
+    console.log(rut.length);
+    console.log(members);
+    if (rut.length !== members) {
+      return [null, "Los ruts y miembros ingresados deben ser iguales"];
+      }
 
     let status = AVAILABILITY[3];
 
@@ -44,6 +78,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     }
 
     const newApplication = new Application({
+      rut,
       subsidyId,
       userId: user._id,
       socialPercentage,
