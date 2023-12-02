@@ -16,13 +16,13 @@ const NavBar = () => {
                     <HomeIcon className="nav-icon" />
                     <span>Inicio</span>
                 </Link>
-                <Link to="/subsidios" className="nav-item">
+                <Link to="/subsidies" className="nav-item">
                     <RectangleGroupIcon className="nav-icon" />
-                    <span>Subsidios</span>
+                    <span>Subsidios y Beneficios</span>
                 </Link>
-                <Link to="/postulaciones" className="nav-item">
+                <Link to="/applications" className="nav-item">
                     <RectangleGroupIcon className="nav-icon" />
-                    <span>Postulaciones</span>
+                    <span>Mis postulaciones</span>
                 </Link>
                 {/* Agrega más elementos de navegación según sea necesario */}
             </div>

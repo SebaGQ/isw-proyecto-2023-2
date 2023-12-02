@@ -1,30 +1,127 @@
+/* Card.css */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espacio entre las tarjetas */
+  justify-content: space-evenly;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
 .card {
-    background-color: #ffffff; /* Fondo blanco */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    margin: 1rem;
-    overflow: hidden; /* Asegura que nada se desborde del borde redondeado */
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: #ffffff; /* Fondo blanco */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  margin: 1rem;
+  overflow: hidden; /* Asegura que nada se desborde del borde redondeado */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  position: relative; /* Necesario para posicionar absolutamente el estado */
+  display: flex;
+  flex-direction: column; /* Organiza los hijos de la tarjeta en columna */
+  flex: 1;
+  min-width: 300px; /* Ancho mínimo para todas las tarjetas */
+  max-width: calc(33.333% - 20px); /* Ajuste para 3 tarjetas por fila con 20px de gap */
+  min-height: 250px; /* Altura mínima para todas las tarjetas */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Eleva la tarjeta ligeramente al pasar el ratón por encima */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+  background-color: #f0f0f0; /* Fondo ligeramente gris para el encabezado */
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  position: relative; /* Relativo para el estado absoluto */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.status {
+  padding: 0.25rem 0.5rem;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.status.expired {
+  background-color: #dc3545; /* Rojo */
+}
+
+.status.available {
+  background-color: #28a745; /* Verde */
+}
+
+.card-content {
+  padding: 1rem;
+  flex-grow: 1; /* Permite que el contenido crezca para ocupar el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-footer {
+  padding: 0.6rem 1rem;
+  background-color: #f0f0f0; /* Fondo ligeramente gris para el pie de página */
+  text-align: right; /* Alinea el contenido del pie a la derecha */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+  margin-left: 10px;
+}
+
+.apply-button {
+  background-color: #007bff; /* Azul */
+  color: white;
+}
+
+.apply-button:hover {
+  background-color: #0056b3; /* Un azul más oscuro al pasar el ratón por encima */
+}
+
+.apply-button.disabled {
+  background-color: #cccccc; /* Gris */
+  color: #666666; /* Texto más oscuro para mejor contraste */
+  cursor: not-allowed;
+}
+
+.apply-button.disabled:hover {
+  background-color: #cccccc; /* Mantiene el color gris incluso al pasar el ratón por encima */
+}
+
+.view-requirements-button {
+  background-color: #ffc107; /* Amarillo */
+  color: black;
+}
+
+.view-requirements-button:hover {
+  background-color: #e0a800; /* Amarillo oscuro al pasar el ratón por encima */
+}
+
+/* Responde al tamaño de la pantalla para una mejor experiencia móvil */
+@media (max-width: 768px) {
+  .card-container {
+    flex-direction: column;
   }
-  
-  .card:hover {
-    transform: translateY(-5px); /* Eleva la tarjeta ligeramente al pasar el ratón por encima */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  .card {
+    max-width: 100%;
   }
-  
-  .card-header {
-    background-color: #f0f0f0; /* Fondo ligeramente gris para el encabezado */
-    padding: 0.6rem 1rem;
-    font-weight: bold;
-  }
-  
-  .card-content {
-    padding: 1rem;
-  }
-  
-  .card-footer {
-    padding: 0.6rem 1rem;
-    background-color: #f0f0f0; /* Fondo ligeramente gris para el pie de página */
-    text-align: right; /* Alinea el contenido del pie a la derecha */
-  }
-  
+}

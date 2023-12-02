@@ -18,7 +18,7 @@ const router = express.Router();
 
 router.use(authenticationMiddleware);
 
-router.get("/", authorizationMiddleware.isAdmin, applicationsController.getApplications);
+router.get("/", applicationsController.getApplications);
 router.get("/user/", applicationsController.getApplicationsByUserEmail);
 router.get("/:id", authorizationMiddleware.isAdmin, applicationsController.getApplicationById);
 router.post("/", validationMiddleware.validateApplicationBody, authorizationMiddleware.isUser, applicationsController.createApplication);

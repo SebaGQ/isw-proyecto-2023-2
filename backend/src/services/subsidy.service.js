@@ -10,9 +10,10 @@ async function createSubsidy(subsidyData) {
     const currentDate = new Date();
     currentDate.setDate(currentDate.getDate() - 1); 
 
-    if(new Date(newSubsidy.dateStart) < currentDate){
-      return  [null, "La fecha de inicio debe ser igual o mayor a la fecha actual."]
-    }
+    //Esto se comentó para poder probar el añadir subsidios vencidos
+    //if(new Date(newSubsidy.dateStart) < currentDate){
+    //  return  [null, "La fecha de inicio debe ser igual o mayor a la fecha actual."]
+    //}
 
     await newSubsidy.save();
     return [newSubsidy, null];
@@ -24,7 +25,7 @@ async function createSubsidy(subsidyData) {
 
 async function getSubsidies() {
   try {
-    const subsidies = await Subsidy.find();
+    const subsidies = await Subsidy.find().populate('guidelineId');
     return [subsidies, null];
   } catch (error) {
     handleError(error, "subsidy.service -> getSubsidies");
