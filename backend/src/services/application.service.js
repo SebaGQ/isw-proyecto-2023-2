@@ -1,16 +1,22 @@
-/* eslint-disable max-len */
 "use strict";
 
 const Application = require("../models/application.model");
 const User = require("../models/user.model");
+const Review = require("../models/review.model");
 const Subsidy = require("../models/subsidy.model");
 const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 const AVAILABILITY = require("../constants/availability.constants");
 
+
+    /*
+      Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+      Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
+      se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
+    */ 
 async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
   try { 
-    console.log(subsidyId);
+
     const user = await User.findOne({ email: userEmail });
     if (!user) return [null, "Usuario no encontrado"];
 
@@ -27,20 +33,26 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
 
+    //Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
+    let comments = [];
 
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
+      comments.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
     } 
     // validacion de integrantes
     if (members < guideline.minMembers) {
       status = AVAILABILITY[2];
+      comments.push("La cantidad de integrantes es menor al mínimo requerido por las pautas del subsidio.");
     }
+
     const applicationDateObj = new Date(applicationDate);
     // Validacion de la flecha de aplicacion con la del subsidio
     if (applicationDateObj > subsidy.dateEnd || applicationDateObj < subsidy.dateStart) {
       status = AVAILABILITY[2];
+      comments.push("La fecha de postulación no está dentro del rango permitido por el subsidio.");
     }
 
     const newApplication = new Application({
@@ -53,6 +65,24 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     });
 
     await newApplication.save();
+
+    //Se define el estado de revisión en 'En Revisión'
+    let statusReview = AVAILABILITY[0];
+
+    if (comments.length === 0) {
+      comments.push("La postulación cumple con los requisitos de la pauta.");
+      //Se define el estado de revisión en 'Aceptado'
+      statusReview = AVAILABILITY[1];
+    }
+
+    const newReview = new Review({
+      applicationId: newApplication._id,
+      comments,
+      statusReview,
+    });
+
+    await newReview.save();
+
     return [newApplication, null];
   } catch (error) {
     handleError(error, "application.service -> createApplication");
@@ -85,6 +115,11 @@ async function getApplicationById(applicationId) {
     return [null, "Error al obtener la postulación"];
   }
 }
+
+  /* 
+      Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+      Se entregará distinta información en función de si la solicitud fue rechazada o sigue en proceso
+  */ 
 async function getApplicationsByUserEmail(userEmail) {
   try {
     const user = await User.findOne({ email: userEmail });
@@ -92,7 +127,18 @@ async function getApplicationsByUserEmail(userEmail) {
       return [null, "Usuario no encontrado"];
     }
     const applications = await Application.find({ userId: user._id });
-    return [applications, null];
+    
+    const applicationsWithDetails = await Promise.all(applications.map(async (application) => {
+      //Si la postulación fue rechazada, la revisión   de por qué fue rechazada
+      if (application.status === AVAILABILITY[2]) {
+        const review = await Review.findOne({ applicationId: application._id });
+        return { application, review };
+      }
+      //Si la postulación está en Revisión, Pendiente o Apelación entregará los datos con los que está postulando/apelando
+      return { application };
+    }));
+
+    return [applicationsWithDetails, null];
   } catch (error) {
     handleError(error, "application.service -> getApplicationsByUserEmail");
     return [null, "Error al obtener las postulaciones por correo electrónico del usuario"];

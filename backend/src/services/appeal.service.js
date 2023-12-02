@@ -1,9 +1,23 @@
-const AVAILIBILITY = require("../constants/availability.constants");
+const AVAILABILITY = require("../constants/availability.constants");
 const Appeal = require("../models/appeal.model");
 const User = require("../models/user.model");
+const Guideline = require("../models/guideline.model");
 const ApplicationService = require("./application.service");
 const mongoose = require("mongoose");
+const Subsidy = require("../models/subsidy.model");
 
+
+
+/*  
+Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+Se actualiza la postulación existente en función de los parametros de la apelación.
+
+Se verifica si existen los valores new, en caso de que sí, se reemplazan en la postulación y se agrega
+un comentario indicando que se actualizó el campo, mostrando el valor nuevo y el antiguo. De lo cual queda registro en la BD.
+ 
+Finalmente en el campo result de la apelación se indica si la apelación cumplió con la pauta de subsidio o no.
+En función de ese resultado se marca la postulación como aceptada o rechazada.
+*/
 async function createAppeal(userEmail, postData) {
   try {
     const user = await User.findOne({ email: userEmail });
@@ -14,22 +28,59 @@ async function createAppeal(userEmail, postData) {
     const [application, applicationError] = await ApplicationService.getApplicationById(postData.postId);
     if (applicationError) return [null, applicationError];
     if (!application) return [null, "La postulación asociada no existe"];
-    
+
     // Validar condiciones
-    if (application.status !== AVAILIBILITY[2]) return [null, "La postulación debe estar Rechazada para apelar."];
+    if (application.status !== AVAILABILITY[2]) return [null, "La postulación debe estar Rechazada para apelar."];
     if (application.userId.toString() !== user._id.toString()) return [null, "La postulación a la que se está apelando debe pertenecer al usuario."];
 
     const newAppeal = new Appeal({
       postId: postData.postId,
       userId: user._id,
-      reason: postData.reason,
-      status: AVAILIBILITY[4],
+      status: AVAILABILITY[1],
+      newSocialPercentage: postData.newSocialPercentage,
+      newMembers: postData.newMembers,
     });
 
-    await newAppeal.save();
+    //Se reemplazan los valores nuevos solo si están presentes.
+    if (typeof postData.newSocialPercentage === 'number') {
+      newAppeal.comments.push(`Porcentaje social actualizado de ${application.socialPercentage} a ${postData.newSocialPercentage}%`);
+      application.socialPercentage = postData.newSocialPercentage;
+    }
 
-    // Cambiar el estado de la postulación a Revision
-    application.status = AVAILIBILITY[0];
+    if (typeof postData.newMembers === 'number') {
+      newAppeal.comments.push(`Cantidad de miembros actualizada de ${application.members} a ${postData.newMembers}`);
+      application.members = postData.newMembers;
+    }
+
+    //Ahora se validan los nuevos valores según la pauta
+    let result = [];
+    const subsidy = await Subsidy.findById(application.subsidyId)
+    console.log(subsidy);
+    const guideline = await Guideline.findById(subsidy.guidelineId)
+    console.log("Validación de pauta al apelar");
+    console.log(guideline);
+
+    if (postData.newSocialPercentage > guideline.maxSocialPercentage) {
+      newAppeal.status = AVAILABILITY[2];
+      result.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
+    }
+
+    if (postData.newMembers < guideline.minMembers) {
+      newAppeal.status = AVAILABILITY[2];
+      result.push("La cantidad de integrantes es menor al mínimo requerido por las pautas del subsidio.");
+    }
+
+    if (result) {
+      newAppeal.result = result;
+    } else {
+      result.push("La apelación cumple con los requisitos de la pauta.");
+    }
+
+    // La postulación tendrá el mismo estado que la apelación, es decir,
+    // Si la apelación es rechazada, entonces la postulación igual, lo mismo si es aceptada.
+    application.status = newAppeal.status;
+
+    await newAppeal.save();
     await application.save();
 
     return [newAppeal, null];

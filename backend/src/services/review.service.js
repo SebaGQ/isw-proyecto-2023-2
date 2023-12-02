@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 // Importar el modelo de datos 'Review'
 const Review = require("../models/review.model");
 // Importar el modelo de datos 'Application'
