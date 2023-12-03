@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 const AVAILABILITY = require("../constants/availability.constants");
 
+/* Cambios solicitados por el profesor. Hecho por Patricio Villalón */
 function validarRUT(rut) {
   // Separar el R.U.T. y el dígito verificador
   const cleanRUT = rut.replace(/\./g, '').replace(/-/i, '').toUpperCase();
@@ -30,8 +31,13 @@ function validarRUT(rut) {
   return digitoCalculado === digitoVerificador;
 }
 
-async function createApplication(rut, subsidyId, socialPercentage, applicationDate, members) {
-  try { 
+    /*
+      Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+      Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
+      se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
+    */ 
+async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members) {
+  try {   
     const user = await User.findOne({ rut: rut[0] });
     if (!user) return [null, "Usuario no encontrado"];
 
