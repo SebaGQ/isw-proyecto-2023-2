@@ -5,6 +5,7 @@ import ApplicationForm from '../components/ApplicationForm';
 import Modal from '../components/Modal';
 import RequirementsModal from '../components/RequirementsModal';
 import '../styles/subsidyPage.css'; 
+import Loading from '../components/Loading';
 
 const SubsidyPage = () => {
     const [subsidies, setSubsidies] = useState([]);
@@ -43,7 +44,13 @@ const SubsidyPage = () => {
         getSubsidies();
     }, []);
 
-    if (loading) return <div>Cargando...</div>;
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Loading />
+            </div>
+        );
+    }
     if (error) return <div>Ha ocurrido un error: {error}</div>;
 
     return (

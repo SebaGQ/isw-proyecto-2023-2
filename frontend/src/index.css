@@ -80,3 +80,8 @@ button {
   overflow-y: auto; /* Permite scroll en main content si el contenido es más largo que la pantalla */
   padding: 1rem; /* Añade algo de espacio alrededor del contenido principal */
 }
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

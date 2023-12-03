@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { fetchApplicationsByUser } from '../services/application.service';
 import DetailsModal from '../components/DetailsModal'; // Importa el componente del modal
 import '../styles/ApplicationPage.css';
+import Loading from '../components/Loading';
+
 
 const ApplicationPage = () => {
     const [applications, setApplications] = useState([]);
@@ -36,7 +38,13 @@ const ApplicationPage = () => {
     }, []);
 
 
-    if (loading) return <div>Cargando aplicaciones...</div>;
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <Loading />
+            </div>
+        );
+    }
     if (error) return <div>Ha ocurrido un error: {error}</div>;
 
     return (
