@@ -50,7 +50,7 @@ const SubsidyPage = () => {
         <div className="subsidy-page-container">
              <div className="subsidy-page-header">
             <h1>Subsidios y Beneficios</h1>
-            <p>Estos son los subsidios con los q cuenta el municipio</p>
+            <p>Estos son los subsidios con los que cuenta el municipio</p>
             </div>
             <div className="card-container"> {/* Asegúrate de definir algunos estilos para esto */}
                 {subsidies.map((subsidy) => (

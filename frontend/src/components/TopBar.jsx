@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const TopBar = ({ showNav, setShowNav }) => {
     const navigate = useNavigate();
-    const [user, setUser] = useState({ name: "Nombre" }); // Asumiendo un estado inicial
+    const [user, setUser] = useState({ name: "nombre" }); // Asumiendo un estado inicial
 
     // Simulando la función fetchProfile
     useEffect(() => {
@@ -25,7 +25,7 @@ const TopBar = ({ showNav, setShowNav }) => {
                     className="icon"
                     onClick={() => setShowNav(!showNav)}
                 />
-                TopBar
+                Menu
             </div>
             <div className="topbar-user">
                 <span>{user.name}</span>
