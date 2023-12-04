@@ -1,0 +1,40 @@
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.review-title {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.review-comments {
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.review-status {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.edit-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: #45a049;
+}
