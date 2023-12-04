@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Card.css';
 
-const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements }) => {
+const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements, onDelete, onModify}) => {
   const currentDate = new Date();
   const endDate = new Date(dateEnd);
   const isExpired = endDate < currentDate;
@@ -25,6 +25,8 @@ const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements })
           <button onClick={onApply} className="apply-button card-button">Postular</button>
         )}
         <button onClick={onViewRequirements} className="view-requirements-button card-button">Ver Requisitos</button>
+        <button onClick={onDelete} className="delete-button card-button">Eliminar</button>
+        <button onClick={onModify} className="edit-button card-button">Modificar</button>
       </div>
     </div>
   );
