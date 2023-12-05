@@ -10,6 +10,9 @@ import ApplicationForm from "../components/ApplicationForm";
 import Modal from "../components/Modal";
 import RequirementsModal from "../components/RequirementsModal";
 import "../styles/subsidyPage.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const SubsidyPage = () => {
   const [subsidies, setSubsidies] = useState([]);
@@ -17,8 +20,8 @@ const SubsidyPage = () => {
   const [error, setError] = useState(null);
 
   // Asumiendo que tu contexto de autenticación tiene la información del usuario con un campo "role"
-  const { user } = useAuth();
-  const isAdmin = user?.roles.includes('admin') || false;
+  const {user} = useAuth();
+  const isAdmin = user.roles.some(role => role.name === 'admin');
   console.log('isAdmin:', isAdmin);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -53,7 +56,7 @@ const SubsidyPage = () => {
     getSubsidies();
   }, []);
 
-  const handleDeleteSubsidy = async (subsidyId) => {
+  const handleDeleteSubsidy = async (subsidyId, subsidyName) => {
     try {
       await deleteSubsidy(subsidyId);
       // Puedes recargar la lista de subsidios después de la eliminación si es necesario
@@ -61,9 +64,13 @@ const SubsidyPage = () => {
         (subsidy) => subsidy._id !== subsidyId
       );
       setSubsidies(updatedSubsidies);
+
+      // Mostrar notificación de éxito
+      toast.success(`Subsidio "${subsidyName}" eliminado exitosamente`);
     } catch (error) {
       console.error("Error deleting subsidy:", error);
       // Puedes manejar el error de alguna manera, por ejemplo, mostrar un mensaje al usuario
+      toast.error('Error al eliminar el subsidio');
     }
   };
 
@@ -102,20 +109,20 @@ const SubsidyPage = () => {
             dateEnd={subsidy.dateEnd}
             onApply={() => handleApplyClick(subsidy)}
             onViewRequirements={() => handleViewRequirementsClick(subsidy)}
-            onDelete={() => isAdmin && handleDeleteSubsidy(subsidy._id)}
-            onModify={() => isAdmin && handleModifySubsidy(subsidy._id)}
+            onDelete={() => isAdmin==true && handleDeleteSubsidy(subsidy._id)}
+            onModify={() => isAdmin==true && handleModifySubsidy(subsidy._id)}
           >
             {/* Botones para eliminar y modificar */}
-            {isAdmin && (
+            {user.roles[0].name=== 'admin' ? (
               <div>
-                <button onClick={() => handleDeleteSubsidy(subsidy._id)}>
+                <button onClick={() => handleDeleteSubsidy(subsidy._id, subsidy.name)}>
                   Eliminar
                 </button>
                 <button onClick={() => handleModifySubsidy(subsidy._id)}>
                   Modificar
                 </button>
               </div>
-            )}
+            ):""}
           </Card>
         ))}
         <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)}>
@@ -131,6 +138,7 @@ const SubsidyPage = () => {
           subsidy={currentSubsidy}
         />
       </div>
+      <ToastContainer />
     </div>
   );
 };

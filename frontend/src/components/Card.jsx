@@ -1,10 +1,14 @@
 import React from 'react';
 import '../styles/Card.css';
+import { useAuth } from "../context/AuthContext";
+
 
 const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements, onDelete, onModify}) => {
   const currentDate = new Date();
   const endDate = new Date(dateEnd);
   const isExpired = endDate < currentDate;
+  const { user } = useAuth();
+  const isAdmin = user.roles.some(role => role.name === 'admin');
 
   return (
     <div className="card">
@@ -25,8 +29,11 @@ const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements, o
           <button onClick={onApply} className="apply-button card-button">Postular</button>
         )}
         <button onClick={onViewRequirements} className="view-requirements-button card-button">Ver Requisitos</button>
+        {isAdmin ? ( <div>  
         <button onClick={onDelete} className="delete-button card-button">Eliminar</button>
         <button onClick={onModify} className="edit-button card-button">Modificar</button>
+        </div>
+        ): ""}
       </div>
     </div>
   );
