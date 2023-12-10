@@ -1,64 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { fetchReviewsByApplication, createReview, updateReview } from '../services/review.service';
-import ReviewList from '../components/ReviewList';
-import ReviewForm from '../components/ReviewForm';
-import Modal from '../components/Modal';
-import '../styles/reviewPage.css'; 
+import { fetchReviews } from '../services/review.service';
+import ReviewList from '../components/ReviewList'; 
+import ReviewModal from '../components/ReviewModal'; // Un componente modal para detalles o edición de revisión
+// import '../styles/ReviewPage.css';
 import Loading from '../components/Loading';
 
-const ReviewPage = ({ applicationId }) => {
+const ReviewPage = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+    const [selectedReview, setSelectedReview] = useState(null);
 
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const [currentReview, setCurrentReview] = useState(null);
+    const handleReviewClick = (review) => {
+        setSelectedReview(review);
+        setIsReviewModalOpen(true);
+    };
 
     useEffect(() => {
-        const getReviews = async () => {
+        const loadReviews = async () => {
             try {
-                const data = await fetchReviewsByApplication(applicationId);
-                setReviews(data);
+                const fetchedReviews = await fetchReviews();
+                setReviews(fetchedReviews);
             } catch (error) {
                 setError('Error al cargar las revisiones');
-                // Aquí podrías registrar el error o enviarlo a un servicio de monitoreo de errores
+                console.error(error);
             } finally {
                 setLoading(false);
             }
         };
 
-        getReviews();
-    }, [applicationId]);
-
-    const handleEditReview = (review) => {
-        setCurrentReview(review);
-        setIsFormOpen(true);
-    };
-
-    const handleSubmitReview = async (reviewData) => {
-        try {
-            let response;
-            if (currentReview && currentReview._id) {
-                response = await updateReview(currentReview._id, reviewData);
-            } else {
-                response = await createReview({ ...reviewData, applicationId });
-            }
-
-            setReviews(prevReviews => {
-                if (currentReview && currentReview._id) {
-                    return prevReviews.map(r => r._id === currentReview._id ? response : r);
-                } else {
-                    return [...prevReviews, response];
-                }
-            });
-
-            setIsFormOpen(false);
-            setCurrentReview(null); // Limpiar la revisión actual
-        } catch (error) {
-            console.error("Error al procesar la revisión: ", error);
-            // Manejar el error aquí
-        }
-    };
+        loadReviews();
+    }, []);
 
     if (loading) {
         return (
@@ -67,26 +40,20 @@ const ReviewPage = ({ applicationId }) => {
             </div>
         );
     }
-    if (error) return <div>Ha ocurrido un error: {error}</div>;
+    if (error) return <div> Ha ocurrido un error: {error}</div>;
 
     return (
-        <div className="review-page-container">
-            <div className="review-page-header">
-                <h1>Revisiones de Postulaciones</h1>
-                <p>Revisa y gestiona las postulaciones aquí.</p>
-            </div>
-            <div className="review-list-container">
-                <ReviewList
-                    reviews={reviews}
-                    onEditReview={handleEditReview}
+        <div className="review-page">
+            <h1>Revisiones</h1>
+            {/* Aquí puedes incluir un componente de filtrado si es necesario */}
+            <ReviewList reviews={reviews} onReviewClick={handleReviewClick} />
+            {isReviewModalOpen && selectedReview && (
+                <ReviewModal
+                    isOpen={isReviewModalOpen}
+                    onClose={() => setIsReviewModalOpen(false)}
+                    review={selectedReview}
                 />
-                <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)}>
-                    <ReviewForm
-                        initialData={currentReview}
-                        onSubmit={handleSubmitReview}
-                    />
-                </Modal>
-            </div>
+            )}
         </div>
     );
 };

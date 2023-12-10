@@ -1,5 +1,5 @@
 import React from 'react';
-import './ReviewList.css'; // Asegúrate de crear y enlazar un archivo CSS para este componente
+// import './ReviewList.css'; // Asegúrate de crear y enlazar un archivo CSS para este componente
 
 const ReviewList = ({ reviews, onEditReview }) => {
     return (
@@ -10,7 +10,7 @@ const ReviewList = ({ reviews, onEditReview }) => {
                         <h3 className="review-title">Revisión de: {review.applicationId}</h3>
                         <p className="review-comments">Comentarios: {review.comments.join(", ")}</p>
                         <p className="review-status">Estado: {review.status}</p>
-                        <button className="edit-button" onClick={() => onEditReview(review)}>Editar</button>
+                        <button className="edit-button" onClick={() => onEditReview(review)}> Editar</button>
                     </div>
                 ))
             ) : (

@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
+import ReviewPage from './routes/ReviewPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
         path: 'applications',
         element: <ApplicationPage />,
       },
+      {
+        path: 'reviews',
+        element: <ReviewPage />,
+      }
       // ... puedes agregar más rutas hijas aquí ...
     ],
   },
