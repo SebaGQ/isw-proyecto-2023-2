@@ -21,7 +21,7 @@ const SubsidyPage = () => {
 
   // Asumiendo que tu contexto de autenticación tiene la información del usuario con un campo "role"
   const {user} = useAuth();
-  const isAdmin = user.roles.some(role => role.name === 'admin');
+  const isAdmin = user.roles.some(role => role._id === '65762d0004422dfc1dd83cf7');
   console.log('isAdmin:', isAdmin);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -110,11 +110,12 @@ const SubsidyPage = () => {
             dateEnd={subsidy.dateEnd}
             onApply={() => handleApplyClick(subsidy)}
             onViewRequirements={() => handleViewRequirementsClick(subsidy)}
-            onDelete={() => isAdmin==true && handleDeleteSubsidy(subsidy._id)}
-            onModify={() => isAdmin==true && handleModifySubsidy(subsidy._id)}
+            onDelete={() =>  handleDeleteSubsidy(subsidy._id)}
+            onModify={() =>  handleModifySubsidy(subsidy._id)
+            }
           >
             {/* Botones para eliminar y modificar */}
-            {user.roles[0].name=== 'admin' ? (
+            {/* {isAdmin === true ? (
               <div>
                 <button onClick={() => handleDeleteSubsidy(subsidy._id, subsidy.name)}>
                   Eliminar
@@ -123,7 +124,7 @@ const SubsidyPage = () => {
                   Modificar
                 </button>
               </div>
-            ):""}
+            ):""} */}
           </Card>
         ))}
         <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)}>
