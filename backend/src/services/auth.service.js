@@ -24,7 +24,7 @@ async function login(user) {
     const { email, password } = user;
 
     const userFound = await User.findOne({ email: email })
-      .populate("roles")
+      .populate("roles","firstName")
       .exec();
     if (!userFound) {
       return [null, null, "El usuario y/o contraseña son incorrectos"];
@@ -40,7 +40,7 @@ async function login(user) {
     }
 
     const accessToken = jwt.sign(
-      { email: userFound.email, roles: userFound.roles },
+      { email: userFound.email, roles: userFound.roles , firstName: userFound.firstName },
       ACCESS_JWT_SECRET,
       {
         expiresIn: "1d",

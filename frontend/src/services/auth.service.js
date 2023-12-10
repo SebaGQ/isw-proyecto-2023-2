@@ -10,8 +10,14 @@ export const login = async ({ email, password }) => {
     });
     const { status, data } = response;
     if (status === 200) {
-      const { email, roles } = await jwtDecode(data.data.accessToken);
-      localStorage.setItem('user', JSON.stringify({ email, roles }));
+      const { email, firstName, roles } = await jwtDecode(data.data.accessToken);
+
+      const decodedToken = jwtDecode(data.data.accessToken);
+      console.log(decodedToken);
+      console.log (email);
+      console.log (firstName);
+      
+      localStorage.setItem('user', JSON.stringify({ email, firstName, roles }));
       axios.defaults.headers.common[
         'Authorization'
       ] = `Bearer ${data.data.accessToken}`;
@@ -26,6 +32,7 @@ export const logout = () => {
   localStorage.removeItem('user');
   delete axios.defaults.headers.common['Authorization'];
   cookies.remove('jwt');
+  cookies.remove('jwt-auth');
 };
 
 export const test = async () => {
