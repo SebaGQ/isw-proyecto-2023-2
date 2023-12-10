@@ -113,6 +113,22 @@ async function getReviewById(reviewId) {
 }
 
 /**
+ * Obtener la revision segun su application id
+ * @param {string} id id de application id
+ * @returns {Promise} Promesa con el objeto de review
+ */
+async function getReviewByApplicationId(applicationId) {
+  try {
+    const review = await Review.findOne({ applicationId });
+    if (!review) return [null, "revision no encontrada"];
+    return [review, null];
+  } catch (error) {
+    handleError(error, "review.service -> getReviewByApplicationId");
+    return [null, "Error al obtener la revision"];
+  }
+}
+
+/**
  * Obtener todas las review
  * @returns {Promise} Promesa con el objeto de las reviews
  */
@@ -171,4 +187,5 @@ module.exports = {
   getReviewById,
   getReviews,
   getReviewByEmail,
+  getReviewByApplicationId,
 };

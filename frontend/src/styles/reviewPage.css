@@ -1,0 +1,36 @@
+/* reviewPage.css */
+
+.review-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.review-page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.review-page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.review-page-header p {
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.review-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* Espaciado entre los elementos de la lista */
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .review-list-container {
+        flex-direction: column;
+    }
+}
