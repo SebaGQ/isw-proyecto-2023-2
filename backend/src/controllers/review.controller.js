@@ -143,6 +143,25 @@ async function getReviewByEmail(req, res) {
   }
 }
 
+
+/**
+ * Obtiene review con application id
+ * @param {Object} req
+ * @param {Object} res
+ */
+async function getReviewByApplicationId(req, res) {
+  try {
+    const [review, reviewError] = await ReviewService.getReviewByApplicationId(req.params.id);
+    if (reviewError) return respondError(res, reviewError);
+    if (!review) return respondError(res, "No se pudo obtener la review");
+
+    return respondSuccess(req, res, 200, review);
+  } catch (error) {
+    handleError(error, "review.controller -> getReviewByApplicationId");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
 module.exports = {
   createReview,
   updateReviewById,
@@ -151,4 +170,5 @@ module.exports = {
   getReviews,
   filterReviews,
   getReviewByEmail,
+  getReviewByApplicationId,
 };

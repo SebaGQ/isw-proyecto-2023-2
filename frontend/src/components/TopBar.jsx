@@ -29,7 +29,9 @@ const TopBar = ({ showNav, setShowNav }) => {
                     className="icon"
                     onClick={() => setShowNav(!showNav)}
                 />
+
                 Menu
+
             </div>
             <div className="topbar-user">
                 <span>{user.firstName}</span>

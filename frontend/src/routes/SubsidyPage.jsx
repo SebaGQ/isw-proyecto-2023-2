@@ -74,6 +74,7 @@ const SubsidyPage = () => {
     }
   };
 
+
   const handleModifySubsidy = async (subsidyId) => {
     try {
       // Aquí debes proporcionar los datos actualizados del subsidio en el segundo parámetro
@@ -141,6 +142,7 @@ const SubsidyPage = () => {
       <ToastContainer />
     </div>
   );
+
 };
 
 export default SubsidyPage;

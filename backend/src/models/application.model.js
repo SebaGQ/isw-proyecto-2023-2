@@ -7,6 +7,11 @@ const applicationSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
+  // Se agrega a la postulacion un array de rut, para que la persona pueda agregar los rut de los miembros de su familia.
+  rut:[{
+    type: String,
+    required: true,
+  }],
   subsidyId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -38,6 +43,4 @@ const applicationSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const Application = mongoose.model("Application", applicationSchema);
-
-module.exports = Application;
+module.exports = mongoose.model("Application", applicationSchema);;

@@ -8,17 +8,40 @@ const mongoose = require("mongoose");
 const { handleError } = require("../utils/errorHandler");
 const AVAILABILITY = require("../constants/availability.constants");
 
+/* Cambios solicitados por el profesor. Hecho por Patricio Villalón */
+function validarRUT(rut) {
+  // Separar el R.U.T. y el dígito verificador
+  const cleanRUT = rut.replace(/\./g, '').replace(/-/i, '').toUpperCase();
+  const rutNumeros = cleanRUT.slice(0, -1);
+  const digitoVerificador = cleanRUT.slice(-1);
+
+  // Calcular el dígito verificador esperado
+  let suma = 0;
+  let multiplicador = 2;
+
+  for (let i = rutNumeros.length - 1; i >= 0; i--) {
+    suma += parseInt(rutNumeros[i]) * multiplicador;
+    multiplicador = multiplicador === 7 ? 2 : multiplicador + 1;
+  }
+
+  const digitoEsperado = 11 - (suma % 11);
+  const digitoCalculado = digitoEsperado === 11 ? '0' : digitoEsperado.toString();
+
+  // Comparar el dígito verificador calculado con el proporcionado
+  return digitoCalculado === digitoVerificador;
+}
 
     /*
       Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
       Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
       se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
     */ 
-async function createApplication(subsidyId, userEmail, socialPercentage, applicationDate, members) {
-  try { 
-
-    const user = await User.findOne({ email: userEmail });
+async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members) {
+  try {   
+    const user = await User.findOne({ rut: rut[0] });
     if (!user) return [null, "Usuario no encontrado"];
+
+    console.log("service appeal");
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
     // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
@@ -28,10 +51,25 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
+
     const hasPending = await hasPendingApplication(user._id, subsidyId);
     if (hasPending) {
+      
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
+    
+    // Se verifica por cada item en el arreglo, que el rut sea valido, a traves de un calculo matematico.      
+    for(const ruts of rut){
+      if(!validarRUT(ruts)){
+        return [null, "Uno o más rut es invalido"];
+      }
+    }
+    // Se agrega validacion de cantidad de rut igual a la cantidad de miembros.
+    console.log(rut.length);
+    console.log(members);
+    if (rut.length !== members) {
+      return [null, "Los ruts y miembros ingresados deben ser iguales"];
+      }
 
     //Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
@@ -56,6 +94,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
     }
 
     const newApplication = new Application({
+      rut,
       subsidyId,
       userId: user._id,
       socialPercentage,
@@ -79,6 +118,7 @@ async function createApplication(subsidyId, userEmail, socialPercentage, applica
       applicationId: newApplication._id,
       comments,
       statusReview,
+      origin: "Postulación",
     });
 
     await newReview.save();
@@ -126,7 +166,7 @@ async function getApplicationsByUserEmail(userEmail) {
     if (!user) {
       return [null, "Usuario no encontrado"];
     }
-    const applications = await Application.find({ userId: user._id });
+    const applications = await Application.find({ userId: user._id }).populate("subsidyId");
     
     const applicationsWithDetails = await Promise.all(applications.map(async (application) => {
       //Si la postulación fue rechazada, la revisión   de por qué fue rechazada
@@ -156,6 +196,23 @@ async function updateApplication(applicationId, updateData) {
   } catch (error) {
     handleError(error, "application.service -> updateApplication");
     return [null, "Error al actualizar la postulación"];
+  }
+}
+
+async function updateApplicationStatus(applicationId, newStatus) {
+  try {
+
+    if (newStatus !== "Aprobado" && newStatus !== "Rechazado") {
+      return [null, "Estado de postulación no válido"];
+    }
+
+    const application = await Application.findByIdAndUpdate(applicationId, { status: newStatus }, { new: true });
+    if (!application) return [null, "Postulación no encontrada"];
+
+    return [application, null];
+  } catch (error) {
+    handleError(error, "application.service -> updateApplicationStatus");
+    return [null, "Error al actualizar el estado de la postulación"];
   }
 }
 
@@ -193,5 +250,6 @@ module.exports = {
   getApplicationById,
   getApplicationsByUserEmail,
   updateApplication,
+  updateApplicationStatus,
   deleteApplication,
 };

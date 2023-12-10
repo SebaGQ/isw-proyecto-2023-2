@@ -51,7 +51,7 @@ a:hover {
 
 button {
   background-color: var(--primary-color);
-  color: white;
+  color: rgb(255, 255, 255);
   border: none;
   padding: 10px 20px;
   border-radius: var(--border-radius);
@@ -63,31 +63,25 @@ button {
 .app-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh; /*Usa todo el ancho de la pantalla*/
+  width: 100vw;
 }
 
-.topbar {
-  /* Asumiendo que ya tienes estilos para TopBar, asegúrate de que ocupe el ancho completo */
-  width: 100%;
-  z-index: 1000; /* Para asegurarse de que TopBar se mantenga en la parte superior sobre otros elementos */
-}
 
 .app-content {
   display: flex;
   flex: 1; /* Esto hace que app-content llene el espacio restante después de TopBar */
   overflow: hidden; /* Evita cualquier desbordamiento causado por los hijos */
-}
-
-.navbar {
-  /* Asumiendo que ya tienes estilos para NavBar, ajusta según sea necesario para el layout lateral */
-  flex-basis: 250px; /* o el ancho que prefieras para tu NavBar */
-  height: calc(100vh); /* Ajusta la altura si TopBar no es fija */
-  overflow-y: auto; /* Permite scroll en NavBar si el contenido es más largo que la pantalla */
-  z-index: 500; /* Menor que TopBar para mantener la jerarquía si se superponen */
+  
 }
 
 .main-content {
-  flex-grow: 1; /* Esto asegura que main-content ocupe el espacio restante */
+  flex: 1; /* Esto asegura que main-content ocupe el espacio restante */
   overflow-y: auto; /* Permite scroll en main content si el contenido es más largo que la pantalla */
   padding: 1rem; /* Añade algo de espacio alrededor del contenido principal */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
