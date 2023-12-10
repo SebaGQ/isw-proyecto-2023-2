@@ -17,6 +17,11 @@ const reviewSchema = new mongoose.Schema({
         enum: AVAILABILITY,
         default: AVAILABILITY[0],
       },
+    origin:{
+        type: String,
+        required: true,
+
+    },
 }, {
     timestamps: true,
 });

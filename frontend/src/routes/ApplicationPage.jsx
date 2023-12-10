@@ -1,88 +1,104 @@
 import React, { useState, useEffect } from 'react';
 import { fetchApplicationsByUser } from '../services/application.service';
-import DetailsModal from '../components/DetailsModal'; // Importa el componente del modal
+import DetailsModal from '../components/DetailsModal';
+import Modal from '../components/Modal';
+import AppealForm from '../components/AppealForm'; // Asegúrate de importar AppealForm
 import '../styles/ApplicationPage.css';
 import Loading from '../components/Loading';
-
 
 const ApplicationPage = () => {
     const [applications, setApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-    const [selectedApplication, setSelectedApplication] = useState(null);
+    const [isAppealOpen, setIsAppealOpen] = useState(false); // Nuevo estado para el modal de apelación
+    const [selectedApplicationData, setSelectedApplicationData] = useState(null);
 
-    const handleDetailsClick = (application) => {
-        setSelectedApplication(application);
+    const handleDetailsClick = (applicationData) => {
+        setSelectedApplicationData(applicationData);
         setIsDetailsOpen(true);
     };
 
-    useEffect(() => {
-        const getApplicationsByUser = async () => {
-            try {
-                const result = await fetchApplicationsByUser();
-                if (result.state === 'Success') {
-                    setApplications(result.data.map(item => item.application)); // Extraer solo el objeto de aplicación
-                } else {
-                    throw new Error('Failed to fetch applications');
+    const handleAppealClick = (applicationData) => {
+        setSelectedApplicationData(applicationData);
+        setIsAppealOpen(true); // Abrir el modal de apelación
+    };
+        useEffect(() => {
+            const getApplicationsByUser = async () => {
+                try {
+                    const result = await fetchApplicationsByUser();
+                    if (result.state === 'Success') {
+                        setApplications(result.data); // Mantener la estructura original de los datos
+                    } else {
+                        throw new Error('Failed to fetch applications');
+                    }
+                } catch (error) {
+                    setError('Error al cargar las aplicaciones');
+                    console.error(error);
+                } finally {
+                    setLoading(false);
                 }
-            } catch (error) {
-                setError('Error al cargar las aplicaciones');
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
-        };
+            };
 
-        getApplicationsByUser();
-    }, []);
+            getApplicationsByUser();
+        }, []);
 
+        if (loading) {
+            return (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                    <Loading />
+                </div>
+            );
+        }
+        if (error) return <div>Ha ocurrido un error: {error}</div>;
 
-    if (loading) {
         return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <Loading />
-            </div>
-        );
-    }
-    if (error) return <div>Ha ocurrido un error: {error}</div>;
-
-    return (
-        <div className="applications-page">
-            <h1>Mis Postulaciones</h1>
-            <table className="application-table">
-                <thead>
-                    <tr>
-                        <th>Nombre del Subsidio</th>
-                        <th>Estado</th>
-                        <th>Porcentaje Social</th>
-                        <th>Número de Miembros</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {applications.map((application) => (
-                        <tr key={application._id}>
-                            <td>{application.subsidyName}</td>
-                            <td>{application.status}</td>
-                            <td>{application.socialPercentage}%</td>
-                            <td>{application.members}</td>
-                            <td>
-                                <button onClick={() => handleDetailsClick(application)}>Ver Detalles</button>
-                            </td>
+            <div className="applications-page">
+                <h1>Mis Postulaciones</h1>
+                <table className="application-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Subsidio</th>
+                            <th>Estado</th>
+                            <th>Porcentaje Social</th>
+                            <th>Número de Miembros</th>
+                            <th>Acciones</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            {isDetailsOpen && selectedApplication && (
-                <DetailsModal
-                    isOpen={isDetailsOpen}
-                    onClose={() => setIsDetailsOpen(false)}
-                    application={selectedApplication}
-                />
-            )}
-        </div>
-    );
-};
+                    </thead>
+                    <tbody>
+                        {applications.map(({ application, review }) => (
+                            <tr key={application._id}>
+                                <td>{application.subsidyId.name}</td>
+                                <td>{application.status}</td>
+                                <td>{application.socialPercentage}%</td>
+                                <td>{application.members}</td>
+                                <td>
+                                    <button onClick={() => handleDetailsClick({ application, review })}>Ver Detalles</button>
+                                    {application.status === 'Rechazado' && (
+                                        <button className="btn-appeal" onClick={() => handleAppealClick({ application, review })}>Apelar</button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {isDetailsOpen && selectedApplicationData && (
+                    <DetailsModal
+                        isOpen={isDetailsOpen}
+                        onClose={() => setIsDetailsOpen(false)}
+                        application={selectedApplicationData.application}
+                        review={selectedApplicationData.review}
+                    />
+                )}
+                {isAppealOpen && selectedApplicationData && (
+                    <Modal isOpen={isAppealOpen} onClose={() => setIsAppealOpen(false)}>
+                        <AppealForm 
+                            applicationId={selectedApplicationData.application._id} 
+                            onClose={() => setIsAppealOpen(false)} 
+                        />
+                    </Modal>
+                )}
+            </div>
+        );    };
 
-export default ApplicationPage;
+    export default ApplicationPage;
