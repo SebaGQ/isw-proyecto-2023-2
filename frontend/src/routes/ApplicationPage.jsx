@@ -23,25 +23,29 @@ const ApplicationPage = () => {
         setSelectedApplicationData(applicationData);
         setIsAppealOpen(true); // Abrir el modal de apelación
     };
-        useEffect(() => {
-            const getApplicationsByUser = async () => {
-                try {
-                    const result = await fetchApplicationsByUser();
-                    if (result.state === 'Success') {
-                        setApplications(result.data); // Mantener la estructura original de los datos
-                    } else {
-                        throw new Error('Failed to fetch applications');
-                    }
-                } catch (error) {
-                    setError('Error al cargar las aplicaciones');
-                    console.error(error);
-                } finally {
-                    setLoading(false);
+    
+    useEffect(() => {
+        const getApplicationsByUser = async () => {
+            try {
+                const result = await fetchApplicationsByUser();
+    
+                // Si la API devuelve un estado de éxito y contiene datos
+                if (result && result.state === 'Success') {
+                    setApplications(result.data);
+                } else {
+                    // Si la API devuelve un array vacío (en caso de 204 No Content)
+                    setApplications([]);
                 }
-            };
-
-            getApplicationsByUser();
-        }, []);
+            } catch (error) {
+                setError('Error al cargar las aplicaciones');
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        getApplicationsByUser();
+    }, []);
 
         if (loading) {
             return (
@@ -66,7 +70,8 @@ const ApplicationPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {applications.map(({ application, review }) => (
+                    {applications.length > 0 ? (
+                        applications.map(({ application, review }) => (
                             <tr key={application._id}>
                                 <td>{application.subsidyId.name}</td>
                                 <td>{application.status}</td>
@@ -79,8 +84,13 @@ const ApplicationPage = () => {
                                     )}
                                 </td>
                             </tr>
-                        ))}
-                    </tbody>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5">No hay postulaciones disponibles.</td>
+                        </tr>
+                    )}
+                </tbody>
                 </table>
                 {isDetailsOpen && selectedApplicationData && (
                     <DetailsModal
