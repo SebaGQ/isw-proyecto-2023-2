@@ -56,8 +56,5 @@ userSchema.statics.comparePassword = async (password, receivedPassword) => {
   return await bcrypt.compare(password, receivedPassword);
 };
 
-/** Modelo de datos 'User' */
-const User = mongoose.model("User", userSchema);
-
 // Exporta el modelo de datos 'User'
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);
