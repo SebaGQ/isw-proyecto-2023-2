@@ -8,7 +8,7 @@ const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements, o
   const endDate = new Date(dateEnd);
   const isExpired = endDate < currentDate;
   const { user } = useAuth();
-  const isAdmin = user.roles.some(role => role.name === 'admin');
+  const isAdmin = user.roles.some(role => role._id === "65762d0004422dfc1dd83cf7");
 
   return (
     <div className="card">
