@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const AVAILABILITY = require("../constants/availability.constants");
 
 const reviewSchema = new mongoose.Schema({
+    //El review deberia tener un applicationId o un appealId
     applicationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Application",
