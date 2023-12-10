@@ -11,20 +11,18 @@ const SubsidyPage = () => {
     const [subsidies, setSubsidies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [currentSubsidyId, setCurrentSubsidyId] = useState(null);
-
     const [isRequirementsOpen, setIsRequirementsOpen] = useState(false);
     const [currentSubsidy, setCurrentSubsidy] = useState(null);
 
     const handleApplyClick = (subsidy) => {
-        setCurrentSubsidy(subsidy); // Guarda el subsidio completo
+        setCurrentSubsidy(subsidy);
         setIsFormOpen(true);
     };
 
     const handleViewRequirementsClick = (subsidy) => {
-        setCurrentSubsidy(subsidy); // Actualizado para pasar el objeto de subsidio completo
+        setCurrentSubsidy(subsidy);
         setIsRequirementsOpen(true);
     };
 
@@ -35,7 +33,7 @@ const SubsidyPage = () => {
                 setSubsidies(data);
             } catch (error) {
                 setError('Error al cargar los subsidios');
-                // Aquí podrías registrar el error o enviarlo a un servicio de monitoreo de errores
+                console.error(error);
             } finally {
                 setLoading(false);
             }
@@ -51,30 +49,35 @@ const SubsidyPage = () => {
             </div>
         );
     }
+
     if (error) return <div>Ha ocurrido un error: {error}</div>;
 
     return (
         <div className="subsidy-page-container">
-             <div className="subsidy-page-header">
-            <h1>Subsidios y Beneficios</h1>
-            <p>Estos son los subsidios con los q cuenta el municipio</p>
+            <div className="subsidy-page-header">
+                <h1>Subsidios y Beneficios</h1>
+                <p>Estos son los subsidios con los que cuenta el municipio</p>
             </div>
-            <div className="card-container"> {/* Asegúrate de definir algunos estilos para esto */}
-                {subsidies.map((subsidy) => (
-                    <Card
-                        key={subsidy._id}
-                        name={subsidy.name}
-                        description={subsidy.description}
-                        type={subsidy.typeSubsidy}
-                        dateEnd={subsidy.dateEnd}
-                        onApply={() => handleApplyClick(subsidy)}
-                        onViewRequirements={() => handleViewRequirementsClick(subsidy)}
-                    />
-                ))}
+            <div className="card-container">
+                {subsidies.length > 0 ? (
+                    subsidies.map((subsidy) => (
+                        <Card
+                            key={subsidy._id}
+                            name={subsidy.name}
+                            description={subsidy.description}
+                            type={subsidy.typeSubsidy}
+                            dateEnd={subsidy.dateEnd}
+                            onApply={() => handleApplyClick(subsidy)}
+                            onViewRequirements={() => handleViewRequirementsClick(subsidy)}
+                        />
+                    ))
+                ) : (
+                    <div>No hay subsidios disponibles.</div>
+                )}
                 <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)}>
                     <ApplicationForm
-                        subsidyId={currentSubsidy?._id} // Usa el ID del subsidio actual
-                        subsidyName={currentSubsidy?.name} // Pasa el nombre del subsidio al formulario
+                        subsidyId={currentSubsidy?._id}
+                        subsidyName={currentSubsidy?.name}
                         onClose={() => setIsFormOpen(false)}
                     />
                 </Modal>

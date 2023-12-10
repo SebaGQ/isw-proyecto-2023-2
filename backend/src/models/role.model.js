@@ -18,6 +18,4 @@ const roleSchema = new mongoose.Schema(
 );
 
 // Crea el modelo de datos 'Role' a partir del esquema 'roleSchema'
-const Role = mongoose.model("Role", roleSchema);
-
-module.exports = Role;
+module.exports = mongoose.model("Role", roleSchema);;

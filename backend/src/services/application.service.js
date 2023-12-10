@@ -41,6 +41,8 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     const user = await User.findOne({ rut: rut[0] });
     if (!user) return [null, "Usuario no encontrado"];
 
+    console.log("service appeal");
+
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
     // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
     const subsidy = await Subsidy.findById(subsidyId).populate("guidelineId");
@@ -49,8 +51,10 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     const guideline = subsidy.guidelineId;
     if (!guideline) return [null, "No se encontró la pauta asociada al subsidio"];
 
+
     const hasPending = await hasPendingApplication(user._id, subsidyId);
     if (hasPending) {
+      
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
     
@@ -114,6 +118,7 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
       applicationId: newApplication._id,
       comments,
       statusReview,
+      origin: "Postulación",
     });
 
     await newReview.save();
@@ -161,7 +166,7 @@ async function getApplicationsByUserEmail(userEmail) {
     if (!user) {
       return [null, "Usuario no encontrado"];
     }
-    const applications = await Application.find({ userId: user._id });
+    const applications = await Application.find({ userId: user._id }).populate("subsidyId");
     
     const applicationsWithDetails = await Promise.all(applications.map(async (application) => {
       //Si la postulación fue rechazada, la revisión   de por qué fue rechazada

@@ -22,6 +22,4 @@ const guidelineSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const Guideline = mongoose.model("Guideline", guidelineSchema);
-
-module.exports = Guideline;
+module.exports = mongoose.model("Guideline", guidelineSchema);
