@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.use(authenticationMiddleware);
 
-router.get("/", authorizationMiddleware.isAdmin, reviewController.getReviews);
+router.get("/", reviewController.getReviews);
 router.get("/application/:id", authorizationMiddleware.isAdmin, reviewController.getReviewByApplicationId);
 router.get("/userReview", authorizationMiddleware.isUser, reviewController.getReviewByEmail);
 router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewById);
