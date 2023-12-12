@@ -11,6 +11,7 @@ const subsidyBodySchema = Joi.object({
   name: Joi.string()
     .trim()
     .required()
+    .pattern(/^[A-Za-z0-9\s]+$/)
     .messages({
       "string.base": "El nombre debe ser de tipo texto.",
       "string.empty": "El nombre no puede estar vacío.",
@@ -18,6 +19,7 @@ const subsidyBodySchema = Joi.object({
     }),
   description: Joi.string()
     .trim()
+    .pattern(/^[A-Za-z0-9\s]+$/)
     .required()
     .messages({
       "string.base": "La descripción debe ser de tipo texto.",

@@ -10,6 +10,7 @@ const guidelineBodySchema = Joi.object({
   name: Joi.string()
     .required()
     .trim()
+    .pattern(/^[A-Za-z0-9\s]+$/)
     .messages({
       "string.empty": "El nombre no puede estar vacío.",
       "any.required": "El nombre es obligatorio.",
