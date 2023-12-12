@@ -15,6 +15,7 @@ const guidelineBodySchema = Joi.object({
       "string.empty": "El nombre no puede estar vacío.",
       "any.required": "El nombre es obligatorio.",
       "string.base": "El nombre debe ser de tipo string.",
+      "string.pattern.base": "La descripción no puede contener caracteres especiales.",
     }),
   maxSocialPercentage: Joi.number()
     .min(0)
