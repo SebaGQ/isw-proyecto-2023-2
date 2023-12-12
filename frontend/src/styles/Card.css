@@ -71,10 +71,11 @@
 .card-footer {
   padding: 0.6rem 1rem;
   background-color: #f0f0f0; /* Fondo ligeramente gris para el pie de página */
-  text-align: right; /* Alinea el contenido del pie a la derecha */
-  display: flex;
-  justify-content: space-between;
+  text-align: center; /* Alinea el contenido del pie al centro */
+  display: block;
+  justify-content: center; /* Centra los elementos horizontalmente */
   align-items: center;
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan si el espacio es insuficiente */
 }
 
 .card-button {
@@ -124,4 +125,49 @@
   .card {
     max-width: 100%;
   }
+
+  .delete-button,
+  .edit-button {
+    margin: 5px auto; /* Centra los botones horizontalmente */
+    display: block; /* Hace que los botones ocupen todo el ancho disponible */
+  }
+
 }
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  background-color: #f0f0f0; /* Fondo ligeramente gris para las acciones de la tarjeta */
+  align-items: center;
+}
+
+.delete-button,
+.edit-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease-in-out;
+  margin: 5px; /* Añade un margen alrededor de los botones */
+}
+
+.edit-button {
+  background-color: #17a2b8; /* Color azul claro */
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #117a8b; /* Un azul más oscuro al pasar el ratón por encima */
+}
+
+.delete-button {
+  background-color: #dc3545; /* Color rojo */
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #bd2130; /* Un rojo más oscuro al pasar el ratón por encima */
+}
+

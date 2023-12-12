@@ -40,6 +40,4 @@ const subsidySchema = new mongoose.Schema({
   timestamps: true,
 });
 
-const Subsidy = mongoose.model("Subsidy", subsidySchema);
-
-module.exports = Subsidy;
+module.exports = mongoose.model("Subsidy", subsidySchema);

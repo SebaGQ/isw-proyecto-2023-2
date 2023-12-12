@@ -3,10 +3,12 @@ import '../styles/TopBar.css'; // Asegúrate de tener este archivo de estilos en
 import { Bars3CenterLeftIcon, ChevronDownIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { logout } from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const TopBar = ({ showNav, setShowNav }) => {
     const navigate = useNavigate();
-    const [user, setUser] = useState({ name: "Nombre" }); // Asumiendo un estado inicial
+    const { user } = useAuth();
+   
 
     // Simulando la función fetchProfile
     useEffect(() => {
@@ -18,6 +20,8 @@ const TopBar = ({ showNav, setShowNav }) => {
         navigate('/auth');
       };
 
+    console.log(user)  
+
     return (
         <div className="topbar">
             <div className="topbar-brand">
@@ -25,10 +29,12 @@ const TopBar = ({ showNav, setShowNav }) => {
                     className="icon"
                     onClick={() => setShowNav(!showNav)}
                 />
-                TopBar
+
+                Menu
+
             </div>
             <div className="topbar-user">
-                <span>{user.name}</span>
+                <span>{user.firstName}</span>
                 <ChevronDownIcon className="icon" />
                 <div className="logout" onClick={handleLogout}>
                     <PencilIcon className="icon" />

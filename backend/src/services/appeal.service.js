@@ -5,6 +5,7 @@ const Guideline = require("../models/guideline.model");
 const ApplicationService = require("./application.service");
 const mongoose = require("mongoose");
 const Subsidy = require("../models/subsidy.model");
+const Review = require("../models/review.model");
 
 
 
@@ -24,7 +25,6 @@ async function createAppeal(userEmail, postData) {
     if (!user) {
       return [null, "Usuario no encontrado"];
     }
-
     const [application, applicationError] = await ApplicationService.getApplicationById(postData.postId);
     if (applicationError) return [null, applicationError];
     if (!application) return [null, "La postulación asociada no existe"];
@@ -52,13 +52,15 @@ async function createAppeal(userEmail, postData) {
       application.members = postData.newMembers;
     }
 
+    //El campo result debería ser comments y asignarse al Review, no al appeal
+    //el review debe tener el id del appeal
+    
+    
     //Ahora se validan los nuevos valores según la pauta
     let result = [];
     const subsidy = await Subsidy.findById(application.subsidyId)
-    console.log(subsidy);
     const guideline = await Guideline.findById(subsidy.guidelineId)
     console.log("Validación de pauta al apelar");
-    console.log(guideline);
 
     if (postData.newSocialPercentage > guideline.maxSocialPercentage) {
       newAppeal.status = AVAILABILITY[2];

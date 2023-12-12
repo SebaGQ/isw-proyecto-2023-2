@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from './Modal'; // Asegúrate de que este componente ya esté creado y funcional
 
-const DetailsModal = ({ isOpen, onClose, application }) => {
+const DetailsModal = ({ isOpen, onClose, application, review }) => {
     if (!application) return null;
 
     return (
@@ -12,18 +12,19 @@ const DetailsModal = ({ isOpen, onClose, application }) => {
                 <p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>
                 <p><strong>Número de Miembros:</strong> {application.members}</p>
                 <p><strong>Fecha de Postulación:</strong> {new Date(application.applicationDate).toLocaleDateString()}</p>
-                {/* Agrega más detalles si es necesario */}
-                {application.review && (
+                
+                {application.status === 'Rechazado' && review && review.comments && (
                     <>
-                        <h3>Revisión</h3>
-                        <p><strong>Comentarios:</strong></p>
+                        <h2>Motivos del Rechazo</h2>
                         <ul>
-                            {application.review.comments.map((comment, index) => (
+                            {review.comments.map((comment, index) => (
                                 <li key={index}>{comment}</li>
                             ))}
                         </ul>
                     </>
                 )}
+
+                {/* Otra información de revisión si es necesario */}
             </div>
         </Modal>
     );
