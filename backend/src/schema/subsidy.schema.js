@@ -16,7 +16,7 @@ const subsidyBodySchema = Joi.object({
       "string.base": "El nombre debe ser de tipo texto.",
       "string.empty": "El nombre no puede estar vacío.",
       "any.required": "El nombre es obligatorio.",
-      "string.pattern.base": "El nombre no puede contener caracteres especiales.",
+      "string.pattern.base": "La descripción no puede contener caracteres especiales.",
     }),
   description: Joi.string()
     .trim()
