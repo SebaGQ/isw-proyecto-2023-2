@@ -29,6 +29,13 @@ const reviewBodySchema = Joi.object({
             "any.required": "El estado es obligatorio.",
             "any.only": `El estado debe ser uno de los siguientes: ${AVAILABILITY.join(", ")}.`
         }),
+    origin: Joi.string()
+        .required()
+        .messages({
+            "string.empty": "El origen no puede estar vacío.",
+            "any.required": "El origen es obligatorio.",
+            "string.base": "El origen debe ser de tipo string.",
+        }),
 });
 
 module.exports = { reviewBodySchema };
