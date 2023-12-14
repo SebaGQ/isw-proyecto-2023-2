@@ -4,25 +4,20 @@ import {
   deleteSubsidy,
   modifySubsidy,
 } from "../services/subsidy.service";
-import { useAuth } from "../context/AuthContext";
 import Card from "../components/Card";
 import ApplicationForm from "../components/ApplicationForm";
 import Modal from "../components/Modal";
 import RequirementsModal from "../components/RequirementsModal";
 import "../styles/subsidyPage.css";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 
 const SubsidyPage = () => {
   const [subsidies, setSubsidies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Asumiendo que tu contexto de autenticación tiene la información del usuario con un campo "role"
-  const {user} = useAuth();
-  const isAdmin = user.roles.some(role => role._id === '65762d0004422dfc1dd83cf7');
-  console.log('isAdmin:', isAdmin);
+  const navigate = useNavigate();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentSubsidyId, setCurrentSubsidyId] = useState(null);
@@ -38,6 +33,11 @@ const SubsidyPage = () => {
   const handleViewRequirementsClick = (subsidy) => {
     setCurrentSubsidy(subsidy); // Actualizado para pasar el objeto de subsidio completo
     setIsRequirementsOpen(true);
+  };
+
+  const handleCreateSubsidyClick = () => {
+    // Utiliza navigate para redirigir a la página de creación de subsidios
+    navigate('/createSubsidy');
   };
 
   useEffect(() => {
@@ -58,22 +58,22 @@ const SubsidyPage = () => {
 
   const handleDeleteSubsidy = async (subsidyId, subsidyName) => {
     try {
+      // Llama a la función para eliminar el subsidio
       await deleteSubsidy(subsidyId);
-      // Puedes recargar la lista de subsidios después de la eliminación si es necesario
-      const updatedSubsidies = subsidies.filter(
-        (subsidy) => subsidy._id !== subsidyId
-      );
-      setSubsidies(updatedSubsidies);
-
-      // Mostrar notificación de éxito
-      toast.success(`Subsidio "${subsidyName}" eliminado exitosamente`);
+  
+      // Elimina directamente el subsidio del estado sin buscarlo
+      setSubsidies((prevSubsidies) => prevSubsidies.filter((subsidy) => subsidy._id !== subsidyId));
+  
+      // Muestra un mensaje de tostada con el nombre del subsidio
+      toast.success(`Subsidio "${subsidyName}" eliminado correctamente`, { autoClose: 2000 }); // Auto cierra la tostada después de 2000 milisegundos (opcional)
+  
+      // Puedes realizar otras acciones después de eliminar el subsidio
+  
     } catch (error) {
       console.error("Error deleting subsidy:", error);
-      // Puedes manejar el error de alguna manera, por ejemplo, mostrar un mensaje al usuario
-      toast.error('Error al eliminar el subsidio');
+      setError("Error al eliminar el subsidio. Por favor, inténtalo de nuevo.");
     }
   };
-
 
   const handleModifySubsidy = async (subsidyId) => {
     try {
@@ -99,6 +99,7 @@ const SubsidyPage = () => {
       <div className="subsidy-page-header">
         <h1>Subsidios y Beneficios</h1>
         <p>Estos son los subsidios con los que cuenta el municipio</p>
+        <button onClick={handleCreateSubsidyClick}>Crear Subsidio</button>
       </div>
       <div className="card-container">
         {subsidies.map((subsidy) => (
@@ -110,22 +111,9 @@ const SubsidyPage = () => {
             dateEnd={subsidy.dateEnd}
             onApply={() => handleApplyClick(subsidy)}
             onViewRequirements={() => handleViewRequirementsClick(subsidy)}
-            onDelete={() =>  handleDeleteSubsidy(subsidy._id)}
-            onModify={() =>  handleModifySubsidy(subsidy._id)
-            }
-          >
-            {/* Botones para eliminar y modificar */}
-            {/* {isAdmin === true ? (
-              <div>
-                <button onClick={() => handleDeleteSubsidy(subsidy._id, subsidy.name)}>
-                  Eliminar
-                </button>
-                <button onClick={() => handleModifySubsidy(subsidy._id)}>
-                  Modificar
-                </button>
-              </div>
-            ):""} */}
-          </Card>
+            onDelete={() => handleDeleteSubsidy(subsidy._id,subsidy.name)}
+            onModify={() => handleModifySubsidy(subsidy._id)}
+          ></Card>
         ))}
         <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)}>
           <ApplicationForm
@@ -143,7 +131,6 @@ const SubsidyPage = () => {
       <ToastContainer />
     </div>
   );
-
 };
 
 export default SubsidyPage;
