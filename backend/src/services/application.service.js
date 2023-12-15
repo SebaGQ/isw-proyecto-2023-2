@@ -74,16 +74,22 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     //Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
     let comments = [];
+        // Se define por defectos los estados de la revision, asi si esta correcto todas seran true
+        let statusPercentage = true;
+        let statusMembers = true;
+        let statusDate = true;
 
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
       comments.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
+      statusPercentage = false;
     } 
     // validacion de integrantes
     if (members < guideline.minMembers) {
       status = AVAILABILITY[2];
       comments.push("La cantidad de integrantes es menor al mínimo requerido por las pautas del subsidio.");
+      statusMembers = false;
     }
 
     const applicationDateObj = new Date(applicationDate);
@@ -91,6 +97,7 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     if (applicationDateObj > subsidy.dateEnd || applicationDateObj < subsidy.dateStart) {
       status = AVAILABILITY[2];
       comments.push("La fecha de postulación no está dentro del rango permitido por el subsidio.");
+      statusDate = false;
     }
 
     const newApplication = new Application({
@@ -119,6 +126,9 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
       comments,
       statusReview,
       origin: "Postulación",
+      statusPercentage,
+      statusMembers,
+      statusDate,
     });
 
     await newReview.save();
