@@ -37,6 +37,10 @@ export const fetchReviewsByApplication = async (applicationId) => {
 export const fetchReviews = async () => {
     try {
         const response = await axios.get('/reviews');
+
+        if(response.status == 204){
+            return[];
+        }
         return response.data;
     } catch (error) {
         console.error("Error fetching reviews: ", error);
