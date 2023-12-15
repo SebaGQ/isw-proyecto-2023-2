@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchReviews } from '../services/review.service';
 import ReviewList from '../components/ReviewList'; 
 import ReviewModal from '../components/ReviewModal'; // Un componente modal para detalles o edición de revisión
-// import '../styles/ReviewPage.css';
+import '../styles/ReviewPage.css';
 import Loading from '../components/Loading';
 
 const ReviewPage = () => {
@@ -11,17 +11,28 @@ const ReviewPage = () => {
     const [error, setError] = useState(null);
     const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
     const [selectedReview, setSelectedReview] = useState(null);
+    const [editingReview, setEditingReview] = useState(null);
 
     const handleReviewClick = (review) => {
         setSelectedReview(review);
         setIsReviewModalOpen(true);
     };
 
+    const onEditReview = (review) => {
+        setEditingReview(review);
+        setIsReviewModalOpen(true);
+    };
+
     useEffect(() => {
         const loadReviews = async () => {
             try {
-                const fetchedReviews = await fetchReviews();
-                setReviews(fetchedReviews);
+                const response = await fetchReviews();
+                if (response.state === 'Success') {
+                    setReviews(response.data); // Solo pasas el array de revisiones
+                } else {
+                    // Manejar otros estados, por ejemplo, errores
+                    setError('Error al cargar las revisiones');
+                }
             } catch (error) {
                 setError('Error al cargar las revisiones');
                 console.error(error);
@@ -29,6 +40,7 @@ const ReviewPage = () => {
                 setLoading(false);
             }
         };
+        
 
         loadReviews();
     }, []);
@@ -52,7 +64,10 @@ const ReviewPage = () => {
                     isOpen={isReviewModalOpen}
                     onClose={() => setIsReviewModalOpen(false)}
                     review={selectedReview}
+                    editingReview={editingReview}
+                    onEditReview={onEditReview}
                 />
+
             )}
         </div>
     );
