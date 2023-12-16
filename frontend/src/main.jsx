@@ -8,6 +8,7 @@ import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
 import ReviewPage from './routes/ReviewPage.jsx';
+import CreateReviewPage from './components/CreateReviewPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: 'reviews',
         element: <ReviewPage />,
+      },
+      {
+        path: 'createreview',
+        element: <CreateReviewPage />,
       }
       // ... puedes agregar más rutas hijas aquí ...
     ],
