@@ -46,9 +46,15 @@
     margin-left: 5px;
 }
 
-.imagenlogo img {   
+.imagenlogo img {
     width: auto;
-    height: 100px;
+    max-height: 100px;
     background-color: rgb(242, 250, 215);
     border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+    .imagenlogo img {
+        max-height: 30px;
+    }
 }
