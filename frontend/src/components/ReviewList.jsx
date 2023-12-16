@@ -7,8 +7,10 @@ const ReviewList = ({ reviews, onEditReview }) => {
             {reviews.length > 0 ? (
                 reviews.map(review => (
                     <div key={review._id} className="review-item">
-                        <h3 className="review-title">Solicitante: {review.applicationId.userId}</h3>
-                        <p className="review-subsidy">Subsidio: {review.applicationId.subsidyId}</p>
+                        {/* Información de la postulación */}
+                        <h3 className="review-title">Postulante: {review.applicationId.rut[0]}</h3>
+                        {/* crear if si es que no encuentra subsidioId.name*/}
+                        <p className="review-subsidyName">Subsidio: {review.applicationId.subsidyId.name != null ? review.applicationId.subsidyId.name : "No se encuentra el subsidio"}</p>
                         <p className="review-socialPercentage">Porcentaje Social: {review.applicationId.socialPercentage}% {review.statusPercentage ? '✔' : '❌'}</p>
                         <p className="review-applicationDate">Fecha de Postulación: {new Date(review.applicationId.applicationDate).toLocaleDateString() }{review.statusDate ? ' ✔' : ' ❌'}</p>
                         <p className="review-members">Número de Miembros: {review.applicationId.members} {review.statusMembers ? '✔' : '❌'}</p>
