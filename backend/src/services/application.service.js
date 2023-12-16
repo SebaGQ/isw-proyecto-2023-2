@@ -43,9 +43,8 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
 
     //como debe ser el usuario q está postulando se saca del token
     const user = await User.findOne({ email:userEmail});
-    
-    //Validacion innecesaria
-    //if (!user) return [null, "Usuario no encontrado"];
+
+    if (!user) return [null, "Usuario no encontrado"];
 
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
