@@ -18,7 +18,7 @@ const TopBar = ({ showNav, setShowNav }) => {
     const handleLogout = () => {
         logout();
         navigate('/auth');
-      };
+    };
 
     console.log(user)  
 
@@ -30,6 +30,9 @@ const TopBar = ({ showNav, setShowNav }) => {
                     onClick={() => setShowNav(!showNav)}
                     />
                     <p>Menu</p>
+            </div>
+            <div className="imagenlogo">
+                <img src="https://concepcionparticipa.cl/img/LogoConcepcion.png" alt="logo"/>
             </div>
             <div className="topbar-user">
                 <span>{user.firstName}</span>
