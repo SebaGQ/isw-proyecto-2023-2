@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { postApplication } from "../services/application.service";
 import "../styles/ApplicationForm.css";
-
+import { validateRUT } from "validar-rut";
 const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
-  const [ruts, setRuts] = useState("");
+  const [rut, setRut] = useState("");
   const [socialPercentage, setSocialPercentage] = useState("");
   const [members, setMembers] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
@@ -42,7 +42,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
 
   const handleRutChange = (e) => {
     const formattedRut = formatRut(e.target.value);
-    setRuts(formattedRut);
+    setRut(formattedRut);
   };
 
   const handleAddMember = () => {
@@ -82,11 +82,11 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
       {/* Título del formulario */}
       <form onSubmit={handleSubmit} className="application-form">
         <div className="form-group">
-          <label htmlFor="ruts">Rut</label>
+          <label htmlFor="rut">Rut</label>
           <input
-            id="ruts"
+            id="rut"
             type="text"
-            value={ruts}
+            value={rut}
             onChange={handleRutChange}
             placeholder="10.123.123-4"
             required
@@ -103,6 +103,8 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
             placeholder="Ingresa tu porcentaje social"
             required
             className="form-control"
+            min={0}
+            max={100}
           />
         </div>
         <div className="form-group">
@@ -115,6 +117,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
             placeholder="Ingresa el número de miembros de tu familia."
             required
             className="form-control"
+            min={0}
           />
         </div>
         {/* Renderizar dinámicamente los campos de entrada para los miembros de la familia */}
