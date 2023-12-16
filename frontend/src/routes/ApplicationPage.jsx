@@ -41,7 +41,7 @@ const ApplicationPage = () => {
         setIsDetailsOpen(true);
 
         try {
-            const reviewsData = await fetchReviewsByApplication(applicationData.application.id);
+            const reviewsData = await fetchReviewsByApplication(applicationData.application._id);
             setSelectedApplicationData({ ...applicationData, reviews: reviewsData });
         } catch (error) {
             console.error('Error fetching reviews:', error);

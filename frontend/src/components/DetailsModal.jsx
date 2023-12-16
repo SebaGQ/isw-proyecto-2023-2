@@ -13,7 +13,6 @@ const DetailsModal = ({ isOpen, onClose, application, reviews }) => {
                 <p><strong>Número de Miembros:</strong> {application.members}</p>
                 <p><strong>Fecha de Postulación:</strong> {new Date(application.applicationDate).toLocaleDateString()}</p>
                 
-                {/* Sección de Historial */}
                 <h3>Historial</h3>
                 {reviews && reviews.length > 0 ? (
                     <table>
