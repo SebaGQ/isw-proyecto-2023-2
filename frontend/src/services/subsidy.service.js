@@ -1,36 +1,61 @@
-import axios from './root.service';
+import axios from "./root.service";
 
 export const fetchSubsidies = async () => {
-    try {
-        const response = await axios.get('/subsidies');
+  try {
+    const response = await axios.get("/subsidies");
 
-        if (response.status === 204) {
-            return []; // Devuelve un array vacío en caso de 204 No Content
-        }
-        return response.data.data; // Asumiendo que los datos están en response.data.data
-    } catch (error) {
-        console.error("There was an error fetching the subsidies: ", error);
-        throw error;
+    if (response.status === 204) {
+      return []; // Devuelve un array vacío en caso de 204 No Content
     }
+    return response.data.data; // Asumiendo que los datos están en response.data.data
+  } catch (error) {
+    console.error("There was an error fetching the subsidies: ", error);
+    throw error;
+  }
 };
 
+export const createSubsidy = async (subsidyData) => {
+  try {
+    const response = await axios.post("/subsidies", subsidyData);
+    const { status, data } = response;
+
+    if (status === 201) {
+      // El subsidio se creó con éxito
+      return data;
+    } else {
+      // Manejar otros códigos de estado si es necesario
+      throw new Error(`Error al crear el subsidio. Estado: ${status}`);
+    }
+  } catch (error) {
+    console.error("Error creating subsidy:", error);
+    throw new Error(
+      "Error al crear el subsidio. Inténtalo de nuevo más tarde."
+    );
+  }
+};
 
 export const deleteSubsidy = async (subsidyId) => {
-    try {
-        const response = await axios.delete(`/subsidies/${subsidyId}`);
-        return response.data.data;
-    } catch (error) {
-        console.error(`There was an error deleting the subsidy with ID ${subsidyId}: `, error);
-        throw error;
-    }
+  try {
+    const response = await axios.delete(`/subsidies/${subsidyId}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(
+      `There was an error deleting the subsidy with ID ${subsidyId}: `,
+      error
+    );
+    throw error;
+  }
 };
 
 export const modifySubsidy = async (subsidyId, updatedData) => {
-    try {
-        const response = await axios.put(`/subsidies/${subsidyId}`, updatedData);
-        return response.data.data;
-    } catch (error) {
-        console.error(`There was an error modifying the subsidy with ID ${subsidyId}: `, error);
-        throw error;
-    }
+  try {
+    const response = await axios.put(`/subsidies/${subsidyId}`, updatedData);
+    return response.data.data;
+  } catch (error) {
+    console.error(
+      `There was an error modifying the subsidy with ID ${subsidyId}: `,
+      error
+    );
+    throw error;
+  }
 };

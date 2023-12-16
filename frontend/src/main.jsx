@@ -8,6 +8,8 @@ import Root from './routes/Root.jsx';
 import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
 import ReviewPage from './routes/ReviewPage.jsx';
+import CreateSubsidyPage from './routes/CreateSubsidyPage.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -22,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: 'subsidies',
         element: <SubsidyPage />,
+      },
+      {
+        path: 'createSubsidy',
+        element: <CreateSubsidyPage />,
       },
       {
         path: 'applications',
