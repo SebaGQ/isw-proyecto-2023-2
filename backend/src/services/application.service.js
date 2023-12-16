@@ -118,7 +118,7 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     if (comments.length === 0) {
       comments.push("La postulación cumple con los requisitos de la pauta.");
       //Se define el estado de revisión en 'Aceptado'
-      statusReview = AVAILABILITY[1];
+      statusReview = AVAILABILITY[3];
     }
 
     const newReview = new Review({
