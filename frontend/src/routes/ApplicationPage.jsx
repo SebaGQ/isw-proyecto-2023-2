@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { fetchApplicationsByUser } from '../services/application.service';
+import { fetchReviewsByApplication } from '../services/review.service';
 import DetailsModal from '../components/DetailsModal';
 import Modal from '../components/Modal';
 import AppealForm from '../components/AppealForm';
@@ -35,13 +36,16 @@ const ApplicationPage = () => {
         getApplicationsByUser();
     }, [getApplicationsByUser]);
 
-    const refetchApplications = () => {
-        getApplicationsByUser();
-    };
-
-    const handleDetailsClick = (applicationData) => {
+    const handleDetailsClick = async (applicationData) => {
         setSelectedApplicationData(applicationData);
         setIsDetailsOpen(true);
+
+        try {
+            const reviewsData = await fetchReviewsByApplication(applicationData.application.id);
+            setSelectedApplicationData({ ...applicationData, reviews: reviewsData });
+        } catch (error) {
+            console.error('Error fetching reviews:', error);
+        }
     };
 
     const handleAppealClick = (applicationData) => {
@@ -73,34 +77,34 @@ const ApplicationPage = () => {
                     </tr>
                 </thead>
                 <tbody>
-                {applications.length > 0 ? (
-                    applications.map(({ application, review }) => (
-                        <tr key={application._id}>
-                            <td>{application.subsidyId.name}</td>
-                            <td>{application.status}</td>
-                            <td>{application.socialPercentage}%</td>
-                            <td>{application.members}</td>
-                            <td>
-                                <button onClick={() => handleDetailsClick({ application, review })}>Ver Detalles</button>
-                                {application.status === 'Rechazado' && (
-                                    <button className="btn-appeal" onClick={() => handleAppealClick({ application, review })}>Apelar</button>
-                                )}
-                            </td>
+                    {applications.length > 0 ? (
+                        applications.map(({ application, review }) => (
+                            <tr key={application._id}>
+                                <td>{application.subsidyId.name}</td>
+                                <td>{application.status}</td>
+                                <td>{application.socialPercentage}%</td>
+                                <td>{application.members}</td>
+                                <td>
+                                    <button onClick={() => handleDetailsClick({ application, review })}>Ver Detalles</button>
+                                    {application.status === 'Rechazado' && (
+                                        <button className="btn-appeal" onClick={() => handleAppealClick({ application, review })}>Apelar</button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5">No hay postulaciones disponibles.</td>
                         </tr>
-                    ))
-                ) : (
-                    <tr>
-                        <td colSpan="5">No hay postulaciones disponibles.</td>
-                    </tr>
-                )}
-            </tbody>
+                    )}
+                </tbody>
             </table>
             {isDetailsOpen && selectedApplicationData && (
                 <DetailsModal
                     isOpen={isDetailsOpen}
                     onClose={() => setIsDetailsOpen(false)}
                     application={selectedApplicationData.application}
-                    review={selectedApplicationData.review}
+                    reviews={selectedApplicationData.reviews}
                 />
             )}
             {isAppealOpen && selectedApplicationData && (

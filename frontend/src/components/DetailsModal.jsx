@@ -1,7 +1,7 @@
 import React from 'react';
-import Modal from './Modal'; // Asegúrate de que este componente ya esté creado y funcional
+import Modal from './Modal';
 
-const DetailsModal = ({ isOpen, onClose, application, review }) => {
+const DetailsModal = ({ isOpen, onClose, application, reviews }) => {
     if (!application) return null;
 
     return (
@@ -13,18 +13,28 @@ const DetailsModal = ({ isOpen, onClose, application, review }) => {
                 <p><strong>Número de Miembros:</strong> {application.members}</p>
                 <p><strong>Fecha de Postulación:</strong> {new Date(application.applicationDate).toLocaleDateString()}</p>
                 
-                {application.status === 'Rechazado' && review && review.comments && (
-                    <>
-                        <h2>Motivos del Rechazo</h2>
-                        <ul>
-                            {review.comments.map((comment, index) => (
-                                <li key={index}>{comment}</li>
+                {/* Sección de Historial */}
+                <h3>Historial</h3>
+                {reviews && reviews.length > 0 ? (
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Estado</th>
+                                <th>Usuario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {reviews.map((review, index) => (
+                                <tr key={index}>
+                                    <td>{review.state}</td>
+                                    <td>{review.userId}</td>
+                                </tr>
                             ))}
-                        </ul>
-                    </>
+                        </tbody>
+                    </table>
+                ) : (
+                    <p>No hay revisiones disponibles.</p>
                 )}
-
-                {/* Otra información de revisión si es necesario */}
             </div>
         </Modal>
     );

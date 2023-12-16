@@ -6,7 +6,12 @@ const reviewSchema = new mongoose.Schema({
     applicationId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Application",
-        required: true,
+        required: false,
+    },
+    appealId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Application",
+        required: false,
     },
     comments: [{
         type: String,

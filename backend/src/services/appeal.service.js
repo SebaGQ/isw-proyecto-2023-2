@@ -41,6 +41,8 @@ async function createAppeal(userEmail, postData) {
       newMemberRUTs: postData.newMemberRUTs
     });
 
+    await newAppeal.save();
+
     //Se actualiza la postulación con los valores nuevos
     application.socialPercentage = newAppeal.newSocialPercentage;
     application.members = newAppeal.newMembers;
@@ -50,7 +52,7 @@ async function createAppeal(userEmail, postData) {
     const guideline = await Guideline.findById(subsidy.guidelineId);
 
     const newReview = new Review({
-      applicationId: postData.postId,
+      appealId: newAppeal._id,
       comments: [],
       status: AVAILABILITY[1],
       origin: "Apelación",
@@ -74,7 +76,6 @@ async function createAppeal(userEmail, postData) {
 
     application.status = newReview.status;
 
-    await newAppeal.save();
     await application.save();
     await newReview.save();
 
