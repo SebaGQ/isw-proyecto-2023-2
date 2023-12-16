@@ -101,6 +101,7 @@
   background-color: #cccccc; /* Gris */
   color: #666666; /* Texto más oscuro para mejor contraste */
   cursor: not-allowed;
+  margin-bottom: 8px;
 }
 
 .apply-button.disabled:hover {

@@ -16,13 +16,12 @@ const AppealForm = ({ applicationId, onClose, onAppealSuccess }) => {
 
         try {
             await postAppeal(appealData);
-            onClose(); // Cierra el formulario después de enviar la apelación
+            onClose();
             if (onAppealSuccess) {
-                onAppealSuccess(); // Llama a la función para refrescar la lista de postulaciones
+                onAppealSuccess();
             }
         } catch (error) {
             console.error('Error al enviar la apelación:', error);
-            // Manejar el error mostrando un mensaje al usuario si es necesario
         }
     };
 

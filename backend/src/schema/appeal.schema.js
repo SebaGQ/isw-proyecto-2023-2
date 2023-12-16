@@ -44,7 +44,7 @@ const appealBodySchema = Joi.object({
     .min(1)
     .messages({
       "number.base": "Los nuevos miembros deben ser un número.",
-      "number.min": "Debe haber al menos un nuevo miembro.",
+      "number.min": "Debe haber al menos un miembro.",
     }),
 
   comments: Joi.array().items(
