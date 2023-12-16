@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-// Asegúrate de tener la función apropiada para enviar la apelación
 import { postAppeal } from '../services/appeal.service'; 
 import '../styles/ApplicationForm.css';
 
-const AppealForm = ({ applicationId, onClose }) => {
+const AppealForm = ({ applicationId, onClose, onAppealSuccess }) => {
     const [newSocialPercentage, setNewSocialPercentage] = useState('');
     const [newMembers, setNewMembers] = useState('');
 
@@ -17,10 +16,12 @@ const AppealForm = ({ applicationId, onClose }) => {
 
         try {
             await postAppeal(appealData);
-            onClose(); // Cierra el formulario después de enviar la apelación
+            onClose();
+            if (onAppealSuccess) {
+                onAppealSuccess();
+            }
         } catch (error) {
             console.error('Error al enviar la apelación:', error);
-            // Manejar el error mostrando un mensaje al usuario si es necesario
         }
     };
 

@@ -29,12 +29,7 @@ const appealSchema = new mongoose.Schema({
     min: 1,
   },
   //El appeal no deberia tener los comentarios ni result, el review deberia tener comments
-  comments: [{
-    type: String,
-  }],
-  result: [{
-    type: String,
-  }],
+
 }, {
   timestamps: true,
 });

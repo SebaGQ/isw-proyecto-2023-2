@@ -36,12 +36,16 @@ function validarRUT(rut) {
       Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
       se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
     */ 
-async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members) {
+async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members,userEmail) {
   try {   
-    const user = await User.findOne({ rut: rut[0] });
+    //El usuario no se debe buscar por el primer rut ingresado
+    //const user = await User.findOne({ rut: rut[0] });
+
+    //como debe ser el usuario q está postulando se saca del token
+    const user = await User.findOne({ email:userEmail});
+
     if (!user) return [null, "Usuario no encontrado"];
 
-    console.log("service appeal");
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
     // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
@@ -74,16 +78,22 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     //Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
     let comments = [];
+        // Se define por defectos los estados de la revision, asi si esta correcto todas seran true
+        let statusPercentage = true;
+        let statusMembers = true;
+        let statusDate = true;
 
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
       comments.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
+      statusPercentage = false;
     } 
     // validacion de integrantes
     if (members < guideline.minMembers) {
       status = AVAILABILITY[2];
       comments.push("La cantidad de integrantes es menor al mínimo requerido por las pautas del subsidio.");
+      statusMembers = false;
     }
 
     const applicationDateObj = new Date(applicationDate);
@@ -91,6 +101,7 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     if (applicationDateObj > subsidy.dateEnd || applicationDateObj < subsidy.dateStart) {
       status = AVAILABILITY[2];
       comments.push("La fecha de postulación no está dentro del rango permitido por el subsidio.");
+      statusDate = false;
     }
 
     const newApplication = new Application({
@@ -111,7 +122,7 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     if (comments.length === 0) {
       comments.push("La postulación cumple con los requisitos de la pauta.");
       //Se define el estado de revisión en 'Aceptado'
-      statusReview = AVAILABILITY[1];
+      statusReview = AVAILABILITY[3];
     }
 
     const newReview = new Review({
@@ -119,6 +130,9 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
       comments,
       statusReview,
       origin: "Postulación",
+      statusPercentage,
+      statusMembers,
+      statusDate,
     });
 
     await newReview.save();
@@ -169,7 +183,7 @@ async function getApplicationsByUserEmail(userEmail) {
     const applications = await Application.find({ userId: user._id }).populate("subsidyId");
     
     const applicationsWithDetails = await Promise.all(applications.map(async (application) => {
-      //Si la postulación fue rechazada, la revisión   de por qué fue rechazada
+      //Si la postulación fue rechazada, la revisión de por qué fue rechazada
       if (application.status === AVAILABILITY[2]) {
         const review = await Review.findOne({ applicationId: application._id });
         return { application, review };

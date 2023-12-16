@@ -2,6 +2,7 @@
 
 /** Modelo de datos 'User' */
 const User = require("../models/user.model.js");
+const Role = require('../models/role.model.js');
 
 /** Modulo 'jsonwebtoken' para crear tokens */
 const jwt = require("jsonwebtoken");
@@ -22,10 +23,12 @@ const { handleError } = require("../utils/errorHandler");
 async function login(user) {
   try {
     const { email, password } = user;
+    
 
     const userFound = await User.findOne({ email: email })
-      .populate("roles","firstName")
+      .populate("roles", "firstName")
       .exec();
+      
     if (!userFound) {
       return [null, null, "El usuario y/o contraseña son incorrectos"];
     }
@@ -38,9 +41,20 @@ async function login(user) {
     if (!matchPassword) {
       return [null, null, "El usuario y/o contraseña son incorrectos"];
     }
+    const userRoles = userFound.roles;
+    const roleIds = userRoles.map(role => role._id); // Array de IDs de roles
+    const roleDocuments = await Role.find({ _id: { $in: roleIds } }); // Buscar documentos de roles basados en los IDs
 
+    const roleNames = roleDocuments.map(role => role.name); // Obtener los nombres de los roles
+
+    
     const accessToken = jwt.sign(
-      { email: userFound.email, roles: userFound.roles , firstName: userFound.firstName },
+      {
+        
+        email: userFound.email,
+        roles: roleNames,
+        firstName: userFound.firstName,
+      },
       ACCESS_JWT_SECRET,
       {
         expiresIn: "1d",
@@ -59,6 +73,7 @@ async function login(user) {
   } catch (error) {
     handleError(error, "auth.service -> signIn");
   }
+  
 }
 
 /**
@@ -87,7 +102,11 @@ async function refresh(cookies) {
         if (!userFound) return [null, "No usuario no autorizado"];
 
         const accessToken = jwt.sign(
-          { email: userFound.email, roles: userFound.roles },
+          {
+            email: userFound.email,
+            roles: roleName,
+            firstName: userFound.firstName,
+          },
           ACCESS_JWT_SECRET,
           {
             expiresIn: "1d",

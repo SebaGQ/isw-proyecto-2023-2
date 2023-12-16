@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { postApplication } from "../services/application.service";
 import "../styles/ApplicationForm.css";
 import { validateRUT } from "validar-rut";
@@ -7,7 +7,21 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
   const [socialPercentage, setSocialPercentage] = useState("");
   const [members, setMembers] = useState("");
   const [familyMembers, setFamilyMembers] = useState([]);
+    const [memberRUTs, setMemberRUTs] = useState([]);
 
+    // Actualiza los RUTs cuando cambia la cantidad de miembros
+    useEffect(() => {
+        setMemberRUTs(new Array(Number(members)).fill(''));
+    }, [members]);
+
+    // Maneja el cambio en los campos de RUT
+    const handleRUTChange = (index, value) => {
+        const updatedRUTs = [...memberRUTs];
+        updatedRUTs[index] = value;
+        setMemberRUTs(updatedRUTs);
+    };
+
+    // Maneja el envío del formulario
   const formatRut = (value) => {
     // Elimina caracteres no numéricos
     const numericValue = value.replace(/\D/g, "");
@@ -65,6 +79,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
       subsidyId,
       socialPercentage: Number(socialPercentage),
       members: Number(members),
+            rut: memberRUTs,
     };
 
     try {
@@ -79,7 +94,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
   return (
     <div className="application-form-container">
       <h2 className="form-title">Postulación para: {subsidyName}</h2>{" "}
-      {/* Título del formulario */}
+     
       <form onSubmit={handleSubmit} className="application-form">
         <div className="form-group">
           <label htmlFor="rut">Rut</label>
@@ -114,7 +129,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
             type="number"
             value={members}
             onChange={(e) => setMembers(e.target.value)}
-            placeholder="Ingresa el número de miembros de tu familia."
+            placeholder="Ingresa el número de miembros de tu familia"
             required
             className="form-control"
             min={0}
@@ -136,6 +151,20 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
               className="form-control"
             />
           </div>
+                {memberRUTs.map((_, index) => (
+                    <div className="form-group" key={index}>
+                        <label htmlFor={`memberRUT-${index}`}>RUT Miembro {index + 1}</label>
+                        <input
+                            id={`memberRUT-${index}`}
+                            type="text"
+                            value={memberRUTs[index]}
+                            onChange={(e) => handleRUTChange(index, e.target.value)}
+                            placeholder="Ingresa el RUT"
+                            required
+                            className="form-control"
+                        />
+                    </div>
+                ))}
         ))}
 
         {/* Botón para agregar más miembros */}
