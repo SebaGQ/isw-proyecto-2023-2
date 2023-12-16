@@ -2,7 +2,8 @@
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    width: 350px; /* Ajusta la anchura del sidebar */
+    width: 28%; /* Ajusta la anchura del sidebar */
+    max-width: 300px; /* Ajusta la anchura mínima del sidebar */
     height: 100vh;
     flex-shrink: 0; /* Evita que el NavBar cambie su tamaño */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

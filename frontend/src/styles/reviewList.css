@@ -1,40 +1,57 @@
+/* ReviewList.css */
 
 .review-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    margin: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; /* Contorno más oscuro */
 }
 
+
 .review-item {
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 5px;
+    border-bottom: 1px solid #eaeaea;
+    padding: 10px 0;
+    margin-bottom: 10px;
+    border: 5px solid #dfdfdf; /* Contorno más oscuro */
+    border-radius: 8px;
+}
+
+.review-item:last-child {
+    border-bottom: none;
 }
 
 .review-title {
-    font-size: 1.2rem;
+    color: #0056b3; /* Azul */
     margin-bottom: 5px;
 }
 
-.review-comments {
-    font-size: 1rem;
+.review-applicant,
+.review-subsidy,
+.review-socialPercentage,
+.review-applicationDate,
+.review-members,
+.review-comments,
+.review-status,
+.review-origin {
+    color: #333333;
+    font-size: 0.9em;
     margin-bottom: 5px;
-}
-
-.review-status {
-    font-size: 1rem;
-    margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 .edit-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
+    background-color: #ffc107; /* Amarillo */
+    color: black;
     border: none;
-    border-radius: 5px;
+    padding: 8px 15px;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .edit-button:hover {
-    background-color: #45a049;
+    background-color: #e0a800; /* Amarillo oscuro */
 }
+

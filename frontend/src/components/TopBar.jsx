@@ -28,10 +28,8 @@ const TopBar = ({ showNav, setShowNav }) => {
                 <Bars3CenterLeftIcon
                     className="icon"
                     onClick={() => setShowNav(!showNav)}
-                />
-
-                Menu
-
+                    />
+                    <p>Menu</p>
             </div>
             <div className="topbar-user">
                 <span>{user.firstName}</span>

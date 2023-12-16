@@ -11,18 +11,22 @@ const subsidyBodySchema = Joi.object({
   name: Joi.string()
     .trim()
     .required()
+    .pattern(/^[A-Za-z0-9\s]+$/)
     .messages({
       "string.base": "El nombre debe ser de tipo texto.",
       "string.empty": "El nombre no puede estar vacío.",
       "any.required": "El nombre es obligatorio.",
+      "string.pattern.base": "El nombre no puede contener caracteres especiales.",
     }),
   description: Joi.string()
     .trim()
+    .pattern(/^[A-Za-z0-9\s]+$/)
     .required()
     .messages({
       "string.base": "La descripción debe ser de tipo texto.",
       "string.empty": "La descripción no puede estar vacía.",
       "any.required": "La descripción es obligatoria.",
+      "string.pattern.base": "La descripción no puede contener caracteres especiales.",
     }),
   amount: Joi.number()
     .required()

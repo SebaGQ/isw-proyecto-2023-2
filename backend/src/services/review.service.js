@@ -135,7 +135,8 @@ async function getReviewByApplicationId(applicationId) {
 async function getReviews() {
   try {
     // Obtener el objeto de review y la informacion de application
-    const reviews = await Review.find().populate("applicationId");
+    const reviews = await Review.find().populate({
+      path: "applicationId", populate: { path: "subsidyId" } });
     // Verificar que existen review
     if (!reviews) throw new Error("No hay revisiones");
 
