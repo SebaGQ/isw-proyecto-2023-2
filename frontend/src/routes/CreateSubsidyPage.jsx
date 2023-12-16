@@ -46,25 +46,12 @@ const CreateSubsidyPage = () => {
 
       // Redirige a la página de subsidios después de la creación exitosa
       navigate("/subsidies");
-    } catch (error) {
-      console.error("Error creating subsidy:", error);
 
-      if (error.response) {
-        // Si hay una respuesta del servidor
-        if (error.response.data && error.response.data.message) {
-          // Si la respuesta del servidor incluye un mensaje, muestra ese mensaje
-          setError(error.response.data.message);
-        } else {
-          // Si no hay un mensaje específico, muestra el status y los detalles del error
-          setError(
-            `Error: ${error.response.status} - ${error.response.statusText}`
-          );
-          console.error("Details:", error.response.data);
-        }
-      } else {
-        // Si no hay una respuesta del servidor, muestra un mensaje genérico
-        setError("Error al crear el subsidio. Por favor, inténtalo de nuevo.");
-      }
+    } catch (error) {
+      console.error("Error creating subsidy desde la página:", error);
+
+      // Muestra un toast de error con el mensaje recibido desde el servicio
+      toast.error(error.message);
     }
   };
 

@@ -12,12 +12,17 @@ import "../styles/subsidyPage.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext";
 
 const SubsidyPage = () => {
   const [subsidies, setSubsidies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const { user } = useAuth();
+  const isAdmin = user.roles[0] === "admin";
+  console.log(isAdmin)
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentSubsidyId, setCurrentSubsidyId] = useState(null);
@@ -99,7 +104,10 @@ const SubsidyPage = () => {
       <div className="subsidy-page-header">
         <h1>Subsidios y Beneficios</h1>
         <p>Estos son los subsidios con los que cuenta el municipio</p>
+        { isAdmin? ( <div>
         <button onClick={handleCreateSubsidyClick}>Crear Subsidio</button>
+        </div>
+        ): ""}
       </div>
       <div className="card-container">
         {subsidies.map((subsidy) => (

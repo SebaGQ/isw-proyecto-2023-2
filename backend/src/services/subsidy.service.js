@@ -8,7 +8,7 @@ async function createSubsidy(subsidyData) {
   try {
     const newSubsidy = new Subsidy(subsidyData);
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 2);
+    currentDate.setDate(currentDate.getDate() - 1);
     const currentDateUTC = new Date(currentDate.toISOString());
 
     console.log(currentDate);

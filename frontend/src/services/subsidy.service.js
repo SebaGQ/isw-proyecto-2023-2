@@ -20,17 +20,24 @@ export const createSubsidy = async (subsidyData) => {
     const { status, data } = response;
 
     if (status === 201) {
-      // El subsidio se creó con éxito
       return data;
     } else {
-      // Manejar otros códigos de estado si es necesario
       throw new Error(`Error al crear el subsidio. Estado: ${status}`);
     }
   } catch (error) {
-    console.error("Error creating subsidy:", error);
-    throw new Error(
-      "Error al crear el subsidio. Inténtalo de nuevo más tarde."
-    );
+    console.error("Error creating subsidy desde el service:", error);
+    console.error("Error creating subsidy desde el service:", error);
+
+    if (error.response && error.response.data) {
+      // Si la respuesta contiene datos, obtenemos el mensaje de error
+      const errorMessage = error.response.data.message;
+  
+      // Lanza un nuevo error con el mensaje para que pueda ser manejado en el componente
+      throw new Error(errorMessage);
+    } else {
+      // Si no hay datos en la respuesta, lanza un error genérico
+      throw new Error("Error al crear el subsidio. Inténtalo de nuevo más tarde. desde el service");
+    }
   }
 };
 
