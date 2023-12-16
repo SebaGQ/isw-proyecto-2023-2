@@ -2,6 +2,7 @@ import axios from './root.service';
 import cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 
+
 export const login = async ({ email, password }) => {
   try {
     const response = await axios.post('auth/login', {
@@ -16,6 +17,8 @@ export const login = async ({ email, password }) => {
       console.log(decodedToken);
       console.log (email);
       console.log (firstName);
+      console.log(roles);
+      
       
       localStorage.setItem('user', JSON.stringify({ email, firstName, roles }));
       axios.defaults.headers.common[

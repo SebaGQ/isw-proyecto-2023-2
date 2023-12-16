@@ -3,6 +3,8 @@ import { logout } from '../services/auth.service';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import TopBar from '../components/TopBar';
 import NavBar from '../components/NavBar';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Root() {
   return (
@@ -30,6 +32,7 @@ function PageRoot() {
         <main className="main-content">
           <Outlet /> {/* Aquí se renderizarán las rutas hijas */}
         </main>
+        <ToastContainer />
       </div>
     </div>
   );

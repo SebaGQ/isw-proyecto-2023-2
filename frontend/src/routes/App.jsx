@@ -1,5 +1,6 @@
 import '../styles/App.css';
 function App() {
+  
   return (
     <>
       <h1>Postulación para Subsidios y Beneficios</h1>

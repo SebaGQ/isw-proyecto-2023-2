@@ -8,12 +8,15 @@ async function createSubsidy(subsidyData) {
   try {
     const newSubsidy = new Subsidy(subsidyData);
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() - 1); 
+    currentDate.setDate(currentDate.getDate() - 2);
+    const currentDateUTC = new Date(currentDate.toISOString());
 
+    console.log(currentDate);
+    console.log(newSubsidy.dateStart);
     //Esto se comentó para poder probar el añadir subsidios vencidos
-    //if(new Date(newSubsidy.dateStart) < currentDate){
-    //  return  [null, "La fecha de inicio debe ser igual o mayor a la fecha actual."]
-    //}
+    if(new Date(newSubsidy.dateStart) < currentDateUTC){
+      return  [null, "La fecha de inicio debe ser igual o mayor a la fecha actual."]
+    }
 
     await newSubsidy.save();
     return [newSubsidy, null];
