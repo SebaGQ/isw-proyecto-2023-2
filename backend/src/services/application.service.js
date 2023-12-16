@@ -36,12 +36,17 @@ function validarRUT(rut) {
       Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
       se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
     */ 
-async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members) {
+async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members,userEmail) {
   try {   
-    const user = await User.findOne({ rut: rut[0] });
-    if (!user) return [null, "Usuario no encontrado"];
+    //El usuario no se debe buscar por el primer rut ingresado
+    //const user = await User.findOne({ rut: rut[0] });
 
-    console.log("service appeal");
+    //como debe ser el usuario q está postulando se saca del token
+    const user = await User.findOne({ email:userEmail});
+    
+    //Validacion innecesaria
+    //if (!user) return [null, "Usuario no encontrado"];
+
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
     // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
@@ -179,7 +184,7 @@ async function getApplicationsByUserEmail(userEmail) {
     const applications = await Application.find({ userId: user._id }).populate("subsidyId");
     
     const applicationsWithDetails = await Promise.all(applications.map(async (application) => {
-      //Si la postulación fue rechazada, la revisión   de por qué fue rechazada
+      //Si la postulación fue rechazada, la revisión de por qué fue rechazada
       if (application.status === AVAILABILITY[2]) {
         const review = await Review.findOne({ applicationId: application._id });
         return { application, review };
