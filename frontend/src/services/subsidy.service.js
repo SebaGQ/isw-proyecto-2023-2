@@ -54,6 +54,23 @@ export const deleteSubsidy = async (subsidyId) => {
   }
 };
 
+// Agrega una nueva función para archivar el subsidio
+export const archiveSubsidy = async (subsidyId) => {
+  try {
+    const response = await axios.patch(`/subsidies/${subsidyId}`, { archive: true });
+    const { status, data } = response;
+
+    if (status === 200) {
+      return data;
+    } else {
+      throw new Error(`Error al archivar el subsidio. Estado: ${status}`);
+    }
+  } catch (error) {
+    console.error("Error archiving subsidy:", error);
+    throw new Error("Error al archivar el subsidio. Por favor, inténtalo de nuevo.");
+  }
+};
+
 export const modifySubsidy = async (subsidyId, updatedData) => {
   try {
     const response = await axios.put(`/subsidies/${subsidyId}`, updatedData);

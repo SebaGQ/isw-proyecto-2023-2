@@ -78,10 +78,34 @@ async function deleteSubsidy(subsidyId) {
   }
 }
 
+async function archiveSubsidy(subsidyId) {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(subsidyId)) {
+      return [null, "ID de subsidio no válido"];
+    }
+    
+    const subsidy = await Subsidy.findByIdAndUpdate(
+      subsidyId,
+      { $set: { archive: true } },
+      { new: true } // Para devolver el subsidio actualizado
+    );
+
+    if (!subsidy) {
+      return [null, "Subsidio no encontrado"];
+    }
+
+    return [subsidy, null];
+  } catch (error) {
+    handleError(error, "subsidy.service -> archiveSubsidy");
+    return [null, "Error al archivar el subsidio"];
+  }
+}
+
 module.exports = {
   createSubsidy,
   getSubsidies,
   getSubsidyById,
   updateSubsidy,
   deleteSubsidy,
+  archiveSubsidy,
 };

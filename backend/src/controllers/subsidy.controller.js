@@ -68,10 +68,26 @@ async function deleteSubsidy(req, res) {
   }
 }
 
+async function archiveSubsidy(req, res) {
+  try {
+    const [archivedSubsidy, archiveError] = await SubsidyService.archiveSubsidy(req.params.id);
+    
+    if (archiveError) {
+      respondError(req, res, 404, archiveError);
+    } else {
+      respondSuccess(req, res, 200, archivedSubsidy);
+    }
+  } catch (error) {
+    handleError(error, "subsidy.controller -> archiveSubsidy");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
 module.exports = {
   createSubsidy,
   getSubsidies,
   getSubsidyById,
   updateSubsidy,
   deleteSubsidy,
+  archiveSubsidy,
 };

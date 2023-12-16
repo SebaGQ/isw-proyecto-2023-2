@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   fetchSubsidies,
   deleteSubsidy,
+  archiveSubsidy,
   modifySubsidy,
 } from "../services/subsidy.service";
 import Card from "../components/Card";
@@ -61,24 +62,28 @@ const SubsidyPage = () => {
     getSubsidies();
   }, []);
 
-  const handleDeleteSubsidy = async (subsidyId, subsidyName) => {
-    try {
-      // Llama a la función para eliminar el subsidio
-      await deleteSubsidy(subsidyId);
-  
-      // Elimina directamente el subsidio del estado sin buscarlo
-      setSubsidies((prevSubsidies) => prevSubsidies.filter((subsidy) => subsidy._id !== subsidyId));
-  
-      // Muestra un mensaje de tostada con el nombre del subsidio
-      toast.success(`Subsidio "${subsidyName}" eliminado correctamente`, { autoClose: 2000 }); // Auto cierra la tostada después de 2000 milisegundos (opcional)
-  
-      // Puedes realizar otras acciones después de eliminar el subsidio
-  
-    } catch (error) {
-      console.error("Error deleting subsidy:", error);
-      setError("Error al eliminar el subsidio. Por favor, inténtalo de nuevo.");
+// Modifica tu función para manejar la eliminación/archivado en el componente
+const handleDeleteSubsidy = async (subsidyId, subsidyName) => {
+  try {
+    const confirmed = window.confirm(`¿Estás seguro de archivar el subsidio "${subsidyName}"?`);
+    
+    if (!confirmed) {
+      // El usuario canceló la operación
+      return;
     }
-  };
+
+    // Llama a una función que actualiza el subsidio a archivado
+    await archiveSubsidy(subsidyId);
+
+    // Puedes mostrar un mensaje de éxito o manejarlo de alguna otra manera
+    toast.success(`Subsidio "${subsidyName}" archivado correctamente.`);
+
+  } catch (error) {
+
+    toast.error("Error archiving subsidy:", error);
+    // Maneja el error, posiblemente mostrando un mensaje al usuario
+  }
+};
 
   const handleModifySubsidy = async (subsidyId) => {
     try {
