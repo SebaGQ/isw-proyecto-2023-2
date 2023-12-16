@@ -38,6 +38,7 @@ async function createAppeal(userEmail, postData) {
       status: AVAILABILITY[1],
       newSocialPercentage: postData.newSocialPercentage,
       newMembers: postData.newMembers,
+      newMemberRUTs: postData.newMemberRUTs
     });
 
     //Se actualiza la postulación con los valores nuevos
