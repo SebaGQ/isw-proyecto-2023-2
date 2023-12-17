@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/TopBar.css'; // Asegúrate de tener este archivo de estilos en tu proyecto.
-import { Bars3CenterLeftIcon, ChevronDownIcon, PencilIcon } from "@heroicons/react/24/solid";
+import { Bars3CenterLeftIcon, LockOpenIcon } from "@heroicons/react/24/solid";
 import { logout } from '../services/auth.service';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -35,10 +35,9 @@ const TopBar = ({ showNav, setShowNav }) => {
                 <img src="https://concepcionparticipa.cl/img/LogoConcepcion.png" alt="logo"/>
             </div>
             <div className="topbar-user">
-                <span>{user.firstName}</span>
-                <ChevronDownIcon className="icon" />
+                <span>¡ Hola, {user.firstName} {user.lastName}!</span>
                 <div className="logout" onClick={handleLogout}>
-                    <PencilIcon className="icon" />
+                    <LockOpenIcon className="icon" />
                     Cerrar sesión
                 </div>
             </div>

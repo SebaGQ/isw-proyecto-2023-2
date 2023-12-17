@@ -35,6 +35,12 @@ const NavBar = () => {
                         <span>Revisiones</span>
                     </Link>
                 )}
+                {isAdmin && (
+                    <Link to="/admin-applications" className="nav-item">
+                        <DocumentTextIcon className="nav-icon" />
+                        <span>Postulaciones</span>
+                    </Link>
+                )}
                 {/* Agrega más elementos de navegación según sea necesario */}
             </div>
         </div>
