@@ -5,6 +5,8 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 80vh;
 }
 
 .application-form .form-group {
@@ -57,3 +59,6 @@
 .btn-secondary:hover {
     background-color: #545b62;
 }
+.invalid-rut {
+    border: 2px solid red;
+  }

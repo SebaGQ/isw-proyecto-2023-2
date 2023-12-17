@@ -36,16 +36,14 @@ function validarRUT(rut) {
       Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
       se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
     */ 
-async function createApplication(rut,subsidyId, socialPercentage, applicationDate, members,userEmail) {
+async function createApplication(firstName, lastName1, lastName2, rutUser,subsidyId, socialPercentage, applicationDate, members, rutsMembers,userEmail) {
   try {   
     //El usuario no se debe buscar por el primer rut ingresado
     //const user = await User.findOne({ rut: rut[0] });
 
     //como debe ser el usuario q está postulando se saca del token
     const user = await User.findOne({ email:userEmail});
-
     if (!user) return [null, "Usuario no encontrado"];
-
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
     // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
@@ -62,16 +60,20 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
     
+    // Verificar que el rutUser ingresado sea un rut valido, a través de un calculo matematico
+    if(!validarRUT(rutUser)){
+      return [null, "El rut ingresado es invalido"];
+    }
     // Se verifica por cada item en el arreglo, que el rut sea valido, a traves de un calculo matematico.      
-    for(const ruts of rut){
+    for(const ruts of rutsMembers){
       if(!validarRUT(ruts)){
         return [null, "Uno o más rut es invalido"];
       }
     }
     // Se agrega validacion de cantidad de rut igual a la cantidad de miembros.
-    console.log(rut.length);
-    console.log(members);
-    if (rut.length !== members) {
+    //console.log(rut.length);
+    //console.log(members);
+    if (rutsMembers.length !== members) {
       return [null, "Los ruts y miembros ingresados deben ser iguales"];
       }
 
@@ -82,7 +84,7 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
         let statusPercentage = true;
         let statusMembers = true;
         let statusDate = true;
-
+    
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
@@ -105,7 +107,10 @@ async function createApplication(rut,subsidyId, socialPercentage, applicationDat
     }
 
     const newApplication = new Application({
-      rut,
+      firstName,
+      lastName1,
+      lastName2,
+      rutUser,
       subsidyId,
       userId: user._id,
       socialPercentage,
