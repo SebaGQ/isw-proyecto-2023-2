@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { fetchReviews } from '../services/review.service';
 import ReviewList from '../components/ReviewList'; 
-import ReviewModal from '../components/ReviewModal'; // Un componente modal para detalles o edición de revisión
+// import ReviewModal from '../components/ReviewModal'; // Un componente modal para detalles o edición de revisión
 import '../styles/ReviewPage.css';
 import Loading from '../components/Loading';
+import { useNavigate } from 'react-router-dom';
 
 const ReviewPage = () => {
+    const navigate = useNavigate();
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,11 +15,14 @@ const ReviewPage = () => {
     const [selectedReview, setSelectedReview] = useState(null);
     const [editingReview, setEditingReview] = useState(null);
 
-    const handleReviewClick = (review) => {
+  const handleReviewClick = (review) => {
         setSelectedReview(review);
         setIsReviewModalOpen(true);
     };
 
+    const handleCreateReview = () => {
+        navigate('/createreview');
+    };
     const onEditReview = (review) => {
         setEditingReview(review);
         setIsReviewModalOpen(true);
@@ -57,6 +62,7 @@ const ReviewPage = () => {
     return (
         <div className="review-page">
             <h1>Revisiones</h1>
+            <button className="create-review-button" onClick={handleCreateReview}>Crear Revisión</button>
             {/* Aquí puedes incluir un componente de filtrado si es necesario */}
             <ReviewList reviews={reviews} onReviewClick={handleReviewClick} />
             {isReviewModalOpen && selectedReview && (

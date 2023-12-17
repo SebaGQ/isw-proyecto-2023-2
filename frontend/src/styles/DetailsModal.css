@@ -1,0 +1,53 @@
+.custom-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* Espacio entre filas */
+    margin-bottom: 16px; /* Espacio debajo de la tabla */
+}
+
+.custom-table th, .custom-table td {
+    border: 1px solid #ddd;
+    padding: 12px; /* Más espacio interior */
+    text-align: left;
+    background-color: white; /* Fondo blanco para el contenido */
+}
+
+.custom-table th {
+    background-color: #007bff; /* Un azul más vibrante para encabezados */
+    color: white; /* Texto blanco en encabezados */
+    border-radius: 5px 5px 0 0; /* Bordes redondeados para la parte superior de la tabla */
+}
+
+.custom-table tr {
+    border-radius: 8px; /* Bordes redondeados para las filas */
+}
+
+.custom-table td {
+    border: none;
+}
+
+.custom-table tr:nth-child(even) td {
+    background-color: #f9f9f9; /* Alternar colores para las filas */
+}
+
+.custom-table tr:hover td {
+    background-color: #eaeaea; /* Color al pasar el ratón */
+}
+
+.custom-table button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px; /* Más padding para los botones */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s; /* Transición suave para el hover */
+}
+
+.custom-table .socialPercentage,
+.custom-table .members {
+    text-align: center; /* Centra el texto horizontalmente */
+    vertical-align: middle; /* Centra el texto verticalmente */
+}
+    

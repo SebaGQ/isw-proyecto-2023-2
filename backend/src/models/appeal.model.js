@@ -19,6 +19,10 @@ const appealSchema = new mongoose.Schema({
     enum: AVAILABILITY,
     default : AVAILABILITY[0],
   },
+  newMemberRUTs:[{
+    type: String,
+    required: true,
+  }],
   newSocialPercentage: {
     type: Number,
     min: 0,
@@ -29,12 +33,7 @@ const appealSchema = new mongoose.Schema({
     min: 1,
   },
   //El appeal no deberia tener los comentarios ni result, el review deberia tener comments
-  comments: [{
-    type: String,
-  }],
-  result: [{
-    type: String,
-  }],
+
 }, {
   timestamps: true,
 });

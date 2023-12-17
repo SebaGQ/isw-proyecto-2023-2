@@ -29,7 +29,6 @@ async function createAppeal(userEmail, postData) {
     if (applicationError) return [null, applicationError];
     if (!application) return [null, "La postulación asociada no existe"];
 
-    // Validar condiciones
     if (application.status !== AVAILABILITY[2]) return [null, "La postulación debe estar Rechazada para apelar."];
     if (application.userId.toString() !== user._id.toString()) return [null, "La postulación a la que se está apelando debe pertenecer al usuario."];
 
@@ -39,51 +38,49 @@ async function createAppeal(userEmail, postData) {
       status: AVAILABILITY[1],
       newSocialPercentage: postData.newSocialPercentage,
       newMembers: postData.newMembers,
+      newMemberRUTs: postData.newMemberRUTs
     });
 
-    //Se reemplazan los valores nuevos solo si están presentes.
-    if (typeof postData.newSocialPercentage === 'number') {
-      newAppeal.comments.push(`Porcentaje social actualizado de ${application.socialPercentage} a ${postData.newSocialPercentage}%`);
-      application.socialPercentage = postData.newSocialPercentage;
-    }
+    await newAppeal.save();
 
-    if (typeof postData.newMembers === 'number') {
-      newAppeal.comments.push(`Cantidad de miembros actualizada de ${application.members} a ${postData.newMembers}`);
-      application.members = postData.newMembers;
-    }
+    //Se actualiza la postulación con los valores nuevos
+    application.socialPercentage = newAppeal.newSocialPercentage;
+    application.members = newAppeal.newMembers;
 
-    //El campo result debería ser comments y asignarse al Review, no al appeal
-    //el review debe tener el id del appeal
-    
-    
-    //Ahora se validan los nuevos valores según la pauta
-    let result = [];
-    const subsidy = await Subsidy.findById(application.subsidyId)
-    const guideline = await Guideline.findById(subsidy.guidelineId)
-    console.log("Validación de pauta al apelar");
+    let comments = [];
+    const subsidy = await Subsidy.findById(application.subsidyId);
+    const guideline = await Guideline.findById(subsidy.guidelineId);
+
+    const newReview = new Review({
+      applicationId : postData.postId,
+      appealId: newAppeal._id,
+      comments: [],
+      status: AVAILABILITY[1],
+      origin: "Apelación",
+      socialPercentage : newAppeal.newSocialPercentage,
+      members: newAppeal.newMembers,
+    });
 
     if (postData.newSocialPercentage > guideline.maxSocialPercentage) {
-      newAppeal.status = AVAILABILITY[2];
-      result.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
+      newReview.status = AVAILABILITY[2];
+      comments.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
     }
 
     if (postData.newMembers < guideline.minMembers) {
-      newAppeal.status = AVAILABILITY[2];
-      result.push("La cantidad de integrantes es menor al mínimo requerido por las pautas del subsidio.");
+      newReview.status = AVAILABILITY[2];
+      comments.push("La cantidad de integrantes es menor al mínimo requerido por las pautas del subsidio.");
     }
 
-    if (result) {
-      newAppeal.result = result;
-    } else {
-      result.push("La apelación cumple con los requisitos de la pauta.");
+    if (comments.length === 0) {
+      comments.push("La apelación cumple con los requisitos de la pauta.");
     }
 
-    // La postulación tendrá el mismo estado que la apelación, es decir,
-    // Si la apelación es rechazada, entonces la postulación igual, lo mismo si es aceptada.
-    application.status = newAppeal.status;
+    newReview.comments = comments;
 
-    await newAppeal.save();
+    application.status = newReview.status;
+
     await application.save();
+    await newReview.save();
 
     return [newAppeal, null];
   } catch (error) {

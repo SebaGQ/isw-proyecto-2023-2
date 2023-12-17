@@ -2,13 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom'; // Asegúrate de tener react-router-dom instalado para el manejo de rutas
 import '../styles/NavBar.css';
 import { HomeIcon, RectangleGroupIcon, DocumentTextIcon } from '@heroicons/react/24/solid';
+
 import { useAuth } from "../context/AuthContext";
+
 
 const NavBar = () => {
     // Aquí podrías usar algo similar a useRouter de Next.js para determinar la ruta activa
     const { user } = useAuth();
     const isAdmin = user.roles[0] === "admin";
-
+    const isUser = user.roles[0] === "user";
+  
     return (
         <div className="navbar">
             <div className="navbar-header">
@@ -29,14 +32,24 @@ const NavBar = () => {
                     <RectangleGroupIcon className="nav-icon" />
                     <span>Subsidios y Beneficios</span>
                 </Link>
-                <Link to="/applications" className="nav-item">
-                    <RectangleGroupIcon className="nav-icon" />
-                    <span>Mis postulaciones</span>
-                </Link>
-                <Link to="/reviews" className="nav-item">
-                    <DocumentTextIcon className="nav-icon" />
-                    <span>Revisiones</span>
-                </Link>
+                {isUser && (
+                    <Link to="/applications" className="nav-item">
+                        <RectangleGroupIcon className="nav-icon" />
+                        <span>Mis postulaciones</span>
+                    </Link>
+                )}
+                {isAdmin && (
+                    <Link to="/reviews" className="nav-item">
+                        <DocumentTextIcon className="nav-icon" />
+                        <span>Revisiones</span>
+                    </Link>
+                )}
+                {isAdmin && (
+                    <Link to="/admin-applications" className="nav-item">
+                        <DocumentTextIcon className="nav-icon" />
+                        <span>Postulaciones</span>
+                    </Link>
+                )}
                 {/* Agrega más elementos de navegación según sea necesario */}
             </div>
         </div>

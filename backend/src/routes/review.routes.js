@@ -20,7 +20,7 @@ const router = express.Router();
 router.use(authenticationMiddleware);
 
 router.get("/", reviewController.getReviews);
-router.get("/application/:id", authorizationMiddleware.isAdmin, reviewController.getReviewByApplicationId);
+router.get("/application/:id", reviewController.getReviewByApplicationId);
 router.get("/userReview", authorizationMiddleware.isUser, reviewController.getReviewByEmail);
 router.get("/:id", authorizationMiddleware.isAdmin, reviewController.getReviewById);
 router.post("/", authorizationMiddleware.isAdmin, validationMiddleware.validateReviewBody, reviewController.createReview);
