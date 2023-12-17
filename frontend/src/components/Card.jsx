@@ -1,22 +1,32 @@
-import React from 'react';
-import '../styles/Card.css';
+import React from "react";
+import "../styles/Card.css";
 import { useAuth } from "../context/AuthContext";
 
-
-const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements, onDelete, onModify}) => {
+const Card = ({
+  name,
+  type,
+  description,
+  dateEnd,
+  onApply,
+  onViewRequirements,
+  onModify,
+  onArchive,
+  onDelete,
+  showArchivedSubsidies,
+  archiveState,
+}) => {
   const currentDate = new Date();
   const endDate = new Date(dateEnd);
   const isExpired = endDate < currentDate;
   const { user } = useAuth();
   const isAdmin = user.roles[0] === "admin";
-  console.log(isAdmin)
 
   return (
     <div className="card">
       <div className="card-header">
         <h2>{name}</h2>
-        <span className={isExpired ? 'status expired' : 'status available'}>
-          {isExpired ? 'Vencido' : 'Disponible'}
+        <span className={isExpired ? "status expired" : "status available"}>
+          {isExpired ? "Vencido" : "Disponible"}
         </span>
       </div>
       <div className="card-content">
@@ -25,16 +35,45 @@ const Card = ({ name, type, description, dateEnd, onApply, onViewRequirements, o
       <div className="card-footer">
         <p>{type}</p>
         {isExpired ? (
-          <button disabled className="apply-button card-button disabled">Postulaciones Cerradas</button>
+          <button disabled className="apply-button card-button disabled">
+            Postulaciones Cerradas
+          </button>
         ) : (
-          <button onClick={onApply} className="apply-button card-button">Postular</button>
+          <button onClick={onApply} className="apply-button card-button">
+            Postular
+          </button>
         )}
-        <button onClick={onViewRequirements} className="view-requirements-button card-button">Ver Requisitos</button>
-        {isAdmin ? ( <div>  
-        <button onClick={onDelete} className="delete-button card-button">Eliminar</button>
-        <button onClick={onModify} className="edit-button card-button">Modificar</button>
-        </div>
-        ): ""}
+        <button
+          onClick={onViewRequirements}
+          className="view-requirements-button card-button"
+        >
+          Ver Requisitos
+        </button>
+        {isAdmin ? (
+          <div>
+            <button onClick={onModify} className="edit-button card-button">
+              Modificar
+            </button>
+
+            {showArchivedSubsidies ? (
+              <button onClick={onDelete} className="delete-button card-button">
+                Eliminar
+              </button>
+            ) : (
+              ""
+            )}
+            <button
+              onClick={onArchive}
+              className={`archive-button card-button ${
+                archiveState ? "unarchive" : "archive"
+              }`}
+            >
+              {archiveState ? "Desarchivar" : "Archivar"}
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

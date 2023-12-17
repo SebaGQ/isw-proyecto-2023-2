@@ -26,15 +26,23 @@ async function createSubsidy(subsidyData) {
   }
 }
 
-async function getSubsidies() {
+// Nueva función para obtener subsidios según el estado de archivado
+async function getSubsidies(archive = false) {
   try {
-    const subsidies = await Subsidy.find().populate('guidelineId');
+    // Define el filtro según el estado de archivado
+    const filter = archive ? { archive: true } : { archive: false };
+
+    // Obtiene subsidios según el filtro
+    const subsidies = await Subsidy.find(filter).populate('guidelineId');
+
     return [subsidies, null];
   } catch (error) {
+    console.log("error en el service")
     handleError(error, "subsidy.service -> getSubsidies");
     return [null, "Error al obtener los subsidios"];
   }
 }
+
 
 async function getSubsidyById(subsidyId) {
   try {
@@ -78,15 +86,17 @@ async function deleteSubsidy(subsidyId) {
   }
 }
 
-async function archiveSubsidy(subsidyId) {
+async function archiveSubsidy(subsidyId, archiveStatus) {
   try {
     if (!mongoose.Types.ObjectId.isValid(subsidyId)) {
       return [null, "ID de subsidio no válido"];
     }
-    
+
+    const update = { archive: archiveStatus };
+
     const subsidy = await Subsidy.findByIdAndUpdate(
       subsidyId,
-      { $set: { archive: true } },
+      { $set: update },
       { new: true } // Para devolver el subsidio actualizado
     );
 
@@ -96,8 +106,8 @@ async function archiveSubsidy(subsidyId) {
 
     return [subsidy, null];
   } catch (error) {
-    handleError(error, "subsidy.service -> archiveSubsidy");
-    return [null, "Error al archivar el subsidio"];
+    handleError(error, "subsidy.service -> updateArchiveStatus");
+    return [null, "Error al actualizar el estado de archivado del subsidio"];
   }
 }
 

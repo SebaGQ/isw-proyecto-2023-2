@@ -1,8 +1,13 @@
 import axios from "./root.service";
 
-export const fetchSubsidies = async () => {
+export const fetchSubsidies = async (archive = false) => {
+
   try {
-    const response = await axios.get("/subsidies");
+    const response = await axios.get("/subsidies", {
+      params: {
+        archive: archive
+      }
+    });
 
     if (response.status === 204) {
       return []; // Devuelve un array vacío en caso de 204 No Content
@@ -54,20 +59,19 @@ export const deleteSubsidy = async (subsidyId) => {
   }
 };
 
-// Agrega una nueva función para archivar el subsidio
-export const archiveSubsidy = async (subsidyId) => {
+export const archiveSubsidy = async (subsidyId, archiveState) => {
   try {
-    const response = await axios.patch(`/subsidies/${subsidyId}`, { archive: true });
+    const response = await axios.patch(`/subsidies/${subsidyId}`, { archive: archiveState });
     const { status, data } = response;
 
     if (status === 200) {
       return data;
     } else {
-      throw new Error(`Error al archivar el subsidio. Estado: ${status}`);
+      throw new Error(`Error al ${archiveState ? 'archivar' : 'desarchivar'} el subsidio. Estado: ${status}`);
     }
   } catch (error) {
-    console.error("Error archiving subsidy:", error);
-    throw new Error("Error al archivar el subsidio. Por favor, inténtalo de nuevo.");
+    console.error(`${archiveState ? 'Error archiving' : 'Error unarchiving'} subsidy:`, error);
+    throw new Error(`Error al ${archiveState ? 'archivar' : 'desarchivar'} el subsidio. Por favor, inténtalo de nuevo.`);
   }
 };
 
@@ -81,5 +85,14 @@ export const modifySubsidy = async (subsidyId, updatedData) => {
       error
     );
     throw error;
+  }
+};
+
+export const getSubsidyById = async (subsidyId) => {
+  try {
+    const response = await axios.get(`/subsidies/${subsidyId}`);
+    return response.data; // Suponiendo que el servidor devuelve los datos del subsidio.
+  } catch (error) {
+    throw new Error(`Error fetching subsidy by ID: ${error.message}`);
   }
 };

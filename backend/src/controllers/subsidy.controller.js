@@ -23,17 +23,27 @@ async function createSubsidy(req, res) {
 
 async function getSubsidies(req, res) {
   try {
-    const [subsidies, subsidiesError] = await SubsidyService.getSubsidies();
-    if (subsidiesError) return respondError(req, res, 404, subsidiesError);
+    const archive = req.query && req.query.archive === 'false';
 
+    // Llama al servicio para obtener los subsidios
+    const [subsidies, error] = await SubsidyService.getSubsidies(archive);
+
+    if (error) {
+      return respondError(req,res, 400, "Error interno del servidor");
+    }
+
+    // Devuelve la lista de subsidios al cliente
     subsidies.length === 0
       ? respondSuccess(req, res, 204)
       : respondSuccess(req, res, 200, subsidies);
+
   } catch (error) {
+    // Maneja el error y devuelve el mensaje correspondiente
     handleError(error, "subsidy.controller -> getSubsidies");
-    respondError(req, res, 500, "Error interno del servidor");
+    respondError(req ,res, 500, "Error interno del servidor");
   }
 }
+
 
 async function getSubsidyById(req, res) {
   try {
@@ -70,7 +80,10 @@ async function deleteSubsidy(req, res) {
 
 async function archiveSubsidy(req, res) {
   try {
-    const [archivedSubsidy, archiveError] = await SubsidyService.archiveSubsidy(req.params.id);
+    const subsidyId = req.params.id;
+    const archiveStatus = req.body.archive;
+
+    const [archivedSubsidy, archiveError] = await SubsidyService.archiveSubsidy(subsidyId, archiveStatus);
     
     if (archiveError) {
       respondError(req, res, 404, archiveError);

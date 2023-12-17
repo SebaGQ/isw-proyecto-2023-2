@@ -6,7 +6,30 @@
 
 .subsidy-page-header {
     text-align: center;
+    flex-direction: column;
     margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    gap: 30px;
+}
+
+.subsidy-page-header button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Estilo de color, ajusta según tu diseño */
+    color: white;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.subsidy-page-header button:hover {
+    background-color: #0056b3; /* Cambia el color al pasar el ratón por encima */
 }
 
 .subsidy-page-header h1 {

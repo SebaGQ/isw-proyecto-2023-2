@@ -1,13 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { createSubsidy } from "../services/subsidy.service";
-import { useNavigate } from "react-router-dom";
+import {
+  createSubsidy,
+  modifySubsidy,
+  getSubsidyById,
+} from "../services/subsidy.service";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/CreateSubsidyPage.css";
 import { fetchGuideline } from "../services/guideline.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CreateSubsidyPage = () => {
-  const [subsidyData, setSubsidyData] = useState({
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  const initialSubsidyData = {
     name: "",
     description: "",
     amount: "",
@@ -15,10 +34,52 @@ const CreateSubsidyPage = () => {
     dateEnd: "",
     typeSubsidy: "",
     guidelineId: "",
-  });
+  };
 
-  const [error, setError] = useState({ hasError: false, message: "" }); // Nuevo estado para manejar errores
-  const navigate = useNavigate();
+  const [subsidyData, setSubsidyData] = useState(initialSubsidyData);
+  const [error, setError] = useState({ hasError: false, message: "" });
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [guidelines, setGuidelines] = useState([]);
+  const [selectedGuidelineId, setSelectedGuidelineId] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const fetchGuidelines = async () => {
+      try {
+        const guidelinesData = await fetchGuideline();
+        setGuidelines(guidelinesData);
+      } catch (error) {
+        console.error("Error fetching guidelines:", error);
+      }
+    };
+
+    fetchGuidelines();
+  }, []); // Solo se ejecutará una vez al montar el componente
+
+  const subsidyIdParam = queryParams.get("subsidyId");
+
+  useEffect(() => {
+    
+  
+    if (subsidyIdParam) {
+      // Si hay un subsidyId en la URL, se trata de una edición
+      setIsEditMode(true);
+      console.log("subsidyIdParam:", subsidyIdParam);
+  
+      // Fetch del subsidio por ID y actualización del estado
+      setSubsidyData({
+        name: queryParams.get("subsidyName") || "",
+        description: queryParams.get("subsidyDescription") || "",
+        amount: queryParams.get("subsidyAmount") || "",
+        dateStart: formatDate(queryParams.get("subsidyStart")) || "",
+        dateEnd: formatDate(queryParams.get("subsidyEnd")) || "",
+        typeSubsidy: queryParams.get("subsidyType") || "",
+        guidelineId: queryParams.get("subsidyGuideline") || "",
+      });
+  
+      setSelectedGuidelineId(queryParams.get("subsidyGuideline") || "");
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,42 +96,26 @@ const CreateSubsidyPage = () => {
       const subsidyDataWithGuideline = {
         ...subsidyData,
         guidelineId: selectedGuidelineId,
+        dateStart: new Date(subsidyData.dateStart).toISOString().split("T")[0],
+        dateEnd: new Date(subsidyData.dateEnd).toISOString().split("T")[0],
       };
 
-      console.log(selectedGuidelineId);
-      console.log("Subsidy Data with Guideline:", subsidyDataWithGuideline);
+      if (isEditMode) {
+        await modifySubsidy(subsidyIdParam, subsidyDataWithGuideline);
+        toast.success("¡Subsidio modificado correctamente!");
+      } else {
+        await createSubsidy(subsidyDataWithGuideline);
+        toast.success("¡Subsidio creado correctamente!");
+      }
 
-      await createSubsidy(subsidyDataWithGuideline);
-      // Muestra un toast de éxito
-      toast.success("¡Subsidio creado correctamente!");
-
-      // Redirige a la página de subsidios después de la creación exitosa
       navigate("/subsidies");
-
     } catch (error) {
-      console.error("Error creating subsidy desde la página:", error);
-
-      // Muestra un toast de error con el mensaje recibido desde el servicio
+      console.error("Error creating/modifying subsidy:", error);
       toast.error(error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
-  //pautas
-  const [guidelines, setGuidelines] = useState([]); // Nuevo estado para almacenar las pautas
-  const [selectedGuidelineId, setSelectedGuidelineId] = useState(""); // Nuevo estado para almacenar el ID de la guía seleccionada
-
-  useEffect(() => {
-    const fetchGuidelines = async () => {
-      try {
-        const guidelinesData = await fetchGuideline(); // Ajusta el nombre de la función
-        setGuidelines(guidelinesData);
-      } catch (error) {
-        console.error("Error fetching guidelines:", error);
-      }
-    };
-
-    fetchGuidelines();
-  }, []);
 
   return (
     <div className="create-subsidy-container">
@@ -85,7 +130,10 @@ const CreateSubsidyPage = () => {
             type="text"
             value={subsidyData.name}
             onChange={(e) =>
-              setSubsidyData({ ...subsidyData, name: e.target.value })
+              setSubsidyData((prevData) => ({
+                ...prevData,
+                name: e.target.value,
+              }))
             }
             placeholder="Ingresa el nombre del subsidio"
             required
@@ -98,7 +146,10 @@ const CreateSubsidyPage = () => {
             id="subsidyDescription"
             value={subsidyData.description}
             onChange={(e) =>
-              setSubsidyData({ ...subsidyData, description: e.target.value })
+              setSubsidyData((prevData) => ({
+                ...prevData,
+                description: e.target.value,
+              }))
             }
             placeholder="Ingresa la descripción del subsidio"
             required
@@ -112,7 +163,10 @@ const CreateSubsidyPage = () => {
             type="number"
             value={subsidyData.amount}
             onChange={(e) =>
-              setSubsidyData({ ...subsidyData, amount: e.target.value })
+              setSubsidyData((prevData) => ({
+                ...prevData,
+                amount: e.target.value,
+              }))
             }
             placeholder="Ingresa el monto del subsidio"
             required
@@ -126,7 +180,10 @@ const CreateSubsidyPage = () => {
             type="date"
             value={subsidyData.dateStart}
             onChange={(e) =>
-              setSubsidyData({ ...subsidyData, dateStart: e.target.value })
+              setSubsidyData((prevData) => ({
+                ...prevData,
+                dateStart: e.target.value,
+              }))
             }
             required
             className="form-control"
@@ -139,7 +196,10 @@ const CreateSubsidyPage = () => {
             type="date"
             value={subsidyData.dateEnd}
             onChange={(e) =>
-              setSubsidyData({ ...subsidyData, dateEnd: e.target.value })
+              setSubsidyData((prevData) => ({
+                ...prevData,
+                dateEnd: e.target.value,
+              }))
             }
             required
             className="form-control"
@@ -152,7 +212,10 @@ const CreateSubsidyPage = () => {
             type="text"
             value={subsidyData.typeSubsidy}
             onChange={(e) =>
-              setSubsidyData({ ...subsidyData, typeSubsidy: e.target.value })
+              setSubsidyData((prevData) => ({
+                ...prevData,
+                typeSubsidy: e.target.value,
+              }))
             }
             placeholder="Ingresa el tipo de subsidio"
             required
@@ -177,8 +240,19 @@ const CreateSubsidyPage = () => {
           </select>
         </div>
         <div className="form-actions">
-          <button type="submit" className="btn btn-primary">
-            Crear Subsidio
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Procesando..." : "Crear Subsidio"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => navigate("/subsidies")}
+          >
+            Cancelar
           </button>
         </div>
       </form>
