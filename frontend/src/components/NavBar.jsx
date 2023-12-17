@@ -7,8 +7,11 @@ import { useAuth } from '../context/AuthContext';
 const NavBar = () => {
     // Aquí podrías usar algo similar a useRouter de Next.js para determinar la ruta activa
     const { user } = useAuth();
-    const isAdmin = user.roles[0] === "admin";
-    const isUser = user.roles[0] === "user";
+    /* const isAdmin = user.roles[0] === "admin";
+    const isUser = user.roles[0] === "user"; */
+    const isAdmin = true;
+    const isUser = true;
+    
     return (
         <div className="navbar">
             <div className="navbar-header">
