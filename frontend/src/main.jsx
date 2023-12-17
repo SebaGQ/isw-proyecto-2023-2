@@ -9,6 +9,8 @@ import ErrorPage from './routes/ErrorPage.jsx';
 import Login from './routes/Login.jsx';
 import ReviewPage from './routes/ReviewPage.jsx';
 import CreateSubsidyPage from './routes/CreateSubsidyPage.jsx';
+import  GuidelinePage from './routes/GuidelinePage.jsx';
+import CreateGuidelinePage from './routes/CreateGuidelinePage.jsx';
 
 
 const router = createBrowserRouter([
@@ -20,6 +22,14 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <App />,
+      },
+      {
+        path: 'guidelines',
+        element: <GuidelinePage />,
+      },
+      {
+        path:'createguideline',
+        element: <CreateGuidelinePage />
       },
       {
         path: 'subsidies',

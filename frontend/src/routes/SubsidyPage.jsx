@@ -3,7 +3,6 @@ import {
   fetchSubsidies,
   deleteSubsidy,
   archiveSubsidy,
-  modifySubsidy,
 } from "../services/subsidy.service";
 import Card from "../components/Card";
 import ApplicationForm from "../components/ApplicationForm";

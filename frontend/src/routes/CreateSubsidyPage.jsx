@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   createSubsidy,
   modifySubsidy,
-  getSubsidyById,
 } from "../services/subsidy.service";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/CreateSubsidyPage.css";
@@ -245,7 +244,7 @@ const CreateSubsidyPage = () => {
             className="btn btn-primary"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Procesando..." : "Crear Subsidio"}
+            {isSubmitting ? "Procesando..." : isEditMode ? "Modificar Subsidio" : "Crear Subsidio"}
           </button>
           <button
             type="button"

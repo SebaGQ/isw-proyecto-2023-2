@@ -30,8 +30,6 @@ export const createSubsidy = async (subsidyData) => {
       throw new Error(`Error al crear el subsidio. Estado: ${status}`);
     }
   } catch (error) {
-    console.error("Error creating subsidy desde el service:", error);
-    console.error("Error creating subsidy desde el service:", error);
 
     if (error.response && error.response.data) {
       // Si la respuesta contiene datos, obtenemos el mensaje de error
@@ -80,11 +78,16 @@ export const modifySubsidy = async (subsidyId, updatedData) => {
     const response = await axios.put(`/subsidies/${subsidyId}`, updatedData);
     return response.data.data;
   } catch (error) {
-    console.error(
-      `There was an error modifying the subsidy with ID ${subsidyId}: `,
-      error
-    );
-    throw error;
+    if (error.response && error.response.data) {
+      // Si la respuesta contiene datos, obtenemos el mensaje de error
+      const errorMessage = error.response.data.message;
+  
+      // Lanza un nuevo error con el mensaje para que pueda ser manejado en el componente
+      throw new Error(errorMessage);
+    } else {
+      // Si no hay datos en la respuesta, lanza un error genérico
+      throw new Error("Error al crear el subsidio. Inténtalo de nuevo más tarde. desde el service");
+    }
   }
 };
 
