@@ -52,10 +52,13 @@ async function createAppeal(userEmail, postData) {
     const guideline = await Guideline.findById(subsidy.guidelineId);
 
     const newReview = new Review({
+      applicationId : postData.postId,
       appealId: newAppeal._id,
       comments: [],
       status: AVAILABILITY[1],
       origin: "Apelación",
+      socialPercentage : newAppeal.newSocialPercentage,
+      members: newAppeal.newMembers,
     });
 
     if (postData.newSocialPercentage > guideline.maxSocialPercentage) {

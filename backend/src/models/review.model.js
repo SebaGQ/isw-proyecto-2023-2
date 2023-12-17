@@ -29,21 +29,31 @@ const reviewSchema = new mongoose.Schema({
 
     },
     statusPercentage: {
-    type: Boolean,
-    required: true,
-    default: true,
+        type: Boolean,
+        required: true,
+        default: true,
     },
     statusMembers: {
-    type: Boolean,
-    required: true,
-    default: true,
+        type: Boolean,
+        required: true,
+        default: true,
     },
     statusDate: {
-    type: Boolean,
-    required: true,
-    default: true,
+        type: Boolean,
+        required: true,
+        default: true,
     },
-}, {
+    socialPercentage: {
+        type: Number,
+        required: true,
+        min: 0,
+        max: 100,
+    },
+    members: {
+        type: Number,
+        required: true,
+        min: 1,
+    },
 }, {
     timestamps: true,
 });

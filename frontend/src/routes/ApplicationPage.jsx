@@ -14,6 +14,7 @@ const ApplicationPage = () => {
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [isAppealOpen, setIsAppealOpen] = useState(false);
     const [selectedApplicationData, setSelectedApplicationData] = useState(null);
+    const [loadingReviews, setLoadingReviews] = useState(false);
 
     const getApplicationsByUser = useCallback(async () => {
         setLoading(true);
@@ -32,6 +33,10 @@ const ApplicationPage = () => {
         }
     }, []);
 
+    const refetchApplications = () => {
+        getApplicationsByUser();
+    };
+
     useEffect(() => {
         getApplicationsByUser();
     }, [getApplicationsByUser]);
@@ -39,12 +44,15 @@ const ApplicationPage = () => {
     const handleDetailsClick = async (applicationData) => {
         setSelectedApplicationData(applicationData);
         setIsDetailsOpen(true);
+        setLoadingReviews(true); // Inicia la carga
 
         try {
             const reviewsData = await fetchReviewsByApplication(applicationData.application._id);
-            setSelectedApplicationData({ ...applicationData, reviews: reviewsData });
+            setSelectedApplicationData({ ...applicationData, reviews: reviewsData.data });
         } catch (error) {
             console.error('Error fetching reviews:', error);
+        } finally {
+            setLoadingReviews(false); // Finaliza la carga
         }
     };
 
@@ -105,12 +113,13 @@ const ApplicationPage = () => {
                     onClose={() => setIsDetailsOpen(false)}
                     application={selectedApplicationData.application}
                     reviews={selectedApplicationData.reviews}
+                    loadingReviews={loadingReviews} // Pasas el estado de carga al modal
                 />
             )}
             {isAppealOpen && selectedApplicationData && (
                 <Modal isOpen={isAppealOpen} onClose={() => setIsAppealOpen(false)}>
-                    <AppealForm 
-                        applicationId={selectedApplicationData.application._id} 
+                    <AppealForm
+                        applicationId={selectedApplicationData.application._id}
                         onClose={() => setIsAppealOpen(false)}
                         onAppealSuccess={refetchApplications}
                     />
