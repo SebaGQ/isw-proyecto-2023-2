@@ -2,13 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom'; // Asegúrate de tener react-router-dom instalado para el manejo de rutas
 import '../styles/NavBar.css';
 import { HomeIcon, RectangleGroupIcon, DocumentTextIcon } from '@heroicons/react/24/solid';
-import { useAuth } from '../context/AuthContext';
+
+import { useAuth } from "../context/AuthContext";
+
 
 const NavBar = () => {
     // Aquí podrías usar algo similar a useRouter de Next.js para determinar la ruta activa
     const { user } = useAuth();
     const isAdmin = user.roles[0] === "admin";
     const isUser = user.roles[0] === "user";
+  
     return (
         <div className="navbar">
             <div className="navbar-header">
@@ -19,6 +22,12 @@ const NavBar = () => {
                     <HomeIcon className="nav-icon" />
                     <span>Inicio</span>
                 </Link>
+                {isAdmin && (
+                    <Link to="/guidelines" className="nav-item">
+                        <RectangleGroupIcon className="nav-icon" />
+                        <span>Pautas</span>
+                    </Link>
+                )}
                 <Link to="/subsidies" className="nav-item">
                     <RectangleGroupIcon className="nav-icon" />
                     <span>Subsidios y Beneficios</span>
