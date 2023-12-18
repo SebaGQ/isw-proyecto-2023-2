@@ -139,7 +139,7 @@ const SubsidyPage = () => {
         <p>Estos son los subsidios con los que cuenta el municipio</p>
         <div className="button-container">
           {isAdmin ? (
-            <div>
+            <div className="button-container">
               <button onClick={handleCreateSubsidyClick}>Crear Subsidio</button>
               
               <button
