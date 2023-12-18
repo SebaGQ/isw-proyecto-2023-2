@@ -8,28 +8,29 @@
     padding: 8px;
     text-align: left;
 }
+
+.application-table th {
+    background-color: #f4f4f4;
+}
+
+.application-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.application-table tr:hover {
+    background-color: #eaeaea;
+}
+
 .application-table button {
     background-color: #007bff;
     color: white;
+    border: none;
     padding: 5px 10px;
     border-radius: 4px;
+    cursor: pointer;
     font-size: 0.9rem;
-    margin-left: 30%;
 }
 
 .application-table button:hover {
     background-color: #0056b3;
-}
-
-
-.application-table .btn-appeal {
-    background-color: red;
-    margin-left: 10px; /* Ajusta este valor según tus necesidades */
-}
-
-.application-table .btn-appeal:hover {
-    background-color: darkred; /* O cualquier otro color para el hover */
-    text-align: center;
-    vertical-align: middle; 
-
 }

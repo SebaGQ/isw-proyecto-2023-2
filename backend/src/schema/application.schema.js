@@ -12,19 +12,27 @@ const applicationBodySchema = Joi.object({
       "string.base": "El id del usuario debe ser de tipo string.",
       "string.pattern.base": "El id del usuario proporcionado no es un ObjectId válido.",
     }),
+  firstName: Joi.string().pattern(/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/).required().messages({
+    "string.empty": "El nombre no puede estar vacío.",
+    "any.required": "El nombre es obligatorio.",
+    "string.base": "El nombre debe ser de tipo string.",
+  }),
+  lastName1: Joi.string().pattern(/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/).required().messages({
+    "string.empty": "El primer apellido no puede estar vacío.",
+    "any.required": "El primer apellido es obligatorio.",
+    "string.base": "El primer apellido debe ser de tipo string.",
+  }),
+  lastName2: Joi.string().pattern(/^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/).required().messages({
+    "string.empty": "El segundo apellido no puede estar vacío.",
+    "any.required": "El segundo apellido es obligatorio.",
+    "string.base": "El segundo apellido debe ser de tipo string.",
+  }),
     // Cambios solicitados, validacion de rut, por cada valor en el array se verifica que cumpla con el pattern.
-    rut: Joi.array().items(
-      Joi.string().pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).required().messages({
-          "string.empty": "El rut no puede estar vacío.",
-          "any.required": "El rut es obligatorio.",
-          "string.base": "El rut debe ser de tipo string.",
-    })
-    ).required().min(1).messages(
-      {
-        "array.base": "Los rut deben estar en formato de arreglo.",
-        "any.required": "Los rut son obligatorios.",
-        "array.min": "Debe haber al menos un rut."
-    }),
+  rutUser: Joi.string().pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).required().messages({
+    "string.empty": "El rut no puede estar vacío.",
+    "any.required": "El rut es obligatorio.",
+    "string.base": "El rut debe ser de tipo string.",
+  }),
   subsidyId: Joi.string()
     // Patrón que tienen los id de mongo, 24 caracteres hexadecimales
     .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
@@ -50,12 +58,24 @@ const applicationBodySchema = Joi.object({
       "any.required": "El porcentaje social es obligatorio.",
     }),
     members: Joi.number()
-    .min(1)
+    .min(0)
     .required()
     .messages({
       "number.base": "La cantidad de miembros debe ser de tipo número.",
       "number.min": "La cantidad de miembros no puede ser menor que 0.",
       "any.required": "La cantidad de miembros es obligatoria.",
+    }),
+    rutsMembers: Joi.array().items(
+      Joi.string().pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).messages({
+          "string.empty": "El rut no puede estar vacío.",
+          "any.required": "El rut es obligatorio.",
+          "string.base": "El rut debe ser de tipo string.",
+    })
+    ).messages(
+      {
+        "array.base": "Los rut deben estar en formato de arreglo.",
+        "any.required": "Los rut son obligatorios.",
+        "array.min": "Debe haber al menos un rut."
     }),
   applicationDate: Joi.date()
     .messages({
