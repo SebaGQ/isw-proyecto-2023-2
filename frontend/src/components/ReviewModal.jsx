@@ -51,7 +51,7 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
                                     <td>{review.origin}</td>
                                     <td>{review.status}</td>
                                     <td>{formatDate(review.createdAt)}</td>
-                                    <td>{review.socialPercentage} %</td>
+                                    <td>{review.socialPercentage}</td>
                                     <td>{review.members}</td>
                                 </tr>
                             ))}
