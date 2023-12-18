@@ -129,6 +129,7 @@ const ApplicationPage = () => {
                         <Modal isOpen={isAppealOpen} onClose={() => setIsAppealOpen(false)}>
                             <AppealForm
                                 applicationId={selectedApplicationData.application._id}
+                                subsidyName={selectedApplicationData.application.subsidyId.name}
                                 onClose={() => setIsAppealOpen(false)}
                                 onAppealSuccess={refetchApplications}
                             />

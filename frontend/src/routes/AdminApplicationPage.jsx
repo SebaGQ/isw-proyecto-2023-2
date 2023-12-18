@@ -3,8 +3,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { fetchApplications } from '../services/application.service';
 import { fetchReviewsByApplication } from '../services/review.service';
 import ApplicationDetailsModal from '../components/ApplicationDetailsModal'; // Importa tu nuevo componente
-import AppealForm from '../components/AppealForm';
 import Loading from '../components/Loading';
+import AdminReviewModal from '../components/AdminReviewModal'; // Asegúrate de que la ruta es correcta
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faGavel } from '@fortawesome/free-solid-svg-icons';
+import '../styles/AdminApplicationPage.css';
 
 const AdminApplicationPage = () => {
     const [applications, setApplications] = useState([]);
@@ -14,6 +17,7 @@ const AdminApplicationPage = () => {
     const [selectedApplication, setSelectedApplication] = useState(null);
     const [reviews, setReviews] = useState([]);
     const [loadingReviews, setLoadingReviews] = useState(false);
+    const [isReviewOpen, setIsReviewOpen] = useState(false);
 
     const getApplicationsByUser = useCallback(async () => {
         setLoading(true);
@@ -36,6 +40,19 @@ const AdminApplicationPage = () => {
         getApplicationsByUser();
     }, [getApplicationsByUser]);
 
+    const refreshApplications = async () => {
+        try {
+            const result = await fetchApplications();
+            if (result && result.state === 'Success') {
+                setApplications(result.data);
+            } else {
+                setApplications([]);
+            }
+        } catch (error) {
+            console.error('Error al recargar las aplicaciones:', error);
+        }
+    };
+
     const handleDetailsClick = async (applicationData) => {
         setSelectedApplication(applicationData);
         setIsDetailsOpen(true);
@@ -50,6 +67,12 @@ const AdminApplicationPage = () => {
             setLoadingReviews(false);
         }
     };
+
+    const handleReviewClick = (applicationData) => {
+        setSelectedApplication(applicationData);
+        setIsReviewOpen(true);
+    };
+
 
     if (loading) {
         return (
@@ -73,49 +96,70 @@ const AdminApplicationPage = () => {
     };
 
     return (
-        <div className="applications-page">
-            <h1>Todas las postulaciones</h1>
-            <table className="application-table">
-                <thead>
-                    <tr>
-                        <th>Nombre del Subsidio</th>
-                        <th>Estado</th>
-                        <th>Fecha últ. modificación</th>
-                        <th>Porcentaje Social</th>
-                        <th>Número de Miembros</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {applications.length > 0 ? (
-                        applications.map((application) => (
-                            <tr key={application._id}>
-                                <td>{application.subsidyId.name}</td>
-                                <td>{application.status}</td>
-                                <td>{formatDate(application.updatedAt)}</td>
-                                <td>{application.socialPercentage}</td>
-                                <td>{application.members}</td>
-                                <td>
-                                    <button onClick={() => handleDetailsClick(application)}>Ver Detalles</button>
-                                </td>
-                            </tr>
-                        ))
-                    ) : (
+        <div>
+            <div className="applications-page">
+                <h1>Todas las postulaciones</h1>
+                <table className="application-table">
+                    <thead>
                         <tr>
-                            <td colSpan="6">No hay postulaciones disponibles.</td>
+                            <th>Nombre del Subsidio</th>
+                            <th>Estado</th>
+                            <th>Fecha últ. modificación</th>
+                            <th>Porcentaje Social</th>
+                            <th>Número de Miembros</th>
+                            <th>Ver Detalles</th>
+                            <th>Hacer revision</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
-            {isDetailsOpen && selectedApplication && (
-                <ApplicationDetailsModal
-                    isOpen={isDetailsOpen}
-                    onClose={() => setIsDetailsOpen(false)}
-                    application={selectedApplication}
-                    reviews={reviews}
-                    loadingReviews={loadingReviews}
-                />
-            )}
+                    </thead>
+                    <tbody>
+                        {applications.length > 0 ? (
+                            applications.map((application) => (
+                                <tr key={application._id}>
+                                    <td>{application.subsidyId.name}</td>
+                                    <td>{application.status}</td>
+                                    <td>{formatDate(application.updatedAt)}</td>
+                                    <td>{application.socialPercentage}</td>
+                                    <td>{application.members}</td>
+                                    <td>
+                                        <button onClick={() => handleDetailsClick(application)}>
+                                            <FontAwesomeIcon icon={faEye} />
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
+                                            className="button-review"
+                                            onClick={() => handleReviewClick(application)}>
+                                            <FontAwesomeIcon icon={faGavel} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="6">No hay postulaciones disponibles.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+                {isDetailsOpen && selectedApplication && (
+                    <ApplicationDetailsModal
+                        isOpen={isDetailsOpen}
+                        onClose={() => setIsDetailsOpen(false)}
+                        application={selectedApplication}
+                        reviews={reviews}
+                        loadingReviews={loadingReviews}
+                    />
+                )}
+                {isReviewOpen && selectedApplication && (
+                    <AdminReviewModal
+                        isOpen={isReviewOpen}
+                        onClose={() => setIsReviewOpen(false)}
+                        application={selectedApplication}
+                        onReviewSuccess={refreshApplications}
+                    />
+                )}
+
+            </div>
         </div>
     );
 };

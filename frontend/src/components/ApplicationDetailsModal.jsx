@@ -2,10 +2,17 @@
 import React from 'react';
 import Modal from './Modal';
 import Loading from '../components/Loading'; // Asegúrate de que la ruta de importación es correcta
+import '../styles/ApplicationDetailsModal.css';
 
+//Esta es del admin
 const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews }) => {
     if (!application) return null;
-
+    
+    // Determinar si mostrar los motivos del rechazo
+    const showRejectionReasons = reviews.length > 0 && reviews[reviews.length - 1].status === "Rechazado";
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log(showRejectionReasons);
+    console.log(reviews);
     // Función para formatear la fecha
     const formatDate = (dateString) => {
         const options = {
@@ -19,9 +26,10 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
     };
 
     return (
+
         <Modal isOpen={isOpen} onClose={onClose}>
+            <div className="modal-container">
             <h2>Detalles de la Postulación</h2>
-            <div className="details-content">
                 <p><strong>Tipo:</strong> {application.subsidyId.typeSubsidy}</p>
                 <p><strong>Nombre {application.subsidyId.typeSubsidy}:</strong> {application.subsidyId.name}</p>
                 <p><strong>Estado:</strong> {application.status}</p>
@@ -30,6 +38,14 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
                 {/*<p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>*/}
                 {/*<p><strong>Número de Miembros:</strong> {application.members}</p>*/}
                 <p><strong>Fecha de Postulación:</strong> {formatDate(application.applicationDate)}</p>
+
+                {showRejectionReasons && (
+                    <div>
+                        <h2>Motivos del Rechazo</h2>
+                        <p>{reviews[reviews.length - 1].comments}</p>
+                    </div>
+                )}
+
 
                 <h2>Historial</h2>
                 {loadingReviews ? (
@@ -62,6 +78,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
                 )}
             </div>
         </Modal>
+
     );
 };
 

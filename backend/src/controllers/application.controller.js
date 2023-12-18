@@ -126,6 +126,31 @@ async function updateApplication(req, res) {
 }
 
 /**
+ * Actualiza el estado de una solicitud de subsidio y crea una revisión relacionada.
+ * @param {Object} req - Objeto de petición.
+ * @param {Object} res - Objeto de respuesta.
+ */
+async function updateApplicationStatus(req, res) {
+  try {
+    const applicationId = req.params.id;
+    const { newStatus, comments } = req.body;
+
+    // Llama a la función del servicio para actualizar el estado y crear la revisión
+    const [updatedApplication, updateError] = await ApplicationService.updateApplicationStatus(
+      applicationId,
+      newStatus,
+      comments
+    );
+
+    if (updateError) return respondError(req, res, 404, updateError);
+    respondSuccess(req, res, 200, updatedApplication);
+  } catch (error) {
+    handleError(error, "application.controller -> updateApplicationStatus");
+    respondError(req, res, 500, "Error interno del servidor");
+  }
+}
+
+/**
  * Elimina una solicitud de subsidio por su ID.
  * @param {Object} req - Objeto de petición.
  * @param {Object} res - Objeto de respuesta.
@@ -149,5 +174,6 @@ module.exports = {
   getApplicationById,
   getApplicationsByUserEmail,
   updateApplication,
+  updateApplicationStatus,
   deleteApplication,
 };
