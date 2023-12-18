@@ -58,7 +58,7 @@ const applicationBodySchema = Joi.object({
       "any.required": "El porcentaje social es obligatorio.",
     }),
     members: Joi.number()
-    .min(0)
+    .min(1)
     .required()
     .messages({
       "number.base": "La cantidad de miembros debe ser de tipo número.",
@@ -66,7 +66,7 @@ const applicationBodySchema = Joi.object({
       "any.required": "La cantidad de miembros es obligatoria.",
     }),
     rutsMembers: Joi.array().items(
-      Joi.string().pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).messages({
+      Joi.string().min(1).pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).messages({
           "string.empty": "El rut no puede estar vacío.",
           "any.required": "El rut es obligatorio.",
           "string.base": "El rut debe ser de tipo string.",
