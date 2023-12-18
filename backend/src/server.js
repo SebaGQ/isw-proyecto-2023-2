@@ -28,6 +28,7 @@ async function setupServer() {
     // Agregamos los cors
     // server.use(cors({ origin: "/" }));
     server.use(cors({ origin: "http://localhost:5173" }));
+    // server.use(cors({ origin: "http://146.83.198.35:1615" }));
 
 
     // Agregamos el middleware para el manejo de cookies
