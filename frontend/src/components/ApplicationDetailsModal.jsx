@@ -27,9 +27,11 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
 
     return (
 
+
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="modal-container">
             <h2>Detalles de la Postulación</h2>
+            <div className="details-content">
                 <p><strong>Tipo:</strong> {application.subsidyId.typeSubsidy}</p>
                 <p><strong>Nombre {application.subsidyId.typeSubsidy}:</strong> {application.subsidyId.name}</p>
                 <p><strong>Estado:</strong> {application.status}</p>
@@ -78,6 +80,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
                 )}
             </div>
         </Modal>
+
 
     );
 };
