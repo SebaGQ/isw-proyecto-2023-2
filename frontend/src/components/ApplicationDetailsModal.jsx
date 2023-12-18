@@ -2,7 +2,9 @@
 import React from 'react';
 import Modal from './Modal';
 import Loading from '../components/Loading'; // Asegúrate de que la ruta de importación es correcta
+import '../styles/ApplicationDetailsModal.css';
 
+//Esta es del admin
 const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews }) => {
     if (!application) return null;
 
@@ -19,9 +21,10 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
     };
 
     return (
+
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2>Detalles de la Postulación</h2>
-            <div className="details-content">
+            <div className="modal-container">
                 <p><strong>Tipo:</strong> {application.subsidyId.typeSubsidy}</p>
                 <p><strong>Nombre {application.subsidyId.typeSubsidy}:</strong> {application.subsidyId.name}</p>
                 <p><strong>Estado:</strong> {application.status}</p>
@@ -62,6 +65,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
                 )}
             </div>
         </Modal>
+
     );
 };
 

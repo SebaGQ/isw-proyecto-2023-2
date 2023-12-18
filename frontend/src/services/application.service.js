@@ -37,3 +37,13 @@ export const postApplication = async (applicationData) => {
         throw error;
     }
 };
+
+export const updateApplicationStatus = async (applicationId, newStatus, comments) => {
+    try {
+        const response = await axios.patch(`/applications/${applicationId}`, { newStatus, comments });
+        return response.data;
+    } catch (error) {
+        console.error("Error updating application status: ", error);
+        throw error;
+    }
+};
