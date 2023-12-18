@@ -7,8 +7,8 @@ const RequirementsModal = ({ isOpen, onClose, subsidy }) => {
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2>Requisitos {subsidy.name}</h2>
-            <p>Porcentaje Social Máximo: {subsidy.guidelineId.maxSocialPercentage}%</p>
-            <p>Número Mínimo de Miembros: {subsidy.guidelineId.minMembers}</p>
+            <p><strong>Porcentaje Social Máximo:</strong> {subsidy.guidelineId.maxSocialPercentage}%</p>
+            <p><strong>Número Mínimo de Miembros:</strong> {subsidy.guidelineId.minMembers}</p>
         </Modal>
     );
 };
