@@ -12,6 +12,7 @@ const NavBar = () => {
   // Aquí podrías usar algo similar a useRouter de Next.js para determinar la ruta activa
   const { user } = useAuth();
   const isAdmin = user.roles[0] === "admin";//mostro mensaje de error una vez
+  const isUser = user.roles[0] === "user";
 
   return (
     <div className="navbar">
@@ -34,10 +35,12 @@ const NavBar = () => {
           <span>Subsidios y Beneficios</span>
         </Link>
 
-        <Link to="/applications" className="nav-item">
+        {isUser && ( 
+          <Link to="/applications" className="nav-item">
           <RectangleGroupIcon className="nav-icon" />
           <span>Mis postulaciones</span>
-        </Link>
+        </Link>  )}  
+        
         {isAdmin && (
           <Link to="/admin-applications" className="nav-item">
             <DocumentTextIcon className="nav-icon" />
