@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/ReviewList.css';
+import '../styles/reviewList.css';
 
 const ReviewList = ({ reviews, onEditReview }) => {
         // Estados para los filtros
