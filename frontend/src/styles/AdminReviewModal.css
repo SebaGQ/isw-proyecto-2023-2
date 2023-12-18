@@ -1,5 +1,5 @@
 .modal-container {
-    max-width: 500px;
+    max-width: 700px; /* Aumenta el ancho para más espacio */
     margin: auto;
     background: #fff;
     padding: 20px;
@@ -10,20 +10,21 @@
 }
 
 .modal-content .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 20px; /* Espacio adicional entre grupos de formulario */
 }
 
 .modal-content .form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* Espacio ligeramente mayor bajo las etiquetas */
     font-weight: bold;
+    color: #333; /* Color más oscuro para mejorar el contraste */
 }
 
 .modal-content .form-control {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px; /* Un poco más de espacio interior */
+    border: 1px solid #ccc; /* Color de borde más suave */
+    border-radius: 5px; /* Bordes ligeramente redondeados */
     box-sizing: border-box;
     font-size: 16px;
 }
@@ -34,32 +35,47 @@
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 12px 25px; /* Botones más grandes y más cómodos */
     border: none;
-    border-radius: 4px;
+    border-radius: 5px; /* Bordes redondeados consistentes */
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s; /* Transición suave para el hover */
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background-color: #0056b3; /* Color primario más oscuro */
     color: white;
 }
 
 .btn-secondary {
-    background-color: #6c757d;
+    background-color: #4dc75d;
     color: white;
     margin-left: 10px;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-.btn-secondary:hover {
-    background-color: #545b62;
+.btn-primary:hover, .btn-secondary:hover {
+    opacity: 0.9; /* Efecto sutil al pasar el mouse */
 }
 
 .invalid-input {
     border: 2px solid red;
+}
+
+/* Estilos adicionales para los botones y comentarios */
+.btn-delete {
+    background-color: #ff3860; /* Color rojo para el botón de eliminar */
+    color: white;
+    margin-left: 10px; /* Espacio entre el botón de eliminar y el campo de texto */
+}
+
+.comment-group {
+    display: flex; /* Diseño en línea para comentarios y botón de eliminar */
+    align-items: center; /* Alinea verticalmente el botón con el campo de texto */
+    margin-bottom: 10px; /* Espacio entre grupos de comentarios */
+}
+
+.comment-group input {
+    flex-grow: 1; /* El campo de texto ocupa todo el espacio disponible */
+    margin-right: 10px; /* Espacio entre el campo de texto y el botón */
 }
