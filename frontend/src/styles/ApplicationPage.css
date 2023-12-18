@@ -25,11 +25,11 @@
 .application-table .btn-appeal {
     background-color: red;
     margin-left: 10px; /* Ajusta este valor según tus necesidades */
+    margin-left: 30%;
 }
 
 .application-table .btn-appeal:hover {
     background-color: darkred; /* O cualquier otro color para el hover */
-    text-align: center;
-    vertical-align: middle; 
+
 
 }

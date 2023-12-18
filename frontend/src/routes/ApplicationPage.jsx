@@ -98,8 +98,7 @@ return(        <div className="applications-page">
                             </button>
                         </td>
                     )}
-                    <td>
-                    </td>
+                    
                 </tr>
             ))
         ) : (
