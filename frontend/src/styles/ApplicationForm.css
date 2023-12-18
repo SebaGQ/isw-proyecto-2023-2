@@ -59,3 +59,7 @@
     .btn-secondary:hover {
         background-color: #545b62;
     }
+
+    .invalid-rut {
+    border: 2px solid red;
+    }

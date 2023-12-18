@@ -7,11 +7,23 @@ const applicationSchema = new mongoose.Schema({
     required: true,
     ref: "User",
   },
-  // Se agrega a la postulacion un array de rut, para que la persona pueda agregar los rut de los miembros de su familia.
-  rut:[{
+  firstName:{
     type: String,
     required: true,
-  }],
+  },
+  lastName1:{
+    type: String,
+    requiered: true,
+  },
+  lastName2:{
+    type: String,
+    required: true,
+  },
+  // Se agrega a la postulacion un array de rut, para que la persona pueda agregar los rut de los miembros de su familia.
+  rutUser:{
+    type: String,
+    required: true,
+  },
   subsidyId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -37,8 +49,13 @@ const applicationSchema = new mongoose.Schema({
   members: {
     type: Number,
     required: true,
-    min: 1,
+    min: 0,
   },
+  rutsMembers: [{
+    type: String,
+    required: true,
+    min: 0,
+  }],
 }, {
   timestamps: true,
 });
