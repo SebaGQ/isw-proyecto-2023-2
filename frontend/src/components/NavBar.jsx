@@ -38,13 +38,6 @@ const NavBar = () => {
           <RectangleGroupIcon className="nav-icon" />
           <span>Mis postulaciones</span>
         </Link>
-
-        {isAdmin && (
-          <Link to="/reviews" className="nav-item">
-            <DocumentTextIcon className="nav-icon" />
-            <span>Revisiones</span>
-          </Link>
-        )}
         {isAdmin && (
           <Link to="/admin-applications" className="nav-item">
             <DocumentTextIcon className="nav-icon" />
