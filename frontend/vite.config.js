@@ -8,4 +8,5 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   plugins: [react()],
+  preview: {port: 443, host:true}
 });
