@@ -31,6 +31,7 @@ function validarRUT(rut) {
   return digitoCalculado === digitoVerificador;
 }
 
+
     /*
       Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
       Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
@@ -42,7 +43,9 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
     //const user = await User.findOne({ rut: rut[0] });
 
     //como debe ser el usuario q está postulando se saca del token
-    const user = await User.findOne({ email:userEmail});
+
+    const user = await User.findOne({ email: userEmail});
+    
     if (!user) return [null, "Usuario no encontrado"];
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
@@ -56,9 +59,10 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
 
     const hasPending = await hasPendingApplication(user._id, subsidyId);
     if (hasPending) {
-      
+
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
+
 
     const hasPrevious = await hasPreviousApplication(user._id, subsidyId);
     if (hasPrevious) {
@@ -76,26 +80,27 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
       }
     }
     // Se agrega validacion de cantidad de rut igual a la cantidad de miembros.
+
     //console.log(rut.length);
     //console.log(members);
     if (rutsMembers.length !== members) {
       return [null, "Los ruts y miembros ingresados deben ser iguales"];
-      }
+    }
 
     //Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
     let comments = [];
+
         // Se define por defectos los estados de la revision, asi si esta correcto todas seran true
         let statusPercentage = true;
         let statusMembers = true;
         let statusDate = true;
-    
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
       comments.push("El porcentaje social excede el máximo permitido por las pautas del subsidio.");
       statusPercentage = false;
-    } 
+    }
     // validacion de integrantes
     if (members < guideline.minMembers) {
       status = AVAILABILITY[2];
@@ -127,23 +132,22 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
 
     await newApplication.save();
 
-    //Se define el estado de revisión en 'En Revisión'
-    let statusReview = AVAILABILITY[0];
-
     if (comments.length === 0) {
       comments.push("La postulación cumple con los requisitos de la pauta.");
       //Se define el estado de revisión en 'Aceptado'
-      statusReview = AVAILABILITY[3];
+      status = AVAILABILITY[3];
     }
 
     const newReview = new Review({
       applicationId: newApplication._id,
       comments,
-      statusReview,
+      status,
       origin: "Postulación",
       statusPercentage,
       statusMembers,
       statusDate,
+      socialPercentage,
+      members,
     });
 
     await newReview.save();
@@ -157,7 +161,7 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
 
 async function getApplications(filters = {}) {
   try {
-    const applications = await Application.find(filters);
+    const applications = await Application.find(filters).populate("subsidyId").populate("user");
     if (!applications) return [null, "No hay postulaciones"];
     return [applications, null];
   } catch (error) {
@@ -181,10 +185,10 @@ async function getApplicationById(applicationId) {
   }
 }
 
-  /* 
-      Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
-      Se entregará distinta información en función de si la solicitud fue rechazada o sigue en proceso
-  */ 
+/* 
+    Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+    Se entregará distinta información en función de si la solicitud fue rechazada o sigue en proceso
+*/
 async function getApplicationsByUserEmail(userEmail) {
   try {
     const user = await User.findOne({ email: userEmail });
@@ -192,7 +196,7 @@ async function getApplicationsByUserEmail(userEmail) {
       return [null, "Usuario no encontrado"];
     }
     const applications = await Application.find({ userId: user._id }).populate("subsidyId");
-    
+
     const applicationsWithDetails = await Promise.all(applications.map(async (application) => {
       //Si la postulación fue rechazada, la revisión de por qué fue rechazada
       if (application.status === AVAILABILITY[2]) {

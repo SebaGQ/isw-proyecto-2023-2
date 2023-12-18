@@ -19,6 +19,10 @@ const appealSchema = new mongoose.Schema({
     enum: AVAILABILITY,
     default : AVAILABILITY[0],
   },
+  newMemberRUTs:[{
+    type: String,
+    required: true,
+  }],
   newSocialPercentage: {
     type: Number,
     min: 0,

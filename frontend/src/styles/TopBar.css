@@ -12,6 +12,8 @@
     height: 2.5rem;
     width: 1.5rem;
     cursor: pointer;
+    margin-left: 10px;
+    margin-right: 5px;
 }
 
 .user-image {
@@ -44,4 +46,25 @@
     display: inline-flex;
     align-items: center;
     margin-left: 5px;
+}
+
+.imagenlogo img {
+    width: auto;
+    height: 100px;
+    background-color: rgb(242, 250, 215);
+    border-radius: 10px;
+}
+
+/* Para dispositivos con ancho hasta 600px, ajusta el tamaño del logo */
+@media (max-width: 600px) {
+    .imagenlogo img {
+        height: 50px; /* Tamaño más pequeño para dispositivos móviles */
+    }
+}
+
+/* Para dispositivos con ancho hasta 400px, oculta el logo */
+@media (max-width: 400px) {
+    .imagenlogo img {
+        display: none; /* Oculta el logo en pantallas muy pequeñas */
+    }
 }

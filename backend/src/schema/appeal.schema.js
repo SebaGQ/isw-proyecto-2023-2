@@ -30,7 +30,18 @@ const appealBodySchema = Joi.object({
       "any.only": `El estado debe ser uno de los siguientes: ${AVAILABILITY.join(", ")}.`,
       "any.required": "El estado es obligatorio.",
     }),
-
+    newMemberRUTs: Joi.array().items(
+      Joi.string().pattern(/^0*(\d{1,3}(\.?\d{3})*)\-?([\dkK])$/).required().messages({
+          "string.empty": "El rut no puede estar vacío.",
+          "any.required": "El rut es obligatorio.",
+          "string.base": "El rut debe ser de tipo string.",
+    })
+    ).required().min(1).messages(
+      {
+        "array.base": "Los rut deben estar en formato de arreglo.",
+        "any.required": "Los rut son obligatorios.",
+        "array.min": "Debe haber al menos un rut."
+    }),
   newSocialPercentage: Joi.number()
     .min(0)
     .max(100)

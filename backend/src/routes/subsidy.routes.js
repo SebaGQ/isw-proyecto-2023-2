@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const express = require("express");
-const { createSubsidy, getSubsidies, getSubsidyById, updateSubsidy, deleteSubsidy } = require("../controllers/subsidy.controller");
+const { createSubsidy, getSubsidies, getSubsidyById, updateSubsidy, deleteSubsidy, archiveSubsidy} = require("../controllers/subsidy.controller");
 
 const router = express.Router();
 
@@ -23,5 +23,6 @@ router.get("/:id", authorizationMiddleware.isAdmin, getSubsidyById);
 router.post("/", validationMiddleware.validateSubsidyBody, authorizationMiddleware.isAdmin, createSubsidy);
 router.put("/:id", validationMiddleware.validateSubsidyBody, authorizationMiddleware.isAdmin, updateSubsidy);
 router.delete("/:id", authorizationMiddleware.isAdmin, deleteSubsidy);
+router.patch("/:id", authorizationMiddleware.isAdmin, archiveSubsidy);
 
 module.exports = router;

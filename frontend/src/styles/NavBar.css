@@ -49,3 +49,13 @@
 .nav-item span {
     font-size: 1.3rem; /* Tamaño de fuente más estándar para el texto del menú */
 }
+
+
+
+
+/* Oculta los iconos en pantallas con un ancho menor a 600px */
+@media (max-width: 600px) {
+    .nav-icon {
+        display: none;
+    }
+}

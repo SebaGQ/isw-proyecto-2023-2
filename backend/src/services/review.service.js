@@ -119,14 +119,15 @@ async function getReviewById(reviewId) {
  */
 async function getReviewByApplicationId(applicationId) {
   try {
-    const review = await Review.findOne({ applicationId });
-    if (!review) return [null, "revision no encontrada"];
-    return [review, null];
+    const reviews = await Review.find({ applicationId });
+    if (!reviews || reviews.length === 0) return [[], "No se encontraron revisiones"];
+    return [reviews, null];
   } catch (error) {
-    handleError(error, "review.service -> getReviewByApplicationId");
-    return [null, "Error al obtener la revision"];
+    handleError(error, "review.service -> getReviewsByApplicationId");
+    return [[], "Error al obtener las revisiones"];
   }
 }
+
 
 /**
  * Obtener todas las review
