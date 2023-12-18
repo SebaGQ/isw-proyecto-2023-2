@@ -176,10 +176,6 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
         });
       }
     });
-    // Validar los RUTs antes de proceder
-    const areRUTsValid = memberRUTs.every((memberRUT) =>
-      validateRUT(memberRUT)
-    );
     //Tiene que ser igual al backend.
     const applicationData = {
       firstName,
@@ -197,9 +193,11 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
       toast.success("Postulacion Enviada");
       onClose(); // Cierra el formulario después de enviar la postulación
     } catch (error) {
-      toast.error(
-        "Hubo un error al procesar la postulación. Por favor, inténtalo nuevamente."
-      );
+      const errorMessage =
+        error.response && error.response.data
+          ? error.response.data.message
+          : "Hubo un error al procesar la postulación. Por favor, inténtalo nuevamente.";
+      toast.error(errorMessage);
     }
   };
 

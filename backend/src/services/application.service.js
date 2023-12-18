@@ -59,6 +59,11 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
       
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
+
+    const hasPrevious = await hasPreviousApplication(user._id, subsidyId);
+    if (hasPrevious) {
+      return [null, "Ya ha realizado una postulación previa para este subsidio"];
+    }
     
     // Verificar que el rutUser ingresado sea un rut valido, a través de un calculo matematico
     if(!validarRUT(rutUser)){
@@ -263,6 +268,20 @@ async function hasPendingApplication(userId, subsidyId) {
   }
 }
 
+async function hasPreviousApplication(userId, subsidyId) {
+  try {
+    const previousApplication = await Application.findOne({
+      userId,
+      subsidyId,
+      status: { $ne: AVAILABILITY[4] } // Excluye el estado "Rechazado"
+    });
+    return previousApplication !== null; // Retorna true si existe una aplicación previa
+  } catch (error) {
+    handleError(error, "application.service -> hasPreviousApplication");
+    throw new Error("Error al comprobar la existencia de postulaciones previas");
+  }
+}
+
 module.exports = {
   createApplication,
   getApplications,
@@ -271,4 +290,6 @@ module.exports = {
   updateApplication,
   updateApplicationStatus,
   deleteApplication,
+  hasPendingApplication,
+  hasPreviousApplication,
 };
