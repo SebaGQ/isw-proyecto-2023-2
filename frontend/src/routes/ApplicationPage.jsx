@@ -33,15 +33,8 @@ const ApplicationPage = () => {
       setLoading(false);
     }
   }, []);
-  
-  const refetchApplications = () => {
-        getApplicationsByUser();
-    };
 
-  useEffect(() => {
-    getApplicationsByUser();
-  }, [getApplicationsByUser]);
-  
+
   const handleDetailsClick = async (applicationData) => {
         setSelectedApplicationData(applicationData);
         setIsDetailsOpen(true);
@@ -58,14 +51,10 @@ const ApplicationPage = () => {
     };
 
 
-  const refetchApplications = () => {
+  useEffect(() => {
     getApplicationsByUser();
-  };
-
-  const handleDetailsClick = (applicationData) => {
-    setSelectedApplicationData(applicationData);
-    setIsDetailsOpen(true);
-  };
+  }, [getApplicationsByUser]);
+  
 
   const handleAppealClick = (applicationData) => {
     setSelectedApplicationData(applicationData);
