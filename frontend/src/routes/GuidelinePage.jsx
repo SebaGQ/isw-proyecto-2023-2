@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Loading from "../components/Loading";
 
 const GuidelinePage = () => {
   const [guideline, setGuideline] = useState([]);
@@ -79,7 +80,7 @@ const GuidelinePage = () => {
     }
   };
 
-  if (loading) return <div>Cargando...</div>;
+  if (loading) return <Loading/>;
   if (error) return <div>Ha ocurrido un error: {error}</div>;
 
   return (
