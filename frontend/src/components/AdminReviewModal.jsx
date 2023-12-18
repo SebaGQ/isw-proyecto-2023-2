@@ -60,6 +60,16 @@ const AdminReviewModal = ({ isOpen, onClose, application, onReviewSuccess, initi
 
                         <label>Nombre del Solicitante:</label>
                         <div className="info">{application.firstName}</div>
+
+                        <label>Apellido del Solicitante:</label>
+                        <div className="info">{application.lastName}</div>
+
+                        <label>Miembros:</label>
+                        <div className="info">{application.members}</div>
+
+                        <label>Porcentaje Social:</label>
+                        <div className="info">{application.socialPercentage}</div>
+
                     </div>
                     <div className="form-group">
                     <label htmlFor="status">Estado:</label>
@@ -83,10 +93,10 @@ const AdminReviewModal = ({ isOpen, onClose, application, onReviewSuccess, initi
                                 </button>
                             </div>
                         ))}
-                        <button type="button" className="btn btn-secondary" onClick={handleAddComment}>Agregar Comentario</button>
+                        <button type="button" className="btn-secondary" onClick={handleAddComment}>Agregar Comentario</button>
                     </div>
                     <div className="form-actions">
-                        <button type="submit" className="btn btn-primary">Enviar Revisión</button>
+                        <button type="submit" className="btn-primary">Enviar Revisión</button>
                     </div>
                 </form>
             </div>
