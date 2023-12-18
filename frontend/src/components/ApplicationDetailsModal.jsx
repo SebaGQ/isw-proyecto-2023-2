@@ -49,35 +49,37 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
                     )}
 
 
-                    <h2>Historial</h2>
-                    {loadingReviews ? (
-                        <Loading />
-                    ) : reviews && reviews.length > 0 ? (
-                        <table className="custom-table">
-                            <thead>
-                                <tr>
-                                    <th>Origen</th>
-                                    <th>Estado</th>
-                                    <th>Fecha</th>
-                                    <th>Porcentaje Social</th>
-                                    <th>Cantidad Miembros</th>
+                <h2>Historial</h2>
+                {loadingReviews ? (
+                    <Loading />
+                ) : reviews && reviews.length > 0 ? (
+                    <table className="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Origen</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Porcentaje Social</th>
+                                <th>Cantidad Miembros</th>
+                                <th>Comentarios</th> {/* Nueva columna para comentarios */}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {reviews.map((review, index) => (
+                                <tr key={index}>
+                                    <td>{review.origin}</td>
+                                    <td>{review.status}</td>
+                                    <td>{formatDate(review.createdAt)}</td>
+                                    <td>{review.socialPercentage} %</td>
+                                    <td>{review.members}</td>
+                                    <td>{review.comments.join('. ')}</td> {/* Mostrar comentarios */}
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {reviews.map((review, index) => (
-                                    <tr key={index}>
-                                        <td>{review.origin}</td>
-                                        <td>{review.status}</td>
-                                        <td>{formatDate(review.createdAt)}</td>
-                                        <td>{review.socialPercentage} %</td>
-                                        <td>{review.members}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>No hay revisiones disponibles.</p>
-                    )}
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <p>No hay revisiones disponibles.</p>
+                )}
                 </div>
                 </div>
         </Modal>
