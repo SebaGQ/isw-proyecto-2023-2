@@ -122,6 +122,7 @@ async function createApplication(firstName, lastName1, lastName2, rutUser,subsid
       applicationDate,
       status,
       members,
+      rutsMembers,
     });
 
     await newApplication.save();
