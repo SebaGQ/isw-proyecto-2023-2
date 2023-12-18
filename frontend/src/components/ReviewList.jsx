@@ -2,11 +2,55 @@ import React from 'react';
 import '../styles/ReviewList.css';
 
 const ReviewList = ({ reviews, onEditReview }) => {
+        // Estados para los filtros
+        const [filteredReviews, setFilteredReviews] = useState(reviews);
+        const [subsidyNameFilter, setSubsidyNameFilter] = useState('');
+        const [statusFilter, setStatusFilter] = useState('');
+    
+        // Efecto para aplicar filtros y ordenamiento
+        useEffect(() => {
+            let filtered = reviews;
+    
+            // Filtrar por nombre del subsidio si el filtro está activo
+            if (subsidyNameFilter) {
+                filtered = filtered.filter(review =>
+                    review.applicationId.subsidyId.name.toLowerCase().includes(subsidyNameFilter.toLowerCase())
+                );
+            }
+    
+            // Filtrar por estado si el filtro está activo
+            if (statusFilter) {
+                filtered = filtered.filter(review =>
+                    review.status.toLowerCase() === statusFilter.toLowerCase()
+                );
+            }
+    
+            // Ordenar por porcentaje social de menor a mayor
+            filtered.sort((a, b) =>
+                a.applicationId.socialPercentage - b.applicationId.socialPercentage
+            );
+    
+            setFilteredReviews(filtered);
+        }, [reviews, subsidyNameFilter, statusFilter]);
     return (
         <div className="review-list">
-            {reviews.length > 0 ? (
-                reviews.map(review => (
-                    <div key={review._id} className="review-item">
+            {console.log (reviews)}
+            {/* Inputs para los filtros */}
+            <input
+                type="text"
+                placeholder="Filtrar por subsidio"
+                value={subsidyNameFilter}
+                onChange={e => setSubsidyNameFilter(e.target.value)}
+            />
+            <input
+                type="text"
+                placeholder="Filtrar por estado"
+                value={statusFilter}
+                onChange={e => setStatusFilter(e.target.value)}
+            />
+                {filteredReviews.length > 0 ? (
+                    filteredReviews.map(review => (
+                        <div key={review._id} className="review-item">
                         {/* Información de la postulación */}
                         <h3 className="review-title">Postulante: {review.applicationId.rut[0]}</h3>
                         {/* crear if si es que no encuentra subsidioId.name*/}

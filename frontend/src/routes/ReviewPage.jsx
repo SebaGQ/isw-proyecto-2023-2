@@ -34,7 +34,8 @@ const ReviewPage = () => {
                 const response = await fetchReviews();
                 if (response.state === 'Success') {
                     setReviews(response.data); // Solo pasas el array de revisiones
-                } else {
+                }
+                else {
                     // Manejar otros estados, por ejemplo, errores
                     setError('Error al cargar las revisiones');
                 }

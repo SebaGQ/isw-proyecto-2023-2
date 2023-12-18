@@ -11,8 +11,8 @@ import { useAuth } from "../context/AuthContext";
 const NavBar = () => {
   // Aquí podrías usar algo similar a useRouter de Next.js para determinar la ruta activa
   const { user } = useAuth();
-  const isAdmin = user.roles[0] === "admin";//mostro mensaje de error una vez
-  const isUser = user.roles[0] === "user";
+  const isAdmin = user && user.roles && user.roles[0] === "admin";
+  const isUser = user && user.roles && user.roles[0] === "user";
 
   return (
     <div className="navbar">
