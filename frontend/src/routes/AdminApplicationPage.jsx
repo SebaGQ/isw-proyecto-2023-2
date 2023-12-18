@@ -18,6 +18,7 @@ const AdminApplicationPage = () => {
     const [reviews, setReviews] = useState([]);
     const [loadingReviews, setLoadingReviews] = useState(false);
     const [isReviewOpen, setIsReviewOpen] = useState(false);
+    const [selectedReviews, setSelectedReviews] = useState([]);
 
     const getApplicationsByUser = useCallback(async () => {
         setLoading(true);
@@ -68,9 +69,18 @@ const AdminApplicationPage = () => {
         }
     };
 
-    const handleReviewClick = (applicationData) => {
+    const handleReviewClick = async (applicationData) => {
         setSelectedApplication(applicationData);
         setIsReviewOpen(true);
+
+        try {
+            const reviewsData = await fetchReviewsByApplication(applicationData._id);
+            if (reviewsData && reviewsData.data) {
+                setSelectedReviews(reviewsData.data); // Almacena los comentarios de revisión
+            }
+        } catch (error) {
+            console.error('Error fetching reviews:', error);
+        }
     };
 
 
@@ -156,6 +166,7 @@ const AdminApplicationPage = () => {
                         onClose={() => setIsReviewOpen(false)}
                         application={selectedApplication}
                         onReviewSuccess={refreshApplications}
+                        initialComments= {selectedReviews.comments}
                     />
                 )}
 
