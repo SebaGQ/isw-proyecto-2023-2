@@ -118,7 +118,7 @@ const CreateSubsidyPage = () => {
 
   return (
     <div className="create-subsidy-container">
-      <h2 className="form-title">Crear Nuevo Subsidio</h2>{" "}
+      <h2 className="form-title">{isEditMode ? "Modificar Subsidio" : "Crear Subsidio"}</h2>{" "}
       {/* Título del formulario */}
       <form onSubmit={handleSubmit} className="create-subsidy-form">
         {error.hasError && <div className="error-message">{error.message}</div>}
