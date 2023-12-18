@@ -20,8 +20,6 @@ const TopBar = ({ showNav, setShowNav }) => {
         navigate('/auth');
     };
 
-    console.log(user)  
-
     return (
         <div className="topbar">
             <div className="topbar-brand">

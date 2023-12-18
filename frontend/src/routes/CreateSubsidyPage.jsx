@@ -58,7 +58,11 @@ const CreateSubsidyPage = () => {
     const subsidyIdParam = queryParams.get("subsidyId");
     if (subsidyIdParam) {
       setIsEditMode(true);
+
+      // Fetch del subsidio por ID y actualización del estado
+
       setLoadedGuidelineId(queryParams.get("subsidyGuideline") || "");
+
       setSubsidyData({
         name: queryParams.get("subsidyName") || "",
         description: queryParams.get("subsidyDescription") || "",
