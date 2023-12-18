@@ -33,7 +33,7 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
 
                 {showRejectionReasons && (
                     <div>
-                        <h3>Motivos del Rechazo</h3>
+                        <h2>Motivos del Rechazo</h2>
                         <p>{reviews[reviews.length - 1].comments}</p>
                     </div>
                 )}
