@@ -111,12 +111,12 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
       const cleanedAfterDash = afterDash.replace(/\D/g, ""); // Elimina caracteres no numéricos
 
       // Si después del guion hay más de un carácter, permite borrar el guion
-      if (cleanedAfterDash.length > 1) {
-        const updatedRUTs = [...memberRUTs];
-        updatedRUTs[index] = `${beforeDash}-${cleanedAfterDash.slice(0, 1)}`;
-        setMemberRUTs(updatedRUTs);
-        return;
-      }
+      // if (cleanedAfterDash.length > 1) {
+      //   const updatedRUTs = [...memberRUTs];
+      //   updatedRUTs[index] = `${beforeDash}-${cleanedAfterDash.slice(0, 1)}`;
+      //   setMemberRUTs(updatedRUTs);
+      //   return;
+      // }
 
       // Si después del guion hay un solo carácter, permite borrar el guion
       if (cleanedAfterDash.length === 1) {
