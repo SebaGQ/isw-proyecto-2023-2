@@ -275,7 +275,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
             placeholder="Ingresa el número de miembros de tu familia"
             required
             className="form-control"
-            min={0}
+            min={1}
           />
         </div>
         {/* Renderizar dinámicamente los campos de entrada para los miembros de la familia */}

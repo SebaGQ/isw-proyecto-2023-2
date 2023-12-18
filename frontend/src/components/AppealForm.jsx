@@ -1,27 +1,88 @@
 import React, { useState, useEffect } from 'react';
 import { postAppeal } from '../services/appeal.service';
 import '../styles/ApplicationForm.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { validateRUT } from "validar-rut"; 
 
 const AppealForm = ({ applicationId, onClose, onAppealSuccess }) => {
     const [newSocialPercentage, setNewSocialPercentage] = useState('');
     const [newMembers, setNewMembers] = useState('');
     const [newMemberRUTs, setNewMemberRUTs] = useState([]);
 
-    // Actualiza los RUTs cuando cambia la cantidad de nuevos miembros
     useEffect(() => {
         setNewMemberRUTs(new Array(Number(newMembers)).fill(''));
     }, [newMembers]);
 
-    // Maneja el cambio en los campos de RUT
     const handleRUTChange = (index, value) => {
-        const updatedRUTs = [...newMemberRUTs];
-        updatedRUTs[index] = value;
-        setNewMemberRUTs(updatedRUTs);
-    };
+        // Elimina caracteres no numéricos
+    const numericValue = value.replace(/\D/g, "");
 
-    // Maneja el envío del formulario
+    // Divide el Rut en grupos de 3 y agrega puntos
+    const formattedValue = numericValue.replace(
+      /^(\d{2})(\d{3})(\d{3})/,
+      "$1.$2.$3-"
+    );
+
+    // Permite escribir un número después del guion
+    if (formattedValue.includes("-")) {
+      const [beforeDash, afterDash] = formattedValue.split("-");
+      const cleanedAfterDash = afterDash.replace(/\D/g, ""); // Elimina caracteres no numéricos
+
+      // Si después del guion hay más de un carácter, permite borrar el guion
+      if (cleanedAfterDash.length > 1) {
+        const updatedRUTs = [...newMemberRUTs];
+        updatedRUTs[index] = `${beforeDash}-${cleanedAfterDash.slice(0, 1)}`;
+        setNewMemberRUTs(updatedRUTs);
+        return;
+      }
+
+      // Si después del guion hay un solo carácter, permite borrar el guion
+      if (cleanedAfterDash.length === 1) {
+        const updatedRUTs = [...newMemberRUTs];
+        updatedRUTs[index] = `${beforeDash}-${cleanedAfterDash}`;
+        setNewMemberRUTs(updatedRUTs);
+        return;
+      }
+
+      // Si después del guion no hay caracteres, permite borrar el guion
+      const updatedRUTs = [...newMemberRUTs];
+      updatedRUTs[index] = beforeDash;
+      setNewMemberRUTs(updatedRUTs);
+      return;
+    }
+
+    // Si no hay guion, simplemente actualiza el RUT
+    const updatedRUTs = [...newMemberRUTs];
+    updatedRUTs[index] = formattedValue;
+    setNewMemberRUTs(updatedRUTs);
+  };
+
+  const handleMembersChange = (value) => {
+    const numericValue = value.replace(/[^\d]/g, '');
+    setNewMembers(numericValue);
+    setNewMemberRUTs(new Array(Number(numericValue)).fill(''));
+};
+
+const handleSocialPercentageChange = (value) => {
+    const percentage = Number(value);
+    if (!isNaN(percentage) && percentage >= 0 && percentage <= 100) {
+        setNewSocialPercentage(percentage);
+    } else {
+        toast.error("Porcentaje social inválido. Ingresa un valor entre 0 y 100.");
+    }
+};
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validación de los RUTs
+        for (const rut of newMemberRUTs) {
+            if (!validateRUT(rut)) {
+                toast.error("Uno o más RUTs son inválidos.");
+                return;
+            }
+        }
         const appealData = {
             postId: applicationId,
             newSocialPercentage: Number(newSocialPercentage),
@@ -35,8 +96,10 @@ const AppealForm = ({ applicationId, onClose, onAppealSuccess }) => {
             if (onAppealSuccess) {
                 onAppealSuccess();
             }
+            toast.success("Apelación enviada con éxito.");
         } catch (error) {
             console.error('Error al enviar la apelación:', error);
+            toast.error("Error al enviar la apelación.");
         }
     };
 
@@ -50,7 +113,7 @@ const AppealForm = ({ applicationId, onClose, onAppealSuccess }) => {
                         id="newSocialPercentage"
                         type="number"
                         value={newSocialPercentage}
-                        onChange={(e) => setNewSocialPercentage(e.target.value)}
+                        onChange={(e) => handleSocialPercentageChange(e.target.value)}
                         placeholder="Ingresa el nuevo porcentaje social"
                         required
                         className="form-control"
@@ -60,9 +123,9 @@ const AppealForm = ({ applicationId, onClose, onAppealSuccess }) => {
                     <label htmlFor="newMembers">Nuevo Número de Miembros</label>
                     <input
                         id="newMembers"
-                        type="number"
+                        type="text" 
                         value={newMembers}
-                        onChange={(e) => setNewMembers(e.target.value)}
+                        onChange={(e) =>handleMembersChange(e.target.value)}
                         placeholder="Ingresa el nuevo número de miembros de tu familia"
                         required
                         className="form-control"
