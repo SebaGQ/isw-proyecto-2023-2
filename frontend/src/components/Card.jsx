@@ -20,6 +20,7 @@ const Card = ({
   const isExpired = endDate < currentDate;
   const { user } = useAuth();
   const isAdmin = user.roles[0] === "admin";
+  const isUser = user.roles[0] === "user";
 
   return (
     <div className="card">
@@ -34,14 +35,14 @@ const Card = ({
       </div>
       <div className="card-footer">
         <p>{type}</p>
-        {isExpired ? (
-          <button disabled className="apply-button card-button disabled">
-            Postulaciones Cerradas
-          </button>
-        ) : (
-          <button onClick={onApply} className="apply-button card-button">
-            Postular
-          </button>
+                {isUser && ( isExpired ? (
+                <button disabled className="apply-button card-button disabled">
+                    Postulaciones Cerradas
+                </button>
+            ) : (
+                <button onClick={onApply} className="apply-button card-button">
+                    Postular
+                </button>)
         )}
         <button
           onClick={onViewRequirements}

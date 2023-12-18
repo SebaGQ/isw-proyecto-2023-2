@@ -34,7 +34,6 @@ const ReviewList = ({ reviews, onEditReview }) => {
         }, [reviews, subsidyNameFilter, statusFilter]);
     return (
         <div className="review-list">
-            {console.log (reviews)}
             {/* Inputs para los filtros */}
             <input
                 type="text"

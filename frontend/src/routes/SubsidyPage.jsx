@@ -49,7 +49,6 @@ const SubsidyPage = () => {
     try {
       const activeSubsidies = await fetchSubsidies(!showArchivedSubsidies);
       setSubsidies(activeSubsidies);
-      console.log(showArchivedSubsidies);
     } catch (error) {
       setError("Error al cargar los subsidios");
       // Manejar el error aquí
