@@ -31,21 +31,22 @@ function validarRUT(rut) {
   return digitoCalculado === digitoVerificador;
 }
 
-/*
-  Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
-  Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
-  se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
-*/
-async function createApplication(rut, subsidyId, socialPercentage, applicationDate, members, userEmail) {
-  try {
+
+    /*
+      Cambios solicitados por el profesor después de presentación oral: Sebastián Gutiérrez
+      Se creará un objeto de revisión al momento de crear la postulación, en caso de fallar validaciones, 
+      se agregarán comentarios a la revisión indicando las fallas, en caso de cumplir se agregará un comentario que lo indique.
+    */ 
+async function createApplication(firstName, lastName1, lastName2, rutUser,subsidyId, socialPercentage, applicationDate, members, rutsMembers,userEmail) {
+  try {   
     //El usuario no se debe buscar por el primer rut ingresado
     //const user = await User.findOne({ rut: rut[0] });
 
     //como debe ser el usuario q está postulando se saca del token
-    const user = await User.findOne({ email: userEmail });
 
+    const user = await User.findOne({ email: userEmail});
+    
     if (!user) return [null, "Usuario no encontrado"];
-
 
     // El populate toma subsidy.guidelineId y guarda dentro el objeto guideline completo que tiene esa ID
     // En el fondo hace dos consultas a la base de datos, y una la guarda dentro de la otra.
@@ -62,25 +63,38 @@ async function createApplication(rut, subsidyId, socialPercentage, applicationDa
       return [null, "Ya tiene una postulación pendiente para este subsidio"];
     }
 
+
+    const hasPrevious = await hasPreviousApplication(user._id, subsidyId);
+    if (hasPrevious) {
+      return [null, "Ya ha realizado una postulación previa para este subsidio"];
+    }
+    
+    // Verificar que el rutUser ingresado sea un rut valido, a través de un calculo matematico
+    if(!validarRUT(rutUser)){
+      return [null, "El rut ingresado es invalido"];
+    }
     // Se verifica por cada item en el arreglo, que el rut sea valido, a traves de un calculo matematico.      
-    for (const ruts of rut) {
-      if (!validarRUT(ruts)) {
+    for(const ruts of rutsMembers){
+      if(!validarRUT(ruts)){
         return [null, "Uno o más rut es invalido"];
       }
     }
     // Se agrega validacion de cantidad de rut igual a la cantidad de miembros.
-    if (rut.length !== members) {
+
+    //console.log(rut.length);
+    //console.log(members);
+    if (rutsMembers.length !== members) {
       return [null, "Los ruts y miembros ingresados deben ser iguales"];
     }
 
     //Se define el estado de postulación en 'Pendiente'
     let status = AVAILABILITY[3];
     let comments = [];
-    // Se define por defectos los estados de la revision, asi si esta correcto todas seran true
-    let statusPercentage = true;
-    let statusMembers = true;
-    let statusDate = true;
 
+        // Se define por defectos los estados de la revision, asi si esta correcto todas seran true
+        let statusPercentage = true;
+        let statusMembers = true;
+        let statusDate = true;
     // validación porcentaje social
     if (socialPercentage > guideline.maxSocialPercentage) {
       status = AVAILABILITY[2];
@@ -103,13 +117,17 @@ async function createApplication(rut, subsidyId, socialPercentage, applicationDa
     }
 
     const newApplication = new Application({
-      rut,
+      firstName,
+      lastName1,
+      lastName2,
+      rutUser,
       subsidyId,
       userId: user._id,
       socialPercentage,
       applicationDate,
       status,
       members,
+      rutsMembers,
     });
 
     await newApplication.save();
@@ -255,6 +273,20 @@ async function hasPendingApplication(userId, subsidyId) {
   }
 }
 
+async function hasPreviousApplication(userId, subsidyId) {
+  try {
+    const previousApplication = await Application.findOne({
+      userId,
+      subsidyId,
+      status: { $ne: AVAILABILITY[4] } // Excluye el estado "Rechazado"
+    });
+    return previousApplication !== null; // Retorna true si existe una aplicación previa
+  } catch (error) {
+    handleError(error, "application.service -> hasPreviousApplication");
+    throw new Error("Error al comprobar la existencia de postulaciones previas");
+  }
+}
+
 module.exports = {
   createApplication,
   getApplications,
@@ -263,4 +295,6 @@ module.exports = {
   updateApplication,
   updateApplicationStatus,
   deleteApplication,
+  hasPendingApplication,
+  hasPreviousApplication,
 };

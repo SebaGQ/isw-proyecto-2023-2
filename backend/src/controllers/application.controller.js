@@ -12,15 +12,19 @@ const { handleError } = require("../utils/errorHandler");
  */
 async function createApplication(req, res) {
   try {
-    const { rut, subsidyId, socialPercentage, applicationDate, members } = req.body;
+    const { firstName, lastName1, lastName2, rutUser,subsidyId, socialPercentage, applicationDate, members, rutsMembers } = req.body;
     const userEmail = req.email;
 
     const [newApplication, applicationError] = await ApplicationService.createApplication(
-      rut,
+      firstName,
+      lastName1,
+      lastName2,
+      rutUser,
       subsidyId,
       socialPercentage,
       applicationDate,
       members,
+      rutsMembers,
       userEmail,);
 
     if (applicationError) return respondError(req, res, 400, applicationError);
