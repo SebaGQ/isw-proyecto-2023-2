@@ -143,7 +143,7 @@ async function createApplication(rut, subsidyId, socialPercentage, applicationDa
 
 async function getApplications(filters = {}) {
   try {
-    const applications = await Application.find(filters).populate("subsidyId").populate("user");
+    const applications = await Application.find(filters).populate("subsidyId").populate("userId");
     if (!applications) return [null, "No hay postulaciones"];
     return [applications, null];
   } catch (error) {
