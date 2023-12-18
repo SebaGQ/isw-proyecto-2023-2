@@ -58,13 +58,13 @@ const CreateSubsidyPage = () => {
   const subsidyIdParam = queryParams.get("subsidyId");
 
   useEffect(() => {
-    
-  
+
+
     if (subsidyIdParam) {
       // Si hay un subsidyId en la URL, se trata de una edición
       setIsEditMode(true);
       console.log("subsidyIdParam:", subsidyIdParam);
-  
+
       // Fetch del subsidio por ID y actualización del estado
       setSubsidyData({
         name: queryParams.get("subsidyName") || "",
@@ -75,7 +75,7 @@ const CreateSubsidyPage = () => {
         typeSubsidy: queryParams.get("subsidyType") || "",
         guidelineId: queryParams.get("subsidyGuideline") || "",
       });
-  
+
       setSelectedGuidelineId(queryParams.get("subsidyGuideline") || "");
     }
   }, []);
@@ -206,9 +206,8 @@ const CreateSubsidyPage = () => {
         </div>
         <div className="form-group">
           <label htmlFor="subsidyType">Tipo de Subsidio</label>
-          <input
+          <select
             id="subsidyType"
-            type="text"
             value={subsidyData.typeSubsidy}
             onChange={(e) =>
               setSubsidyData((prevData) => ({
@@ -216,10 +215,13 @@ const CreateSubsidyPage = () => {
                 typeSubsidy: e.target.value,
               }))
             }
-            placeholder="Ingresa el tipo de subsidio"
             required
             className="form-control"
-          />
+          >
+            <option value="">Selecciona un tipo</option>
+            <option value="Subsidio">Subsidio</option>
+            <option value="Beneficio">Beneficio</option>
+          </select>
         </div>
         <div className="form-group">
           <label htmlFor="subsidyGuidelineId">ID de la Guía del Subsidio</label>
