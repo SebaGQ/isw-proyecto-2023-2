@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { fetchApplicationsByUser } from "../services/application.service";
+import { fetchReviewsByApplication } from "../services/review.service";
 import DetailsModal from "../components/DetailsModal";
 import Modal from "../components/Modal";
 import AppealForm from "../components/AppealForm";

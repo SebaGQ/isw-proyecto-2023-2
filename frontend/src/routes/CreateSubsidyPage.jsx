@@ -16,12 +16,10 @@ const CreateSubsidyPage = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "";
-
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-
     return `${year}-${month}-${day}`;
   };
 
@@ -41,6 +39,7 @@ const CreateSubsidyPage = () => {
   const [guidelines, setGuidelines] = useState([]);
   const [selectedGuidelineId, setSelectedGuidelineId] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadedGuidelineId, setLoadedGuidelineId] = useState("");
 
   useEffect(() => {
     const fetchGuidelines = async () => {
@@ -53,18 +52,17 @@ const CreateSubsidyPage = () => {
     };
 
     fetchGuidelines();
-  }, []); // Solo se ejecutará una vez al montar el componente
-
-  const subsidyIdParam = queryParams.get("subsidyId");
+  }, []); 
 
   useEffect(() => {
-
-
+    const subsidyIdParam = queryParams.get("subsidyId");
     if (subsidyIdParam) {
-      // Si hay un subsidyId en la URL, se trata de una edición
       setIsEditMode(true);
 
       // Fetch del subsidio por ID y actualización del estado
+
+      setLoadedGuidelineId(queryParams.get("subsidyGuideline") || "");
+
       setSubsidyData({
         name: queryParams.get("subsidyName") || "",
         description: queryParams.get("subsidyDescription") || "",
@@ -74,8 +72,6 @@ const CreateSubsidyPage = () => {
         typeSubsidy: queryParams.get("subsidyType") || "",
         guidelineId: queryParams.get("subsidyGuideline") || "",
       });
-
-      setSelectedGuidelineId(queryParams.get("subsidyGuideline") || "");
     }
   }, []);
 
@@ -89,6 +85,7 @@ const CreateSubsidyPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       const subsidyDataWithGuideline = {
