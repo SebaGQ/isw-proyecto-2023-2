@@ -67,7 +67,7 @@ const subsidyBodySchema = Joi.object({
       "any.required": "El id de la pauta es obligatorio.",
       "string.base": "El id de la pauta debe ser de tipo string.",
       "string.pattern.base": "El id de la pauta proporcionado no es un ObjectId válido.",
-    }),
+    }), 
 }).messages({
   "object.unknown": "No se permiten propiagees adicionales.",
 });

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 // require typeSubsidy
 const TYPE_SUBSIDY = require("../constants/typeSubsidy.constants");
+const { boolean } = require("joi");
 
 const subsidySchema = new mongoose.Schema({
   name: {
@@ -36,6 +37,11 @@ const subsidySchema = new mongoose.Schema({
     required: true,
     ref: "Guideline",
   },
+  archive: {
+    type: Boolean,
+    default: false,
+  }
+
 }, {
   timestamps: true,
 });
