@@ -46,7 +46,14 @@ const AdminReviewModal = ({ isOpen, onClose, application, onReviewSuccess }) => 
                 <h2>Detalles de la Revisión</h2>
                 <form onSubmit={handleSubmit} className="modal-content">
                     <div className="form-group">
-                        {/* ... (código existente para otros campos del formulario) */}
+                        <label>Nombre del Subsidio:</label>
+                        <div className="info">{application.subsidyId.name}</div>
+
+                        <label>RUT del Usuario:</label>
+                        <div className="info">{application.rutUser}</div>
+
+                        <label>Nombre del Solicitante:</label>
+                        <div className="info">{application.firstName}</div>
                     </div>
                     <div className="form-group">
                         <label>Comentarios:</label>
