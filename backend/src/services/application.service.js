@@ -228,15 +228,28 @@ async function updateApplication(applicationId, updateData) {
   }
 }
 
-async function updateApplicationStatus(applicationId, newStatus) {
+async function updateApplicationStatus(applicationId, newStatus, comments) {
   try {
-
-    if (newStatus !== "Aprobado" && newStatus !== "Rechazado") {
-      return [null, "Estado de postulación no válido"];
+    if (!mongoose.Types.ObjectId.isValid(applicationId)) {
+      return [null, "ID de postulación no válido"];
     }
 
-    const application = await Application.findByIdAndUpdate(applicationId, { status: newStatus }, { new: true });
+    const application = await Application.findById(applicationId);
     if (!application) return [null, "Postulación no encontrada"];
+
+    application.status = newStatus;
+    await application.save();
+
+    const newReview = new Review({
+      applicationId: application._id,
+      comments, 
+      status: newStatus,
+      origin: "Administrador",
+      socialPercentage: application.socialPercentage,
+      members: application.members,
+    });
+
+    await newReview.save();
 
     return [application, null];
   } catch (error) {
@@ -244,6 +257,7 @@ async function updateApplicationStatus(applicationId, newStatus) {
     return [null, "Error al actualizar el estado de la postulación"];
   }
 }
+
 
 async function deleteApplication(applicationId) {
   try {
