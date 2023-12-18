@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { fetchReviews } from '../services/review.service';
 import ReviewList from '../components/ReviewList'; 
 // import ReviewModal from '../components/ReviewModal'; // Un componente modal para detalles o edición de revisión
-import '../styles/ReviewPage.css';
+import '../styles/reviewPage.css';
 import Loading from '../components/Loading';
 import { useNavigate } from 'react-router-dom';
 

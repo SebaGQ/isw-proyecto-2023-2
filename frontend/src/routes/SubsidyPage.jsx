@@ -8,7 +8,7 @@ import Card from "../components/Card";
 import ApplicationForm from "../components/ApplicationForm";
 import Modal from "../components/Modal";
 import RequirementsModal from "../components/RequirementsModal";
-import "../styles/subsidyPage.css";
+import "../styles/SubsidyPage.css";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
