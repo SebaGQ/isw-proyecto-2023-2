@@ -1,6 +1,5 @@
-/* ApplicationDetailsModal.css */
 .modal-container {
-    max-width: 100%;
+    max-width: 700px; /* Aumenta el ancho para más espacio */
     margin: auto;
     background: #fff;
     padding: 20px;
@@ -8,62 +7,76 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     max-height: 80vh;
-    box-sizing: border-box;
-    overflow-y: auto;
 }
 
-.custom-table {
+.modal-content .form-group {
+    margin-bottom: 20px; /* Espacio adicional entre grupos de formulario */
+}
+
+.modal-content .form-group label {
+    display: block;
+    margin-bottom: 8px; /* Espacio ligeramente mayor bajo las etiquetas */
+    font-weight: bold;
+    color: #333; /* Color más oscuro para mejorar el contraste */
+}
+
+.modal-content .form-control {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 8px; /* Espacio entre filas */
-    margin-bottom: 16px; /* Espacio debajo de la tabla */
-    table-layout: fixed;
-    overflow-x: auto;
-}
-
-.custom-table th, .custom-table td {
-    border: 1px solid #ddd;
-    padding: 12px; /* Más espacio interior */
-    text-align: left;
-    background-color: white; /* Fondo blanco para el contenido */
+    padding: 12px; /* Un poco más de espacio interior */
+    border: 1px solid #ccc; /* Color de borde más suave */
+    border-radius: 5px; /* Bordes ligeramente redondeados */
     box-sizing: border-box;
+    font-size: 16px;
 }
 
-.custom-table th {
-    background-color: #0024c7; /* Un azul más vibrante para encabezados */
-    color: white; /* Texto blanco en encabezados */
-    border-radius: 5px 5px 0 0; /* Bordes redondeados para la parte superior de la tabla */
+.modal-actions {
+    margin-top: 20px;
+    text-align: right;
 }
 
-.custom-table tr {
-    border-radius: 8px; /* Bordes redondeados para las filas */
-}
-
-.custom-table td {
+.btn {
+    padding: 12px 25px; /* Botones más grandes y más cómodos */
     border: none;
-}
-
-.custom-table tr:nth-child(even) td {
-    background-color: #f9f9f9; /* Alternar colores para las filas */
-}
-
-.custom-table tr:hover td {
-    background-color: #eaeaea; /* Color al pasar el ratón */
-}
-
-.custom-table button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 15px; /* Más padding para los botones */
-    border-radius: 4px;
+    border-radius: 5px; /* Bordes redondeados consistentes */
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 16px;
     transition: background-color 0.3s; /* Transición suave para el hover */
 }
 
-.custom-table .socialPercentage,
-.custom-table .members {
-    text-align: center; /* Centra el texto horizontalmente */
-    vertical-align: middle; /* Centra el texto verticalmente */
+.btn-primary {
+    background-color: #0056b3; /* Color primario más oscuro */
+    color: white;
 }
+
+.btn-secondary {
+    background-color: #55b46a;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    opacity: 0.9; /* Efecto sutil al pasar el mouse */
+}
+
+.invalid-input {
+    border: 2px solid red;
+}
+
+/* Estilos adicionales para los botones y comentarios */
+.btn-delete {
+    background-color: #ff3860; /* Color rojo para el botón de eliminar */
+    color: white;
+    margin-left: 10px; /* Espacio entre el botón de eliminar y el campo de texto */
+}
+
+.comment-group {
+    display: flex; /* Diseño en línea para comentarios y botón de eliminar */
+    align-items: center; /* Alinea verticalmente el botón con el campo de texto */
+    margin-bottom: 10px; /* Espacio entre grupos de comentarios */
+}
+
+.comment-group input {
+    flex-grow: 1; /* El campo de texto ocupa todo el espacio disponible */
+    margin-right: 10px; /* Espacio entre el campo de texto y el botón */
+}
+

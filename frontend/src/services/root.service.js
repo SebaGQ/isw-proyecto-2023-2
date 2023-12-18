@@ -4,7 +4,7 @@ import cookies from 'js-cookie';
 /* LocalHost */
 const API_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:80/api';
 /* Servidor */
-//const API_URL = import.meta.env.VITE_BASE_URL || 'http:146.83.198.35:443/api';
+//const API_URL = import.meta.env.VITE_BASE_URL || 'http://146.83.198.35:1614/api';
 
 const instance = axios.create({
   baseURL: API_URL,
