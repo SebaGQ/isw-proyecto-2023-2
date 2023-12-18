@@ -1,17 +1,16 @@
+// ApplicationDetailsModal.jsx
 import React from 'react';
 import Modal from './Modal';
 import Loading from '../components/Loading'; // Asegúrate de que la ruta de importación es correcta
-import  '../styles/DetailsModal.css';
 
-const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews }) => {
-    if (!application) return null; // Si no hay datos de la aplicación, no renderiza nada
+const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews }) => {
+    if (!application) return null;
 
-
-    // Función para formatear la fecha en dd/mm/aaaa 00:00
+    // Función para formatear la fecha
     const formatDate = (dateString) => {
-        const options = { 
-            year: 'numeric', 
-            month: '2-digit', 
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
             day: '2-digit',
             hour: '2-digit',
             minute: '2-digit',
@@ -19,22 +18,23 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
         return new Date(dateString).toLocaleDateString('es-ES', options);
     };
 
-
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <h2>Detalles de la Postulación</h2>
             <div className="details-content">
+                <p><strong>Tipo:</strong> {application.subsidyId.typeSubsidy}</p>
+                <p><strong>Nombre {application.subsidyId.typeSubsidy}:</strong> {application.subsidyId.name}</p>
                 <p><strong>Estado:</strong> {application.status}</p>
-                <p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>
-                <p><strong>Número de Miembros:</strong> {application.members}</p>
+                <p><strong>Nombre Postulante:</strong> {application.userId.firstName} {application.userId.lastName}</p>
+                <p><strong>RUT Postulante:</strong> {application.userId.rut}</p>
+                {/*<p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>*/}
+                {/*<p><strong>Número de Miembros:</strong> {application.members}</p>*/}
                 <p><strong>Fecha de Postulación:</strong> {formatDate(application.applicationDate)}</p>
-                
+
                 <h2>Historial</h2>
                 {loadingReviews ? (
-                    // Si loadingReviews es true, muestra el componente Loading
                     <Loading />
                 ) : reviews && reviews.length > 0 ? (
-                    // Si hay revisiones, muestra la tabla de revisiones
                     <table className="custom-table">
                         <thead>
                             <tr>
@@ -58,7 +58,6 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
                         </tbody>
                     </table>
                 ) : (
-                    // Si no hay revisiones y no se está cargando, muestra un mensaje
                     <p>No hay revisiones disponibles.</p>
                 )}
             </div>
@@ -66,4 +65,4 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
     );
 };
 
-export default DetailsModal;
+export default ApplicationDetailsModal;

@@ -10,6 +10,7 @@ import Login from './routes/Login.jsx';
 import ReviewPage from './routes/ReviewPage.jsx';
 import CreateReviewPage from './components/CreateReviewPage.jsx';
 import CreateSubsidyPage from './routes/CreateSubsidyPage.jsx';
+import AdminApplicationPage from './routes/AdminApplicationPage.jsx'
 
 
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'applications',
         element: <ApplicationPage />,
+      },
+      {
+        path: 'admin-applications',
+        element: <AdminApplicationPage />,
       },
       {
         path: 'reviews',

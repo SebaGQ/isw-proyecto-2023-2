@@ -1,0 +1,36 @@
+.application-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.application-table th, .application-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.application-table th {
+    background-color: #f4f4f4;
+}
+
+.application-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.application-table tr:hover {
+    background-color: #eaeaea;
+}
+
+.application-table button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.application-table button:hover {
+    background-color: #0056b3;
+}
