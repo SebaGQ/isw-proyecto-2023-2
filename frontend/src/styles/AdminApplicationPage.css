@@ -3,6 +3,18 @@
     border-collapse: collapse;
 }
 
+.details-content {
+    width: 1000px !important;
+    max-height: 500px; /* Ajusta esta altura según tus necesidades */
+    overflow-y: auto;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+
 .application-table th, .application-table td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -33,4 +45,18 @@
 
 .application-table button:hover {
     background-color: #0056b3;
+}
+
+.button-review {
+    background-color: #ff0000 !important; /* Rojo */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.button-review:hover {
+    background-color: #cc0000; /* Un rojo más oscuro para el hover */
 }
