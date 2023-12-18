@@ -10,7 +10,8 @@ import Login from './routes/Login.jsx';
 import ReviewPage from './routes/ReviewPage.jsx';
 import CreateReviewPage from './components/CreateReviewPage.jsx';
 import CreateSubsidyPage from './routes/CreateSubsidyPage.jsx';
-import AdminApplicationPage from './routes/AdminApplicationPage.jsx'
+import  GuidelinePage from './routes/GuidelinePage.jsx';
+import CreateGuidelinePage from './routes/CreateGuidelinePage.jsx';
 
 
 const router = createBrowserRouter([
@@ -22,6 +23,14 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <App />,
+      },
+      {
+        path: 'guidelines',
+        element: <GuidelinePage />,
+      },
+      {
+        path:'createguideline',
+        element: <CreateGuidelinePage />
       },
       {
         path: 'subsidies',

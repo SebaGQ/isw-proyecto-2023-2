@@ -6,6 +6,8 @@ import Modal from '../components/Modal';
 import AppealForm from '../components/AppealForm';
 import '../styles/ApplicationPage.css';
 import Loading from '../components/Loading';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faGavel } from '@fortawesome/free-solid-svg-icons';
 
 const ApplicationPage = () => {
     const [applications, setApplications] = useState([]);
@@ -81,7 +83,8 @@ const ApplicationPage = () => {
                         <th>Estado</th>
                         <th>Porcentaje Social</th>
                         <th>Número de Miembros</th>
-                        <th>Acciones</th>
+                        <th>Ver Detalles</th>
+                        <th>Apelar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -93,10 +96,18 @@ const ApplicationPage = () => {
                                 <td>{application.socialPercentage}%</td>
                                 <td>{application.members}</td>
                                 <td>
-                                    <button onClick={() => handleDetailsClick({ application, review })}>Ver Detalles</button>
-                                    {application.status === 'Rechazado' && (
-                                        <button className="btn-appeal" onClick={() => handleAppealClick({ application, review })}>Apelar</button>
-                                    )}
+                                    <button onClick={() => handleDetailsClick({ application, review })}>
+                                        <FontAwesomeIcon icon={faEye} />
+                                    </button>
+                                </td>
+                                {application.status === 'Rechazado' && (
+                                    <td>
+                                        <button className="btn-appeal" onClick={() => handleAppealClick({ application, review })}>
+                                            <FontAwesomeIcon icon={faGavel} />
+                                        </button>
+                                    </td>
+                                )}
+                                <td>
                                 </td>
                             </tr>
                         ))

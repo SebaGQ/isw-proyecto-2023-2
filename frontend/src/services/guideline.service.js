@@ -13,3 +13,59 @@ export const fetchGuideline = async () => {
     throw error;
   }
 };
+
+export const createGuideline = async (guidelineData) => {
+  try {
+    const response = await axios.post("/guidelines", guidelineData);
+    const { status, data } = response;
+
+    if (status === 201) {
+      return data;
+    } else {
+      throw new Error(`Error al crear la pauta. Estado: ${status}`);
+    }
+  } catch (error) {
+
+    if (error.response && error.response.data) {
+      // Si la respuesta contiene datos, obtenemos el mensaje de error
+      const errorMessage = error.response.data.message;
+  
+      // Lanza un nuevo error con el mensaje para que pueda ser manejado en el componente
+      throw new Error(errorMessage);
+    } else {
+      // Si no hay datos en la respuesta, lanza un error genérico
+      throw new Error("Error al crear la pauta. Inténtalo de nuevo más tarde. desde el service");
+    }
+  }
+};
+
+export const deleteGuideline = async (guidelineId) => {
+  try {
+    const response = await axios.delete(`/guidelines/${guidelineId}`);
+    return response.data.data;
+  } catch (error) {
+    console.error(
+      `There was an error deleting the subsidy with ID ${guidelineIdId}: `,
+      error
+    );
+    throw error;
+  }
+};
+
+export const modifyGuideline = async (guidelineId, updatedData) => {
+  try {
+    const response = await axios.put(`/guidelines/${guidelineId}`, updatedData);
+    return response.data.data;
+  } catch (error) {
+    if (error.response && error.response.data) {
+      // Si la respuesta contiene datos, obtenemos el mensaje de error
+      const errorMessage = error.response.data.message;
+  
+      // Lanza un nuevo error con el mensaje para que pueda ser manejado en el componente
+      throw new Error(errorMessage);
+    } else {
+      // Si no hay datos en la respuesta, lanza un error genérico
+      throw new Error("Error al crear la pauta. Inténtalo de nuevo más tarde. desde el service");
+    }
+  }
+};
