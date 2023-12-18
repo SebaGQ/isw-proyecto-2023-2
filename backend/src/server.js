@@ -27,7 +27,6 @@ async function setupServer() {
     server.use(express.json());
     // Agregamos los cors
     // server.use(cors({ origin: "/" }));
-    server.use(cors({ origin: "http://146.83.198.35:443" }));
     server.use(cors({ origin: "http://localhost:443" }));
 
 
