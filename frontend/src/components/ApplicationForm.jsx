@@ -18,7 +18,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
 
   const handlefirstNameChange = (value) => {
     // Expresión regular para validar que el nombre solo contenga letras y espacios
-    const validNameRegex = /^[a-zA-ZñÑ\s]+$/;
+    const validNameRegex = /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/;
     // value === "" -> permite borrar sin que se envie el error.
     if (value === "" || validNameRegex.test(value)) {
       // El nombre es válido, actualiza el estado
@@ -31,7 +31,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
     }
   };
   const handlelastName1Change = (value) => {
-    const validNameRegex = /^[a-zA-ZñÑ\s]+$/;
+    const validNameRegex = /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/;
     if (value === "" || validNameRegex.test(value)) {
       setlastName1(value);
     } else {
@@ -41,7 +41,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
     }
   };
   const handlelastName2Change = (value) => {
-    const validNameRegex = /^[a-zA-ZñÑ\s]+$/;
+    const validNameRegex = /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]+$/;
     if (value === "" || validNameRegex.test(value)) {
       setlastName2(value);
     } else {
