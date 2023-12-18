@@ -12,13 +12,6 @@ export const login = async ({ email, password }) => {
     const { status, data } = response;
     if (status === 200) {
       const { email, firstName, roles } = await jwtDecode(data.data.accessToken);
-
-      const decodedToken = jwtDecode(data.data.accessToken);
-      console.log(decodedToken);
-      console.log (email);
-      console.log (firstName);
-      console.log(roles);
-      
       
       localStorage.setItem('user', JSON.stringify({ email, firstName, roles }));
       axios.defaults.headers.common[

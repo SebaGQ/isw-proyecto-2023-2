@@ -63,7 +63,6 @@ const CreateSubsidyPage = () => {
     if (subsidyIdParam) {
       // Si hay un subsidyId en la URL, se trata de una edición
       setIsEditMode(true);
-      console.log("subsidyIdParam:", subsidyIdParam);
 
       // Fetch del subsidio por ID y actualización del estado
       setSubsidyData({
