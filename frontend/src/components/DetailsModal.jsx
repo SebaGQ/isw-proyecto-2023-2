@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from './Modal';
 import Loading from '../components/Loading'; // Asegúrate de que la ruta de importación es correcta
-import  '../styles/DetailsModal.css';
+import '../styles/DetailsModal.css';
 
 const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews }) => {
     if (!application) return null; // Si no hay datos de la aplicación, no renderiza nada
@@ -9,9 +9,9 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
 
     // Función para formatear la fecha en dd/mm/aaaa 00:00
     const formatDate = (dateString) => {
-        const options = { 
-            year: 'numeric', 
-            month: '2-digit', 
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
             day: '2-digit',
             hour: '2-digit',
             minute: '2-digit',
@@ -19,6 +19,8 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
         return new Date(dateString).toLocaleDateString('es-ES', options);
     };
 
+    // Determinar si mostrar los motivos del rechazo
+    const showRejectionReasons = reviews?.length > 0 && reviews[reviews.length - 1].status === "Rechazado";
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -28,7 +30,14 @@ const DetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews })
                 <p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>
                 <p><strong>Número de Miembros:</strong> {application.members}</p>
                 <p><strong>Fecha de Postulación:</strong> {formatDate(application.applicationDate)}</p>
-                
+
+                {showRejectionReasons && (
+                    <div>
+                        <h2>Motivos del Rechazo</h2>
+                        <p>{reviews[reviews.length - 1].comments}</p>
+                    </div>
+                )}
+
                 <h2>Historial</h2>
                 {loadingReviews ? (
                     // Si loadingReviews es true, muestra el componente Loading

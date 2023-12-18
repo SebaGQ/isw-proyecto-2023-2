@@ -8,6 +8,11 @@ import '../styles/ApplicationDetailsModal.css';
 const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadingReviews }) => {
     if (!application) return null;
 
+    // Determinar si mostrar los motivos del rechazo
+    const showRejectionReasons = reviews.length > 0 && reviews[reviews.length - 1].status === "Rechazado";
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    console.log(showRejectionReasons);
+    console.log(reviews);
     // Función para formatear la fecha
     const formatDate = (dateString) => {
         const options = {
@@ -22,49 +27,61 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
 
     return (
 
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <h2>Detalles de la Postulación</h2>
-            <div className="modal-container">
-                <p><strong>Tipo:</strong> {application.subsidyId.typeSubsidy}</p>
-                <p><strong>Nombre {application.subsidyId.typeSubsidy}:</strong> {application.subsidyId.name}</p>
-                <p><strong>Estado:</strong> {application.status}</p>
-                <p><strong>Nombre Postulante:</strong> {application.userId.firstName} {application.userId.lastName}</p>
-                <p><strong>RUT Postulante:</strong> {application.userId.rut}</p>
-                {/*<p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>*/}
-                {/*<p><strong>Número de Miembros:</strong> {application.members}</p>*/}
-                <p><strong>Fecha de Postulación:</strong> {formatDate(application.applicationDate)}</p>
 
-                <h2>Historial</h2>
-                {loadingReviews ? (
-                    <Loading />
-                ) : reviews && reviews.length > 0 ? (
-                    <table className="custom-table">
-                        <thead>
-                            <tr>
-                                <th>Origen</th>
-                                <th>Estado</th>
-                                <th>Fecha</th>
-                                <th>Porcentaje Social</th>
-                                <th>Cantidad Miembros</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {reviews.map((review, index) => (
-                                <tr key={index}>
-                                    <td>{review.origin}</td>
-                                    <td>{review.status}</td>
-                                    <td>{formatDate(review.createdAt)}</td>
-                                    <td>{review.socialPercentage} %</td>
-                                    <td>{review.members}</td>
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <div className="modal-container">
+                <h2>Detalles de la Postulación</h2>
+                <div className="details-content">
+                    <p><strong>Tipo:</strong> {application.subsidyId.typeSubsidy}</p>
+                    <p><strong>Nombre {application.subsidyId.typeSubsidy}:</strong> {application.subsidyId.name}</p>
+                    <p><strong>Estado:</strong> {application.status}</p>
+                    <p><strong>Nombre Postulante:</strong> {application.userId.firstName} {application.userId.lastName}</p>
+                    <p><strong>RUT Postulante:</strong> {application.userId.rut}</p>
+                    {/*<p><strong>Porcentaje Social:</strong> {application.socialPercentage}%</p>*/}
+                    {/*<p><strong>Número de Miembros:</strong> {application.members}</p>*/}
+                    <p><strong>Fecha de Postulación:</strong> {formatDate(application.applicationDate)}</p>
+
+                    {showRejectionReasons && (
+                        <div>
+                            <h2>Motivos del Rechazo</h2>
+                            <p>{reviews[reviews.length - 1].comments}</p>
+                        </div>
+                    )}
+
+
+                    <h2>Historial</h2>
+                    {loadingReviews ? (
+                        <Loading />
+                    ) : reviews && reviews.length > 0 ? (
+                        <table className="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Origen</th>
+                                    <th>Estado</th>
+                                    <th>Fecha</th>
+                                    <th>Porcentaje Social</th>
+                                    <th>Cantidad Miembros</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <p>No hay revisiones disponibles.</p>
-                )}
-            </div>
+                            </thead>
+                            <tbody>
+                                {reviews.map((review, index) => (
+                                    <tr key={index}>
+                                        <td>{review.origin}</td>
+                                        <td>{review.status}</td>
+                                        <td>{formatDate(review.createdAt)}</td>
+                                        <td>{review.socialPercentage} %</td>
+                                        <td>{review.members}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p>No hay revisiones disponibles.</p>
+                    )}
+                </div>
+                </div>
         </Modal>
+
 
     );
 };
