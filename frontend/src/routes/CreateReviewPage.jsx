@@ -100,12 +100,12 @@ const CreateReviewPage = () => {
                     onChange={(e) => handleCommentChange(e, index)}
                     required
                 />
-                <button type="button" onClick={() => handleRemoveComment(index)}>
+                <button className="btn-remove" type="button" onClick={() => handleRemoveComment(index)}>
                     Eliminar
                 </button>
             </div>
             ))}
-        <button type="button" onClick={handleAddComment}>
+        <button className="btn-comment" type="button" onClick={handleAddComment}>
                 Agregar Comentario
             </button>
         </div>
