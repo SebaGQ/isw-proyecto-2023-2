@@ -9,8 +9,7 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
     if (!application) return null;
 
     // Determinar si mostrar los motivos del rechazo
-    const showRejectionReasons = reviews.length > 0 && reviews[reviews.length - 1].status === "Rechazado";
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    const showRejectionReasons = reviews.length > 0 
     console.log(showRejectionReasons);
     console.log(reviews);
     // Función para formatear la fecha
@@ -43,8 +42,9 @@ const ApplicationDetailsModal = ({ isOpen, onClose, application, reviews, loadin
 
                     {showRejectionReasons && (
                         <div>
-                            <h2>Motivos del Rechazo</h2>
-                            <p>{reviews[reviews.length - 1].comments}</p>
+                            <h2>Comentarios:</h2>
+                            <p>{reviews[reviews.length - 1].comments.join('. ')}</p>
+
                         </div>
                     )}
 

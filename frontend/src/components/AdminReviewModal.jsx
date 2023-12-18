@@ -1,14 +1,20 @@
 // AdminReviewModal.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from './Modal';
 import { updateApplicationStatus } from '../services/application.service';
 import '../styles/AdminReviewModal.css'; // Asegúrate de que la ruta es correcta
 
-const AdminReviewModal = ({ isOpen, onClose, application, onReviewSuccess }) => {
+const AdminReviewModal = ({ isOpen, onClose, application, onReviewSuccess, initialComments }) => { // Agrega initialComments como prop
     if (!application) return null;
 
     const [comments, setComments] = useState([]);
     const [status, setStatus] = useState(application.status);
+
+    useEffect(() => {
+        if (initialComments) {
+            setComments(initialComments);
+        }
+    }, [initialComments]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,6 +62,13 @@ const AdminReviewModal = ({ isOpen, onClose, application, onReviewSuccess }) => 
                         <div className="info">{application.firstName}</div>
                     </div>
                     <div className="form-group">
+                    <label htmlFor="status">Estado:</label>
+                        <select id="status" className="form-control" value={status} onChange={(e) => setStatus(e.target.value)}>
+                            <option value="Rechazado">Rechazado</option>
+                            <option value="Aceptado">Aceptado</option>
+                            <option value="En Revisión">En Revisión</option>
+                            <option value="Pendiente">Pendiente</option>
+                        </select>
                         <label>Comentarios:</label>
                         {comments.map((comment, index) => (
                             <div key={index} className="comment-group">
