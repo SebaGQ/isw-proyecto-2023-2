@@ -54,8 +54,9 @@ const CreateSubsidyPage = () => {
     fetchGuidelines();
   }, []); 
 
+  const subsidyIdParam = queryParams.get("subsidyId");
   useEffect(() => {
-    const subsidyIdParam = queryParams.get("subsidyId");
+
     if (subsidyIdParam) {
       setIsEditMode(true);
 
