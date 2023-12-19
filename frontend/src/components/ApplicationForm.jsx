@@ -276,6 +276,7 @@ const ApplicationForm = ({ subsidyId, subsidyName, onClose }) => {
             required
             className="form-control"
             min={1}
+            max={10}
           />
         </div>
         {/* Renderizar dinámicamente los campos de entrada para los miembros de la familia */}
